@@ -19,12 +19,12 @@ export default (app: Probot) => {
 			!isNullish((context.payload.issue as IssueWithPullRequestPayload).pull_request) &&
 			VerifiedSenders.has(context.payload.sender.id)
 		) {
-			const issueBodyLower = context.payload.comment.body.toLowerCase();
+			const commentBodyLowerCase = context.payload.comment.body.toLowerCase();
 			const workflowUrl = `https://github.com/${context.payload.repository.full_name}/actions/workflows/${ContinuousDeliveryWorkflow}`;
 
 			const fullPrData = await context.octokit.pulls.get(context.pullRequest());
 
-			if (issueBodyLower.includes('@sapphiredev deploy')) {
+			if (commentBodyLowerCase.startsWith('@sapphiredev deploy')) {
 				await context.octokit.actions.createWorkflowDispatch({
 					workflow_id: ContinuousDeliveryWorkflow,
 					owner: context.payload.repository.owner.name ?? 'sapphiredev',
