@@ -36,7 +36,7 @@ export default (app: Probot) => {
 
 						const replyMessage = context.issue({
 							body: [
-								`Heya ${context.payload.sender.login}, I've started to run the deployment workflow on this PR.`,
+								`Heya @${context.payload.sender.login}, I've started to run the deployment workflow on this PR.`,
 								`You can monitor the build [here](${workflowUrl})!`
 							].join(' ')
 						});
