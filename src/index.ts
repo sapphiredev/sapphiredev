@@ -10,8 +10,8 @@ config({
 
 const probot = createProbot({
 	defaults: {
-		webhookPath: '/api'
+		webhookPath: '/api/github/webhooks'
 	}
 });
 
-export default createNodeMiddleware(app, { probot });
+module.exports = createNodeMiddleware(app, { probot });

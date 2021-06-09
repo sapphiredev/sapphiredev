@@ -1,7 +1,7 @@
 {
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
-		"outDir": "../api",
+		"outDir": "../api/github/webhooks",
 		"rootDir": ".",
 		"composite": true
 	},

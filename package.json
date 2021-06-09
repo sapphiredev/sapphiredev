@@ -5,10 +5,10 @@
 	"author": "@sapphire <contact@sapphirejs.dev>",
 	"license": "MIT",
 	"private": true,
-	"main": "api/index.js",
+	"main": "api/github/webhooks/index.js",
 	"scripts": {
-		"start": "probot run api/index.js",
-		"debug": "node api/DebugRun.js",
+		"start": "probot run api/github/webhooks/index.js",
+		"debug": "node api/github/webhooks/DebugRun.js",
 		"lint": "eslint src tests --ext ts --fix",
 		"format": "prettier --write {src,tests}/**/*.ts",
 		"build": "tsc -b src",
