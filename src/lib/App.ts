@@ -18,10 +18,10 @@ export default (app: Probot) => {
 			(context.payload.action === 'created' || context.payload.action === 'edited') &&
 			!isNullish((context.payload.issue as IssueWithPullRequestPayload).pull_request)
 		) {
-			const issueBodyLower = context.payload.issue.body.toLowerCase();
+			const issueBodyLower = context.payload.comment.body.toLowerCase();
 			const fullPrData = await context.octokit.pulls.get(context.pullRequest());
 
-			if (issueBodyLower.includes('@sapphire-bot deploy')) {
+			if (issueBodyLower.includes('@sapphiredev deploy')) {
 				const workflowDispatch = await context.octokit.actions.createWorkflowDispatch({
 					workflow_id: 'continuous-delivery.yml',
 					owner: context.payload.repository.owner.name ?? 'sapphiredev',
