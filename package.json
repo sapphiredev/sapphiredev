@@ -1,5 +1,5 @@
 {
-	"name": "sapphire-bot",
+	"name": "sapphiredev",
 	"version": "1.0.0",
 	"description": "GitHub app bot that we use in Sapphire to automate our work",
 	"author": "@sapphire <contact@sapphirejs.dev>",
@@ -59,7 +59,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/sapphiredev/sapphire-bot.git"
+		"url": "git+https://github.com/sapphiredev/sapphiredev.git"
 	},
 	"files": [
 		"dist",
@@ -70,9 +70,9 @@
 		"npm": ">=6"
 	},
 	"bugs": {
-		"url": "https://github.com/sapphiredev/sapphire-bot/issues"
+		"url": "https://github.com/sapphiredev/sapphiredev/issues"
 	},
-	"homepage": "https://github.com/sapphiredev/sapphire-bot#README",
+	"homepage": "https://github.com/sapphiredev/sapphiredev#README",
 	"commitlint": {
 		"extends": [
 			"@commitlint/config-conventional"

@@ -2,19 +2,19 @@
 
 ![Sapphire Logo](https://cdn.skyra.pw/gh-assets/sapphire-banner.png)
 
-# Sapphire Bot
+# Sapphire Dev
 
-**GitHub bot for Sapphire**
+**GitHub app for Sapphire**
 
-[![GitHub](https://img.shields.io/github/license/sapphiredev/template)](https://github.com/sapphiredev/template/blob/main/LICENSE.md)
-[![codecov](https://codecov.io/gh/sapphiredev/sapphire-bot/branch/main/graph/badge.svg?token=?????)](https://codecov.io/gh/sapphiredev/sapphire-bot)
-[![Depfu](https://badges.depfu.com/badges/template/count.svg)](https://depfu.com/github/sapphiredev/e?project_id=template)
+[![GitHub](https://img.shields.io/github/license/sapphiredev/sapphiredev)](https://github.com/sapphiredev/sapphiredev/blob/main/LICENSE.md)
+[![codecov](https://codecov.io/gh/sapphiredev/sapphiredev/branch/main/graph/badge.svg?token=IstewBQn9T)](https://codecov.io/gh/sapphiredev/sapphiredev)
+[![Depfu](https://badges.depfu.com/badges/bb7d8a09d113e29e09feefdde7b9ed37/count.svg)](https://depfu.com/github/sapphiredev/sapphiredev?project_id=27856)
 
 </div>
 
 ## Description
 
-The GitHub bot that we use in Sapphire for automating various tasks.
+The GitHub app that we use in Sapphire for automating various tasks.
 
 ## Usage
 
@@ -26,29 +26,20 @@ yarn install
 
 # Compile
 yarn build
-
-# Run the bot
-yarn start
 ```
 
-### Docker
+Next duplicate the [`.env`](.env) file and rename it to [`.env.local`](.env.local). Fill in at least these required environment variables:
 
-First create a [`.env.local`](src/.env.local) in [`src`](src/) and add the following. Fill the values appropriately.
+-   `APP_ID`
+-   `PRIVATE_KEY`
+-   `WEBHOOK_PROXY_URL`
+-   `WEBHOOK_SECRET`
 
-```env
-APP_ID=""
-PRIVATE_KEY=""
-```
+For information on each environment see [`env.d.ts`](src/lib/env.d.ts) or [probot configuration](https://probot.github.io/docs/configuration/)
 
-Then use [`docker-compose`](https://docs.docker.com/compose/) to build and run the Docker container:
+### Running with debugging
 
-```sh
-# 1. Build container
-docker-compose build
-
-# 2. Start container
-docker-compose up
-```
+You can read [Manually Configuring a GitHub App](https://probot.github.io/docs/development/#manually-configuring-a-github-app) on the Probot documentation to learn how to setup the variables above as well as the GitHub application to learn how to setup this project for debugging. Once configured, use `npm run-script debug` with your debugger of choice to start a debug session.
 
 ## Buy us some doughnuts
 
