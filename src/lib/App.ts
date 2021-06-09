@@ -1,6 +1,6 @@
-import { ContinuousDeliveryWorkflow } from '#lib/constants';
 import { isNullish } from '@sapphire/utilities';
 import type { Probot } from 'probot';
+import { ContinuousDeliveryWorkflow } from './constants';
 
 export default (app: Probot) => {
 	app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {

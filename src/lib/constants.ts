@@ -1,4 +1,4 @@
-import { URL } from 'url';
-export const rootFolder = new URL('../../', import.meta.url);
+import { join } from 'path';
+export const rootFolder = join(__dirname, '..', '..');
 
 export const ContinuousDeliveryWorkflow = 'continuous-delivery.yml';

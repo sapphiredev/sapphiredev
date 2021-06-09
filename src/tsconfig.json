@@ -1,14 +1,9 @@
 {
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
+		"outDir": "../api",
 		"rootDir": ".",
-		"baseUrl": ".",
-		"composite": true,
-		"paths": {
-			"#utils/*": ["lib/util/*"],
-			"#lib/*": ["lib/*"],
-			"#root/*": ["*"]
-		}
+		"composite": true
 	},
 	"include": ["."]
 }
