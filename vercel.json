@@ -1,9 +1,7 @@
 {
-	"redirects": [
-		{ "source": "/run", "destination": "/api/github/webhooks/run", "permanent": true }
-	],
+	"redirects": [{ "source": "/run", "destination": "/api/github/webhooks", "permanent": true }],
 	"functions": {
-		"api/github/webhooks/run.ts": {
+		"api/github/webhooks/index.js": {
 			"memory": 3008,
 			"maxDuration": 60
 		}

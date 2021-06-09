@@ -6,6 +6,6 @@
 		"incremental": false,
 		"baseUrl": "."
 	},
-	"include": [".", "../api/**/*"],
-	"references": [{ "path": "../api" }]
+	"include": [".", "../src/**/*"],
+	"references": [{ "path": "../src" }]
 }

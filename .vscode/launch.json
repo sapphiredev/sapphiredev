@@ -13,7 +13,7 @@
 			},
 			"console": "internalConsole",
 			"outputCapture": "std",
-			"outFiles": ["${workspaceFolder}/api/**/*.ts"]
+			"outFiles": ["${workspaceFolder}/api/**/*.js"]
 		}
 	]
 }

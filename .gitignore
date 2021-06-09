@@ -6,6 +6,9 @@ node_modules/
 coverage/
 docs/
 
+# Output directory
+api/
+
 # Ignore JavaScript files
 **/*.js
 **/*.mjs

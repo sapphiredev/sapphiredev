@@ -6,7 +6,7 @@ import nock from 'nock';
 import path from 'path';
 import { Probot, ProbotOctokit } from 'probot';
 // Requiring our app implementation
-import myProbotApp from '../api';
+import myProbotApp from '../src';
 // Requiring our fixtures
 import payload from './mocks/issues.opened.json';
 const issueCreatedBody = { body: 'Thanks for opening this issue!' };
