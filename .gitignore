@@ -1,24 +1,3 @@
-# Ignore a blackhole and the folder for development
-node_modules/
-.vs/
-.idea/
-*.iml
-coverage/
-docs/
-
-# Output directory
-api/
-
-# Ignore JavaScript files
-**/*.js
-**/*.mjs
-**/*.js.map
-**/*.d.ts
-**/*.tsbuildinfo
-!api/**/*.d.ts
-!scripts/*.mjs
-!jest.config.ts
-
 # Ignore heapsnapshot and log files
 *.heapsnapshot
 *.log
