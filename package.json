@@ -53,10 +53,6 @@
 		"type": "git",
 		"url": "git+https://github.com/sapphiredev/sapphiredev.git"
 	},
-	"engines": {
-		"node": ">=14",
-		"npm": ">=6"
-	},
 	"bugs": {
 		"url": "https://github.com/sapphiredev/sapphiredev/issues"
 	},
