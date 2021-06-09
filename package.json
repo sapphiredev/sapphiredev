@@ -8,7 +8,7 @@
 	"main": "api/github/webhooks/index.js",
 	"scripts": {
 		"start": "probot run api/github/webhooks/index.js",
-		"debug": "node api/github/webhooks/DebugRun.js",
+		"debug": "node scripts/DebugRun.mjs",
 		"lint": "eslint src tests --ext ts --fix",
 		"format": "prettier --write {src,tests}/**/*.ts",
 		"build": "tsc -b src",
