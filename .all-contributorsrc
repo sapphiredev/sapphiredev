@@ -7,7 +7,15 @@
 	"imageSize": 100,
 	"commit": true,
 	"commitConvention": "angular",
-	"contributors": [],
+	"contributors": [
+		{
+			"login": "Favna",
+			"name": "Jeroen Claassens",
+			"avatar_url": "https://avatars.githubusercontent.com/u/4019718?v=4",
+			"profile": "https://favware.tech/",
+			"contributions": ["code", "design", "doc", "infra", "maintenance"]
+		}
+	],
 	"contributorsPerLine": 7,
 	"skipCi": true
 }
