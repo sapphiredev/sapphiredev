@@ -1,36 +1,78 @@
-# sapphire-bot
+<div align="center">
 
-> A GitHub App built with [Probot](https://github.com/probot/probot) that Sapphire
+![Sapphire Logo](https://cdn.skyra.pw/gh-assets/sapphire-banner.png)
 
-## Setup
+# Sapphire Bot
+
+**GitHub bot for Sapphire**
+
+[![GitHub](https://img.shields.io/github/license/sapphiredev/template)](https://github.com/sapphiredev/template/blob/main/LICENSE.md)
+[![codecov](https://codecov.io/gh/sapphiredev/sapphire-bot/branch/main/graph/badge.svg?token=?????)](https://codecov.io/gh/sapphiredev/sapphire-bot)
+[![Depfu](https://badges.depfu.com/badges/template/count.svg)](https://depfu.com/github/sapphiredev/e?project_id=template)
+
+</div>
+
+## Description
+
+The GitHub bot that we use in Sapphire for automating various tasks.
+
+## Usage
+
+### Setup
 
 ```sh
 # Install dependencies
-npm install
+yarn install
 
 # Compile
-npm build
+yarn build
 
 # Run the bot
-npm start
+yarn start
 ```
 
-## Docker
+### Docker
+
+First create a [`.env.local`](src/.env.local) in [`src`](src/) and add the following. Fill the values appropriately.
+
+```env
+APP_ID=""
+PRIVATE_KEY=""
+```
+
+Then use [`docker-compose`](https://docs.docker.com/compose/) to build and run the Docker container:
 
 ```sh
 # 1. Build container
-docker build -t sapphire-bot .
+docker-compose build
 
 # 2. Start container
-docker run -e APP_ID=<app-id> -e PRIVATE_KEY=<pem-value> sapphire-bot
+docker-compose up
 ```
 
-## Contributing
+## Buy us some doughnuts
 
-If you have suggestions for how sapphire-bot could be improved, or want to report a bug, open an issue! We'd love all and any contributions.
+Sapphire Community is and always will be open source, even if we don't get donations. That being said, we know there are amazing people who may still want to donate just to show their appreciation. Thank you very much in advance!
 
-For more, check out the [Contributing Guide](CONTRIBUTING.md).
+We accept donations through Open Collective, Ko-fi, Paypal, Patreon and GitHub Sponsorships. You can use the buttons below to donate through your method of choice.
 
-## License
+|   Donate With   |                       Address                       |
+| :-------------: | :-------------------------------------------------: |
+| Open Collective | [Click Here](https://sapphirejs.dev/opencollective) |
+|      Ko-fi      |      [Click Here](https://sapphirejs.dev/kofi)      |
+|     Patreon     |    [Click Here](https://sapphirejs.dev/patreon)     |
+|     PayPal      |     [Click Here](https://sapphirejs.dev/paypal)     |
 
-[ISC](LICENSE) © 2021 sapphiredev <contact@sapphirejs.dev>
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

@@ -1,7 +1,37 @@
-node_modules
-npm-debug.log
+# Ignore a blackhole and the folder for development
+node_modules/
+.vs/
+.idea/
+*.iml
+coverage/
+docs/
+
+# Ignore tsc dist folder
+dist/
+
+# Ignore JavaScript files
+**/*.js
+**/*.mjs
+**/*.js.map
+**/*.d.ts
+**/*.tsbuildinfo
+!src/**/*.d.ts
+!scripts/*.mjs
+!jest.config.ts
+
+# Ignore heapsnapshot and log files
+*.heapsnapshot
+*.log
+
+# Ignore package locks
+package-lock.json
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Certificate files
 *.pem
 !mock-cert.pem
-.env
-coverage
-lib

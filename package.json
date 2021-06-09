@@ -1,34 +1,100 @@
 {
-  "name": "sapphire-bot",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Sapphire",
-  "author": "sapphiredev <contact@sapphirejs.dev>",
-  "license": "ISC",
-  "homepage": "https://github.com/sapphiredev/sapphire-bot",
-  "keywords": [
-    "probot",
-    "github",
-    "probot-app"
-  ],
-  "scripts": {
-    "build": "tsc",
-    "start": "probot run ./lib/index.js",
-    "test": "jest"
-  },
-  "dependencies": {
-    "probot": "^11.0.1"
-  },
-  "devDependencies": {
-    "@types/jest": "^26.0.19",
-    "@types/node": "^14.14.19",
-    "jest": "^26.6.3",
-    "nock": "^13.0.5",
-    "smee-client": "^1.2.2",
-    "ts-jest": "^26.4.4",
-    "typescript": "^4.1.3"
-  },
-  "engines": {
-    "node": ">= 10.13.0"
-  }
+	"name": "sapphire-bot",
+	"version": "1.0.0",
+	"description": "GitHub app bot that we use in Sapphire to automate our work",
+	"author": "@sapphire <contact@sapphirejs.dev>",
+	"license": "MIT",
+	"private": true,
+	"main": "dist/index.js",
+	"module": "dist/index.js",
+	"type": "module",
+	"imports": {
+		"#lib/*": "./dist/lib/*.js",
+		"#root/*": "./dist/*.js",
+		"#utils/*": "./dist/lib/util/*.js"
+	},
+	"scripts": {
+		"start": "probot run dist/index.js",
+		"lint": "eslint src tests --ext ts --fix",
+		"format": "prettier --write {src,tests}/**/*.ts",
+		"build": "node scripts/build.mjs",
+		"watch": "node scripts/watch.mjs",
+		"clean": "node scripts/clean.mjs",
+		"typecheck": "tsc -p src --noEmit",
+		"test": "jest",
+		"dev": "run-s build start",
+		"update": "yarn upgrade-interactive --latest",
+		"commit": "git-cz",
+		"cz": "git-cz",
+		"prepare": "husky install .github/husky"
+	},
+	"dependencies": {
+		"@sapphire/fetch": "^1.0.1",
+		"probot": "^11.4.1",
+		"tslib": "^2.2.0"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^12.1.4",
+		"@commitlint/config-conventional": "^12.1.4",
+		"@sapphire/eslint-config": "^3.1.4",
+		"@sapphire/prettier-config": "^1.1.3",
+		"@sapphire/ts-config": "^2.2.3",
+		"@types/jest": "^26.0.23",
+		"@types/node": "^15.12.2",
+		"@types/node-fetch": "^2.5.10",
+		"cz-conventional-changelog": "^3.3.0",
+		"esbuild": "^0.12.8",
+		"husky": "^6.0.0",
+		"jest": "^27.0.4",
+		"jest-circus": "^27.0.4",
+		"lint-staged": "^11.0.0",
+		"nock": "^13.1.0",
+		"npm-run-all": "^4.1.5",
+		"pretty-quick": "^3.1.0",
+		"smee-client": "^1.2.2",
+		"ts-jest": "^27.0.3",
+		"ts-node": "^10.0.0",
+		"typescript": "^4.3.2"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sapphiredev/sapphire-bot.git"
+	},
+	"files": [
+		"dist",
+		"!dist/*.tsbuildinfo"
+	],
+	"engines": {
+		"node": ">=14",
+		"npm": ">=6"
+	},
+	"bugs": {
+		"url": "https://github.com/sapphiredev/sapphire-bot/issues"
+	},
+	"homepage": "https://github.com/sapphiredev/sapphire-bot#README",
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
+		]
+	},
+	"lint-staged": {
+		"*.{mjs,js,ts}": "eslint --fix --ext mjs,js,ts"
+	},
+	"config": {
+		"commitizen": {
+			"path": "./node_modules/cz-conventional-changelog"
+		}
+	},
+	"resolutions": {
+		"minimist": "^1.2.5",
+		"kind-of": "^6.0.3",
+		"jest-environment-jsdom": "https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.1.tgz",
+		"jest-jasmine2": "https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.1.tgz",
+		"dot-prop": "^6.0.1",
+		"lodash": "^4.17.21",
+		"marked": "^2.0.7",
+		"merge": "^2.1.1",
+		"trim": "^1.0.1"
+	},
+	"prettier": "@sapphire/prettier-config"
 }
