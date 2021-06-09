@@ -31,8 +31,8 @@ jobs:
       - name: Install Dependencies if Cache Miss
         if: ${{ !steps.cache-restore.outputs.cache-hit }}
         run: yarn --frozen-lockfile
-      - name: Build Code
-        run: yarn build
+      - name: Build code for Vercel
+        run: yarn vercel-build
       - name: Push new code
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
