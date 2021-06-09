@@ -4,11 +4,7 @@ export default (app: Probot) => {
 	app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
 		if (context.payload.action === 'created' || context.payload.action === 'edited') {
 			const issueBodyLower = context.payload.issue.body.toLowerCase();
-			const fullPrData = await context.octokit.pulls.get({
-				pull_number: context.payload.issue.number,
-				repo: context.payload.repository.full_name,
-				owner: context.payload.repository.owner.login
-			});
+			const fullPrData = await context.octokit.pulls.get(context.pullRequest());
 
 			if (issueBodyLower.includes('@sapphire-bot deploy')) {
 				const workflowDispatch = await context.octokit.actions.createWorkflowDispatch({

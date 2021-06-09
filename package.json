@@ -5,8 +5,8 @@
 	"author": "@sapphire <contact@sapphirejs.dev>",
 	"license": "MIT",
 	"private": true,
-	"main": "dist/index.js",
-	"module": "dist/index.js",
+	"main": "dist/SapphireBot.js",
+	"module": "dist/SapphireBot.js",
 	"type": "module",
 	"imports": {
 		"#lib/*": "./dist/lib/*.js",
@@ -14,7 +14,7 @@
 		"#utils/*": "./dist/lib/util/*.js"
 	},
 	"scripts": {
-		"start": "probot run dist/index.js",
+		"start": "probot run dist/SapphireBot.js",
 		"lint": "eslint src tests --ext ts --fix",
 		"format": "prettier --write {src,tests}/**/*.ts",
 		"build": "node scripts/build.mjs",
@@ -30,6 +30,8 @@
 	},
 	"dependencies": {
 		"@sapphire/fetch": "^1.0.1",
+		"@sapphire/utilities": "^1.5.3",
+		"dotenv-cra": "^2.0.2",
 		"probot": "^11.4.1",
 		"tslib": "^2.2.0"
 	},
