@@ -36,12 +36,6 @@ jobs:
       - name: Push new code
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          ls -al out/**/**
-          echo "====================================================================================================="
-          ls -al api/**
-          echo "====================================================================================================="
-          ls -al ./**
-          echo "====================================================================================================="
           echo -e "\n# Remove any old files in the dist folder"
           rm -rfv out/api/*
 
@@ -54,5 +48,5 @@ jobs:
           git add --all .
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          # git commit -m "build: vercel build for ${GITHUB_SHA}" || true
-          # git push origin vercel
+          git commit -m "build: vercel build for ${GITHUB_SHA}" || true
+          git push origin vercel
