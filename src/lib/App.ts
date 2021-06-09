@@ -1,16 +1,31 @@
+import { isNullish } from '@sapphire/utilities';
 import type { Probot } from 'probot';
 
 export default (app: Probot) => {
 	app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
-		if (context.payload.action === 'created' || context.payload.action === 'edited') {
+		type IssueWithPullRequestPayload = typeof context.payload.issue & {
+			/** Pull Request API data. This is only undefined on Issue comments so we can use it to filter out those */
+			pull_request: Record<PropertyKey, unknown> | undefined;
+		};
+
+		/** Do not trigger if the comment was made by a bot */
+		if (context.isBot) {
+			return;
+		}
+
+		if (
+			/** Validate that the action is either comments created or comments edited */
+			(context.payload.action === 'created' || context.payload.action === 'edited') &&
+			!isNullish((context.payload.issue as IssueWithPullRequestPayload).pull_request)
+		) {
 			const issueBodyLower = context.payload.issue.body.toLowerCase();
 			const fullPrData = await context.octokit.pulls.get(context.pullRequest());
 
 			if (issueBodyLower.includes('@sapphire-bot deploy')) {
 				const workflowDispatch = await context.octokit.actions.createWorkflowDispatch({
 					workflow_id: 'continuous-delivery.yml',
-					owner: 'sapphiredev',
-					repo: context.payload.repository.full_name,
+					owner: context.payload.repository.owner.name ?? 'sapphiredev',
+					repo: context.payload.repository.name,
 					ref: fullPrData.data.head.ref,
 					inputs: {
 						branch: fullPrData.data.head.ref
@@ -28,9 +43,4 @@ export default (app: Probot) => {
 			}
 		}
 	});
-	// For more information on building apps:
-	// https://probot.github.io/docs/
-
-	// To get your app running against GitHub, see:
-	// https://probot.github.io/docs/development/
 };
