@@ -1,10 +1,5 @@
 import type { Probot } from 'probot';
-
-function isNullish(value: unknown): value is undefined | null {
-	return value === undefined || value === null;
-}
-
-const ContinuousDeliveryWorkflow = 'continuous-delivery.yml';
+import { ContinuousDeliveryWorkflow, isNullish, VerifiedSenders } from './constants';
 
 export default (app: Probot) => {
 	app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
@@ -21,7 +16,8 @@ export default (app: Probot) => {
 		if (
 			/** Validate that the action is either comments created or comments edited */
 			(context.payload.action === 'created' || context.payload.action === 'edited') &&
-			!isNullish((context.payload.issue as IssueWithPullRequestPayload).pull_request)
+			!isNullish((context.payload.issue as IssueWithPullRequestPayload).pull_request) &&
+			VerifiedSenders.has(context.payload.sender.id)
 		) {
 			const issueBodyLower = context.payload.comment.body.toLowerCase();
 			const workflowUrl = `https://github.com/${context.payload.repository.full_name}/actions/workflows/${ContinuousDeliveryWorkflow}`;

@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'development';
 import { config } from 'dotenv-cra';
 import { run } from 'probot';
 import { fileURLToPath } from 'url';
-import App from '../dist/App.js';
+import App from '../dist/app.js';
 
 const app = App.default;
 
