@@ -1,12 +1,12 @@
 // You can import your modules
-// import index from '../src/index'
+// import index from '../api/index'
 
 import fs from 'fs';
 import nock from 'nock';
 import path from 'path';
 import { Probot, ProbotOctokit } from 'probot';
 // Requiring our app implementation
-import myProbotApp from '../src';
+import myProbotApp from '../api';
 // Requiring our fixtures
 import payload from './mocks/issues.opened.json';
 const issueCreatedBody = { body: 'Thanks for opening this issue!' };

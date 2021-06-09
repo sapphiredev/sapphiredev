@@ -6,16 +6,13 @@ node_modules/
 coverage/
 docs/
 
-# Ignore build folder
-api/
-
 # Ignore JavaScript files
 **/*.js
 **/*.mjs
 **/*.js.map
 **/*.d.ts
 **/*.tsbuildinfo
-!src/**/*.d.ts
+!api/**/*.d.ts
 !scripts/*.mjs
 !jest.config.ts
 

@@ -1,18 +1,11 @@
 {
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
-		"target": "ES2020",
 		"noImplicitAny": false,
 		"noEmit": true,
 		"incremental": false,
-		"baseUrl": ".",
-		"paths": {
-			"#utils/*": ["../src/lib/util/*"],
-			"#lib/*": ["../src/lib/*"],
-			"#mocks/*": ["./tests/mocks/*"],
-			"#root/*": ["../src/*"]
-		}
+		"baseUrl": "."
 	},
-	"include": [".", "../src/**/*"],
-	"references": [{ "path": "../src" }]
+	"include": [".", "../api/**/*"],
+	"references": [{ "path": "../api" }]
 }

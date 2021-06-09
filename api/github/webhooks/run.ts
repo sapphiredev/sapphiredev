@@ -14,4 +14,4 @@ const probot = createProbot({
 	}
 });
 
-module.exports = createNodeMiddleware(app, { probot });
+export default createNodeMiddleware(app, { probot });

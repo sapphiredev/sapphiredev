@@ -35,7 +35,7 @@ Next duplicate the [`.env`](.env) file and rename it to [`.env.local`](.env.loca
 -   `WEBHOOK_PROXY_URL`
 -   `WEBHOOK_SECRET`
 
-For information on each environment see [`env.d.ts`](src/lib/env.d.ts) or [probot configuration](https://probot.github.io/docs/configuration/)
+For information on each environment see [probot configuration](https://probot.github.io/docs/configuration/)
 
 ### Running with debugging
 
