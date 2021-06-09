@@ -18,7 +18,7 @@ async function* scan(path, cb) {
 
 export async function build(watch = false) {
 	const rootFolder = new URL('../', import.meta.url);
-	const distFolder = new URL('dist/', rootFolder);
+	const apiFolder = new URL('api/', rootFolder);
 	const srcFolder = new URL('src/', rootFolder);
 
 	const cb = (path) => path.endsWith('.ts');
@@ -37,7 +37,7 @@ export async function build(watch = false) {
 		format: 'esm',
 		resolveExtensions: ['.ts', '.js'],
 		write: true,
-		outdir: fileURLToPath(distFolder),
+		outdir: fileURLToPath(apiFolder),
 		platform: 'node',
 		tsconfig: join(fileURLToPath(srcFolder), 'tsconfig.json'),
 		watch,

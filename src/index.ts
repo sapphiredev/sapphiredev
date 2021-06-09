@@ -12,7 +12,7 @@ config({
 
 const probot = createProbot({
 	defaults: {
-		webhookPath: '/api/github/webhooks'
+		webhookPath: '/api'
 	}
 });
 

@@ -5,17 +5,17 @@
 	"author": "@sapphire <contact@sapphirejs.dev>",
 	"license": "MIT",
 	"private": true,
-	"main": "dist/index.js",
-	"module": "dist/index.js",
+	"main": "api/index.js",
+	"module": "api/index.js",
 	"type": "module",
 	"imports": {
-		"#lib/*": "./dist/lib/*.js",
-		"#root/*": "./dist/*.js",
-		"#utils/*": "./dist/lib/util/*.js"
+		"#lib/*": "./api/lib/*.js",
+		"#root/*": "./api/*.js",
+		"#utils/*": "./api/lib/util/*.js"
 	},
 	"scripts": {
-		"start": "probot run dist/index.js",
-		"debug": "node dist/DebugRun.js",
+		"start": "probot run api/index.js",
+		"debug": "node api/DebugRun.js",
 		"lint": "eslint src tests --ext ts --fix",
 		"format": "prettier --write {src,tests}/**/*.ts",
 		"build": "node scripts/build.mjs",
@@ -61,10 +61,6 @@
 		"type": "git",
 		"url": "git+https://github.com/sapphiredev/sapphiredev.git"
 	},
-	"files": [
-		"dist",
-		"!dist/*.tsbuildinfo"
-	],
 	"engines": {
 		"node": ">=14",
 		"npm": ">=6"

@@ -1,7 +1,6 @@
 {
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
-		"outDir": "../api",
 		"rootDir": ".",
 		"baseUrl": ".",
 		"composite": true,

@@ -6,8 +6,8 @@ node_modules/
 coverage/
 docs/
 
-# Ignore tsc dist folder
-dist/
+# Ignore build folder
+api/
 
 # Ignore JavaScript files
 **/*.js
