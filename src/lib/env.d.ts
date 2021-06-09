@@ -15,7 +15,7 @@ export interface SapphireBotEnv {
 	 * @example
 	 * 1234
 	 */
-	APP_ID: number;
+	APP_ID: IntegerString;
 	/**
 	 * The webhook secret used when creating a GitHub App.
 	 * 'development' is used as a default,
