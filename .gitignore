@@ -3,8 +3,6 @@ node_modules/
 .vs/
 .idea/
 *.iml
-coverage/
-docs/
 
 # Output directory
 api/
@@ -35,4 +33,3 @@ package-lock.json
 
 # Certificate files
 *.pem
-!mock-cert.pem

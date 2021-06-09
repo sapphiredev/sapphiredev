@@ -68,7 +68,7 @@ There are a number of guidelines considered when reviewing Pull Requests to be m
 -   Everything in Sapphire Bot should be generally useful for the majority of users. Don't let that stop you if you've got a good concept though, as your idea still might be a great addition.
 -   Everything should be shard compliant. If code you put in a pull request would break when sharding, break other things from supporting sharding, or is incompatible with sharding; then you will need to think of a way to make it work with sharding in mind before the pull request will be accepted and merged.
 -   Everything should follow [OOP paradigms][oop paradigms] and generally rely on behaviour over state where possible. This generally helps methods be predictable, keeps the codebase simple and understandable, reduces code duplication through abstraction, and leads to efficiency and therefore scalability.
--   Everything should follow our ESLint rules as closely as possible, and should pass lint tests even if you must disable a rule for a single line.
+-   Everything should follow our ESLint rules as closely as possible, and should pass linting even if you must disable a rule for a single line.
 -   Scripts that are to be ran outside of the scope of the bot should be added to [scripts] directory and should be in the `.mjs` file format.
 
 <!-- Link Dump -->

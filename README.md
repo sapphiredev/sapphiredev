@@ -7,7 +7,6 @@
 **GitHub app for Sapphire**
 
 [![GitHub](https://img.shields.io/github/license/sapphiredev/sapphiredev)](https://github.com/sapphiredev/sapphiredev/blob/main/LICENSE.md)
-[![codecov](https://codecov.io/gh/sapphiredev/sapphiredev/branch/main/graph/badge.svg?token=IstewBQn9T)](https://codecov.io/gh/sapphiredev/sapphiredev)
 [![Depfu](https://badges.depfu.com/badges/bb7d8a09d113e29e09feefdde7b9ed37/count.svg)](https://depfu.com/github/sapphiredev/sapphiredev?project_id=27856)
 
 </div>
