@@ -4,7 +4,7 @@ import { createNodeMiddleware, createProbot } from 'probot';
 import app from './App';
 
 config({
-	path: join(__dirname, '..', '.env')
+	path: process.env.NODE_ENV === 'production' ? join(__dirname, '.env') : join(__dirname, '..', '.env')
 });
 
 const probot = createProbot({
