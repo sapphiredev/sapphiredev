@@ -1,0 +1,53 @@
+name: Continuous Delivery
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Build:
+    name: Publish Serverless Code
+    runs-on: ubuntu-latest
+    if: "!contains(needs.pre_ci.outputs.commit_message, '[skip ci]')"
+    needs: pre_ci
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+      - name: Checkout Project
+        uses: actions/checkout@v2
+        with:
+          ref: vercel
+          path: out
+      - name: Use Node.js v16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Restore CI Cache
+        uses: actions/cache@v2.1.5
+        id: cache-restore
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-16-${{ hashFiles('**/yarn.lock') }}
+      - name: Install Dependencies if Cache Miss
+        if: ${{ !steps.cache-restore.outputs.cache-hit }}
+        run: yarn --frozen-lockfile
+      - name: Build Code
+        run: yarn build
+      - name: Push new code
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo -e "\n# Remove any old files in the dist folder"
+          rm -rfv out/api/*
+
+          echo -e "\n# Move the generated docs to the newly-checked-out repo, to be committed and pushed"
+          rsync -vaI package.json out/
+          rsync -vaI api/ out/api
+
+          echo -e "\n# Commit and push"
+          cd out
+          git add --all .
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "build: vercel build for ${GITHUB_SHA}" || true
+          git push origin vercel
