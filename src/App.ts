@@ -1,6 +1,10 @@
-import { isNullish } from '@sapphire/utilities';
 import type { Probot } from 'probot';
-import { ContinuousDeliveryWorkflow } from './constants';
+
+function isNullish(value: unknown): value is undefined | null {
+	return value === undefined || value === null;
+}
+
+const ContinuousDeliveryWorkflow = 'continuous-delivery.yml';
 
 export default (app: Probot) => {
 	app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {

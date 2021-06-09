@@ -22,7 +22,6 @@
 		"prepare": "husky install .github/husky"
 	},
 	"dependencies": {
-		"@sapphire/utilities": "^1.5.3",
 		"dotenv-cra": "^2.0.2",
 		"probot": "^11.4.1",
 		"tslib": "^2.2.0"
