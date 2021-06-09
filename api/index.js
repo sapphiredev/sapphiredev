@@ -106689,7 +106689,7 @@ const ContinuousDeliveryWorkflow = 'continuous-delivery.yml';
 
 
 (0,main.config)({
-    path: __nccwpck_require__.ab + ".env"
+    path: process.env.NODE_ENV === 'production' ? (0,external_path_.join)(__dirname, '.env') : (0,external_path_.join)(__dirname, '..', '.env')
 });
 const probot = (0,lib.createProbot)({
     defaults: {
