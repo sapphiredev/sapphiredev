@@ -40,8 +40,6 @@ jobs:
           rm -rfv out/api/*
 
           echo -e "\n# Move the generated docs to the newly-checked-out repo, to be committed and pushed"
-          rsync -vaI package.json out/
-          rsync -vaI yarn.lock out/
           rsync -vaI api/ out/api
 
           echo -e "\n# Commit and push"

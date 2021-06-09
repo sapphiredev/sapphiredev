@@ -8,6 +8,7 @@ docs/
 
 # Output directory
 api/
+dist/
 
 # Ignore JavaScript files
 **/*.js
