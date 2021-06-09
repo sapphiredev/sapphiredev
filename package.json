@@ -29,7 +29,6 @@
 		"prepare": "husky install .github/husky"
 	},
 	"dependencies": {
-		"@sapphire/fetch": "^1.0.1",
 		"@sapphire/utilities": "^1.5.3",
 		"dotenv-cra": "^2.0.2",
 		"probot": "^11.4.1",
@@ -43,7 +42,6 @@
 		"@sapphire/ts-config": "^2.2.3",
 		"@types/jest": "^26.0.23",
 		"@types/node": "^15.12.2",
-		"@types/node-fetch": "^2.5.10",
 		"cz-conventional-changelog": "^3.3.0",
 		"esbuild": "^0.12.8",
 		"husky": "^6.0.0",
