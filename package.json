@@ -15,6 +15,7 @@
 	},
 	"scripts": {
 		"start": "probot run dist/SapphireBot.js",
+		"debug": "node dist/DebugRun.js",
 		"lint": "eslint src tests --ext ts --fix",
 		"format": "prettier --write {src,tests}/**/*.ts",
 		"build": "node scripts/build.mjs",
