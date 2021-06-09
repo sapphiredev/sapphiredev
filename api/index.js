@@ -106645,12 +106645,20 @@ var main = __nccwpck_require__(92170);
 var external_path_ = __nccwpck_require__(85622);
 // EXTERNAL MODULE: ./node_modules/probot/lib/index.js
 var lib = __nccwpck_require__(58930);
-;// CONCATENATED MODULE: ./src/App.ts
+;// CONCATENATED MODULE: ./src/constants.ts
 function isNullish(value) {
     return value === undefined || value === null;
 }
 const ContinuousDeliveryWorkflow = 'continuous-delivery.yml';
-/* harmony default export */ const App = ((app) => {
+const VerifiedSenders = new Map([
+    [4019718, 'Favna'],
+    [24852502, 'kyranet'],
+    [17960496, 'vladfrangu']
+]);
+
+;// CONCATENATED MODULE: ./src/app.ts
+
+/* harmony default export */ const app = ((app) => {
     app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
         var _a;
         /** Do not trigger if the comment was made by a bot */
@@ -106660,11 +106668,12 @@ const ContinuousDeliveryWorkflow = 'continuous-delivery.yml';
         if (
         /** Validate that the action is either comments created or comments edited */
         (context.payload.action === 'created' || context.payload.action === 'edited') &&
-            !isNullish(context.payload.issue.pull_request)) {
-            const issueBodyLower = context.payload.comment.body.toLowerCase();
+            !isNullish(context.payload.issue.pull_request) &&
+            VerifiedSenders.has(context.payload.sender.id)) {
+            const commentBodyLowerCase = context.payload.comment.body.toLowerCase();
             const workflowUrl = `https://github.com/${context.payload.repository.full_name}/actions/workflows/${ContinuousDeliveryWorkflow}`;
             const fullPrData = await context.octokit.pulls.get(context.pullRequest());
-            if (issueBodyLower.includes('@sapphiredev deploy')) {
+            if (commentBodyLowerCase.startsWith('@sapphiredev deploy')) {
                 await context.octokit.actions.createWorkflowDispatch({
                     workflow_id: ContinuousDeliveryWorkflow,
                     owner: (_a = context.payload.repository.owner.name) !== null && _a !== void 0 ? _a : 'sapphiredev',
@@ -106696,7 +106705,7 @@ const probot = (0,lib.createProbot)({
         webhookPath: '/api/'
     }
 });
-/* harmony default export */ const src = ((0,lib.createNodeMiddleware)(App, { probot }));
+/* harmony default export */ const src = ((0,lib.createNodeMiddleware)(app, { probot }));
 
 })();
 
