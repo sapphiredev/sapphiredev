@@ -21,6 +21,7 @@
 		"prepare": "husky install .github/husky"
 	},
 	"dependencies": {
+		"@sapphire/fetch": "^1.0.3",
 		"dotenv-cra": "^2.0.2",
 		"probot": "^11.4.1",
 		"tslib": "^2.2.0"
@@ -32,6 +33,7 @@
 		"@sapphire/prettier-config": "^1.1.3",
 		"@sapphire/ts-config": "^2.2.3",
 		"@types/node": "^15.12.2",
+		"@types/node-fetch": "^2.5.10",
 		"@vercel/ncc": "^0.28.6",
 		"cz-conventional-changelog": "^3.3.0",
 		"husky": "^6.0.0",

@@ -24,7 +24,7 @@ export default (app: Probot) => {
 
 			const fullPrData = await context.octokit.pulls.get(context.pullRequest());
 
-			if (commentBodyLowerCase.startsWith('@sapphiredev deploy')) {
+			if (commentBodyLowerCase.includes('@sapphiredev pack')) {
 				await context.octokit.actions.createWorkflowDispatch({
 					workflow_id: ContinuousDeliveryWorkflow,
 					owner: context.payload.repository.owner.name ?? 'sapphiredev',
