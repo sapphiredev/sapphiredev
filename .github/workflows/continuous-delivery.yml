@@ -9,7 +9,6 @@ jobs:
   Build:
     name: Publish Serverless Code
     runs-on: ubuntu-latest
-    if: "!contains(needs.pre_ci.outputs.commit_message, '[skip ci]')"
     steps:
       - name: Checkout Project
         uses: actions/checkout@v2
