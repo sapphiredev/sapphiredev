@@ -1,5 +1,6 @@
+import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import type { Probot } from 'probot';
-import { ContinuousDeliveryWorkflow, isNullish, VerifiedSenders } from './constants';
+import { ContinuousDeliveryWorkflow, isNullish, PublishJobName, PullRequestData, VerifiedSenders } from './constants';
 
 export default (app: Probot) => {
 	app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
@@ -29,7 +30,10 @@ export default (app: Probot) => {
 					workflow_id: ContinuousDeliveryWorkflow,
 					owner: context.payload.repository.owner.name ?? 'sapphiredev',
 					repo: context.payload.repository.name,
-					ref: fullPrData.data.head.ref
+					ref: fullPrData.data.head.ref,
+					inputs: {
+						prNumber: context.payload.issue.number.toString()
+					}
 				});
 
 				const replyMessage = context.issue({
@@ -40,6 +44,50 @@ export default (app: Probot) => {
 				});
 
 				await context.octokit.issues.createComment(replyMessage);
+			}
+		}
+	});
+
+	app.on('workflow_run.completed', async (context) => {
+		if (
+			/** Validate that the action is completed */
+			context.payload.action === 'completed' &&
+			context.payload.workflow?.path.endsWith(ContinuousDeliveryWorkflow)
+		) {
+			const workflowRunInfo = context.payload.workflow_run;
+			const pullRequestInfo: PullRequestData | undefined = workflowRunInfo?.pull_requests?.[0];
+			const { owner, repo } = context.issue();
+
+			if (workflowRunInfo && pullRequestInfo) {
+				const workflowJobs = await context.octokit.actions.listJobsForWorkflowRun({ owner, repo, run_id: workflowRunInfo.id });
+
+				const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase() === PublishJobName)?.id;
+
+				if (publishJobId) {
+					const jobLogsData = await context.octokit.actions.downloadJobLogsForWorkflowRun({ owner, repo, job_id: publishJobId });
+
+					if (jobLogsData.url) {
+						const jobLogs = await fetch(jobLogsData.url, FetchResultTypes.Text);
+
+						const matched = jobLogs.match(/📦\s+@sapphire\/[a-z\-0-9.]+/g);
+
+						if (matched) {
+							const packageNames = matched.map((a) => a.slice(4));
+
+							await context.octokit.issues.createComment({
+								owner,
+								repo,
+								body: [
+									`The deployment workflow has finished successfully. You can install it for testing like so:`,
+									'```sh',
+									packageNames.map((name) => `npm install ${name}@pr-${pullRequestInfo.number}`).join('\n'),
+									'```'
+								].join('\n'),
+								issue_number: pullRequestInfo.number
+							});
+						}
+					}
+				}
 			}
 		}
 	});
