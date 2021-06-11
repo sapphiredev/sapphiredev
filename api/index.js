@@ -9864,6 +9864,216 @@ function toSentryError(data) {
 
 /***/ }),
 
+/***/ 99555:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.default = void 0;
+const tslib_1 = __nccwpck_require__(4351);
+tslib_1.__exportStar(__nccwpck_require__(39963), exports);
+var fetch_1 = __nccwpck_require__(39963);
+Object.defineProperty(exports, "default", ({ enumerable: true, get: function () { return fetch_1.fetch; } }));
+tslib_1.__exportStar(__nccwpck_require__(3423), exports);
+tslib_1.__exportStar(__nccwpck_require__(8688), exports);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 3423:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+var _QueryError_json;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.QueryError = void 0;
+const tslib_1 = __nccwpck_require__(4351);
+/**
+ * The QueryError class which is thrown by the `fetch` method
+ */
+class QueryError extends Error {
+    constructor(url, code, response, body) {
+        super(`Failed to request '${url}' with code ${code}.`);
+        /** The requested url. */
+        Object.defineProperty(this, "url", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        /** The HTTP status code. */
+        Object.defineProperty(this, "code", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        /** The returned response body as a string */
+        Object.defineProperty(this, "body", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        /** The original {@link Response} object */
+        Object.defineProperty(this, "response", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
+        _QueryError_json.set(this, void 0);
+        this.url = typeof url === 'string' ? url : url.href;
+        this.code = code;
+        this.body = body;
+        this.response = response;
+        tslib_1.__classPrivateFieldSet(this, _QueryError_json, null, "f");
+    }
+    toJSON() {
+        var _a;
+        return (_a = tslib_1.__classPrivateFieldGet(this, _QueryError_json, "f")) !== null && _a !== void 0 ? _a : (tslib_1.__classPrivateFieldSet(this, _QueryError_json, JSON.parse(this.body), "f"));
+    }
+}
+exports.QueryError = QueryError;
+_QueryError_json = new WeakMap();
+//# sourceMappingURL=QueryError.js.map
+
+/***/ }),
+
+/***/ 39963:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.fetch = void 0;
+const tslib_1 = __nccwpck_require__(4351);
+const node_fetch_1 = tslib_1.__importDefault(__nccwpck_require__(80467));
+const QueryError_1 = __nccwpck_require__(3423);
+__nccwpck_require__(8688);
+async function fetch(url, options, type) {
+    if (typeof options === 'undefined') {
+        options = {};
+        type = "json" /* JSON */;
+    }
+    else if (typeof options === 'string') {
+        type = options;
+        options = {};
+    }
+    else if (typeof type === 'undefined') {
+        type = "json" /* JSON */;
+    }
+    const result = await node_fetch_1.default(url, options);
+    if (!result.ok)
+        throw new QueryError_1.QueryError(url, result.status, result, await result.clone().text());
+    switch (type) {
+        case "result" /* Result */:
+            return result;
+        case "buffer" /* Buffer */:
+            return result.buffer();
+        case "json" /* JSON */:
+            return result.json();
+        case "text" /* Text */:
+            return result.text();
+        default:
+            throw new Error(`Unknown type "${type}"`);
+    }
+}
+exports.fetch = fetch;
+//# sourceMappingURL=fetch.js.map
+
+/***/ }),
+
+/***/ 8688:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.FetchMethods = exports.FetchResultTypes = void 0;
+/**
+ * The supported return types for the `fetch` method
+ */
+var FetchResultTypes;
+(function (FetchResultTypes) {
+    /**
+     * Returns only the body, as JSON. Similar to [`Body.json()`](https://developer.mozilla.org/en-US/docs/Web/API/Body/json).
+     *
+     * You should provide your own type cast (either through the generic return type, or with `as <type>`) to the response to define
+     * the JSON structure, otherwise the result will be `unknown`.
+     */
+    FetchResultTypes["JSON"] = "json";
+    /**
+     * Returns only the body, as a [Buffer](https://nodejs.org/api/buffer.html). Similar to [`Body.blob()`](https://developer.mozilla.org/en-US/docs/Web/API/Body/blob).
+     */
+    FetchResultTypes["Buffer"] = "buffer";
+    /**
+     * Returns only the body, as plain text. Similar to [`Body.text()`](https://developer.mozilla.org/en-US/docs/Web/API/Body/text).
+     */
+    FetchResultTypes["Text"] = "text";
+    /**
+     * Returns the entire response and doesn't parse the `body` in any way.
+     */
+    FetchResultTypes["Result"] = "result";
+})(FetchResultTypes = exports.FetchResultTypes || (exports.FetchResultTypes = {}));
+/**
+ * The list of [HTTP Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+ */
+var FetchMethods;
+(function (FetchMethods) {
+    /**
+     * The `GET` method requests a representation of the specified resource. Requests using `GET` should only retrieve data.
+     * @see [MDN / Web / HTTP / Methods / GET](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET)
+     */
+    FetchMethods["Get"] = "GET";
+    /**
+     * The `HEAD` method asks for a response identical to that of a {@link FetchMethods.Get `GET`} request, but without the response body.
+     * @see [MDN / Web / HTTP / Methods / HEAD](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/HEAD)
+     */
+    FetchMethods["Head"] = "HEAD";
+    /**
+     * The `POST` method is used to submit an entity to the specified resource, often causing a change in state or side effects on the server.
+     * @see [MDN / Web / HTTP / Methods / POST](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST)
+     */
+    FetchMethods["Post"] = "POST";
+    /**
+     * The `PUT` method replaces all current representations of the target resource with the request payload.
+     * @see [MDN / Web / HTTP / Methods / PUT](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PUT)
+     */
+    FetchMethods["Put"] = "PUT";
+    /**
+     * The `DELETE` method deletes the specified resource.
+     * @see [MDN / Web / HTTP / Methods / DELETE](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/DELETE)
+     */
+    FetchMethods["Delete"] = "DELETE";
+    /**
+     *  The `CONNECT` method establishes a tunnel to the server identified by the target resource
+     * @see [MDN / Web / HTTP / Methods / CONNECT](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/CONNECT)
+     */
+    FetchMethods["Connect"] = "CONNECT";
+    /**
+     * The `OPTIONS` method is used to describe the communication options for the target resource.
+     * @see [MDN / Web / HTTP / Methods / OPTIONS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS)
+     */
+    FetchMethods["Options"] = "OPTIONS";
+    /**
+     * The `TRACE` method performs a message loop-back test along the path to the target resource.
+     * @see [MDN / Web / HTTP / Methods / TRACE](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/TRACE)
+     */
+    FetchMethods["Trace"] = "TRACE";
+    /**
+     * The `PATCH` method is used to apply partial modifications to a resource.
+     * @see [MDN / Web / HTTP / Methods / PATCH](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH)
+     */
+    FetchMethods["Patch"] = "PATCH";
+})(FetchMethods = exports.FetchMethods || (exports.FetchMethods = {}));
+//# sourceMappingURL=types.js.map
+
+/***/ }),
+
 /***/ 90785:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -32971,7 +33181,7 @@ module.exports.parse = parse
  */
 
 var basename = __nccwpck_require__(85622).basename
-var Buffer = __nccwpck_require__(21867).Buffer
+var Buffer = __nccwpck_require__(38558).Buffer
 
 /**
  * RegExp to match non attr-char, *after* encodeURIComponent (i.e. not including "%")
@@ -33406,6 +33616,75 @@ function ustring (val) {
 function ContentDisposition (type, parameters) {
   this.type = type
   this.parameters = parameters
+}
+
+
+/***/ }),
+
+/***/ 38558:
+/***/ ((module, exports, __nccwpck_require__) => {
+
+/* eslint-disable node/no-deprecated-api */
+var buffer = __nccwpck_require__(64293)
+var Buffer = buffer.Buffer
+
+// alternative to using Object.keys for old browsers
+function copyProps (src, dst) {
+  for (var key in src) {
+    dst[key] = src[key]
+  }
+}
+if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
+  module.exports = buffer
+} else {
+  // Copy properties from require('buffer')
+  copyProps(buffer, exports)
+  exports.Buffer = SafeBuffer
+}
+
+function SafeBuffer (arg, encodingOrOffset, length) {
+  return Buffer(arg, encodingOrOffset, length)
+}
+
+// Copy static methods from Buffer
+copyProps(Buffer, SafeBuffer)
+
+SafeBuffer.from = function (arg, encodingOrOffset, length) {
+  if (typeof arg === 'number') {
+    throw new TypeError('Argument must not be a number')
+  }
+  return Buffer(arg, encodingOrOffset, length)
+}
+
+SafeBuffer.alloc = function (size, fill, encoding) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  var buf = Buffer(size)
+  if (fill !== undefined) {
+    if (typeof encoding === 'string') {
+      buf.fill(fill, encoding)
+    } else {
+      buf.fill(fill)
+    }
+  } else {
+    buf.fill(0)
+  }
+  return buf
+}
+
+SafeBuffer.allocUnsafe = function (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  return Buffer(size)
+}
+
+SafeBuffer.allocUnsafeSlow = function (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  return buffer.SlowBuffer(size)
 }
 
 
@@ -36839,85 +37118,13 @@ module.exports.parse = parse
 
 /***/ }),
 
-/***/ 22245:
-/***/ ((module, exports, __nccwpck_require__) => {
-
-/*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
-/* eslint-disable node/no-deprecated-api */
-var buffer = __nccwpck_require__(64293)
-var Buffer = buffer.Buffer
-
-// alternative to using Object.keys for old browsers
-function copyProps (src, dst) {
-  for (var key in src) {
-    dst[key] = src[key]
-  }
-}
-if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
-  module.exports = buffer
-} else {
-  // Copy properties from require('buffer')
-  copyProps(buffer, exports)
-  exports.Buffer = SafeBuffer
-}
-
-function SafeBuffer (arg, encodingOrOffset, length) {
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.prototype = Object.create(Buffer.prototype)
-
-// Copy static methods from Buffer
-copyProps(Buffer, SafeBuffer)
-
-SafeBuffer.from = function (arg, encodingOrOffset, length) {
-  if (typeof arg === 'number') {
-    throw new TypeError('Argument must not be a number')
-  }
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.alloc = function (size, fill, encoding) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  var buf = Buffer(size)
-  if (fill !== undefined) {
-    if (typeof encoding === 'string') {
-      buf.fill(fill, encoding)
-    } else {
-      buf.fill(fill)
-    }
-  } else {
-    buf.fill(0)
-  }
-  return buf
-}
-
-SafeBuffer.allocUnsafe = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return Buffer(size)
-}
-
-SafeBuffer.allocUnsafeSlow = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return buffer.SlowBuffer(size)
-}
-
-
-/***/ }),
-
 /***/ 11728:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var Buffer = __nccwpck_require__(22245).Buffer;
+var Buffer = __nccwpck_require__(21867).Buffer;
 
 var getParamBytesForAlg = __nccwpck_require__(30528);
 
@@ -39586,7 +39793,7 @@ function defineGetter(obj, name, getter) {
  * @private
  */
 
-var Buffer = __nccwpck_require__(21867).Buffer
+var Buffer = __nccwpck_require__(41894).Buffer
 var contentDisposition = __nccwpck_require__(53921);
 var deprecate = __nccwpck_require__(18883)('express');
 var encodeUrl = __nccwpck_require__(16592);
@@ -41819,7 +42026,7 @@ methods.forEach(function(method){
  * @api private
  */
 
-var Buffer = __nccwpck_require__(21867).Buffer
+var Buffer = __nccwpck_require__(41894).Buffer
 var contentDisposition = __nccwpck_require__(53921);
 var contentType = __nccwpck_require__(99915);
 var deprecate = __nccwpck_require__(18883)('express');
@@ -43132,6 +43339,75 @@ function plural(ms, n, name) {
     return Math.floor(ms / n) + ' ' + name;
   }
   return Math.ceil(ms / n) + ' ' + name + 's';
+}
+
+
+/***/ }),
+
+/***/ 41894:
+/***/ ((module, exports, __nccwpck_require__) => {
+
+/* eslint-disable node/no-deprecated-api */
+var buffer = __nccwpck_require__(64293)
+var Buffer = buffer.Buffer
+
+// alternative to using Object.keys for old browsers
+function copyProps (src, dst) {
+  for (var key in src) {
+    dst[key] = src[key]
+  }
+}
+if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
+  module.exports = buffer
+} else {
+  // Copy properties from require('buffer')
+  copyProps(buffer, exports)
+  exports.Buffer = SafeBuffer
+}
+
+function SafeBuffer (arg, encodingOrOffset, length) {
+  return Buffer(arg, encodingOrOffset, length)
+}
+
+// Copy static methods from Buffer
+copyProps(Buffer, SafeBuffer)
+
+SafeBuffer.from = function (arg, encodingOrOffset, length) {
+  if (typeof arg === 'number') {
+    throw new TypeError('Argument must not be a number')
+  }
+  return Buffer(arg, encodingOrOffset, length)
+}
+
+SafeBuffer.alloc = function (size, fill, encoding) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  var buf = Buffer(size)
+  if (fill !== undefined) {
+    if (typeof encoding === 'string') {
+      buf.fill(fill, encoding)
+    } else {
+      buf.fill(fill)
+    }
+  } else {
+    buf.fill(0)
+  }
+  return buf
+}
+
+SafeBuffer.allocUnsafe = function (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  return Buffer(size)
+}
+
+SafeBuffer.allocUnsafeSlow = function (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  return buffer.SlowBuffer(size)
 }
 
 
@@ -66886,7 +67162,7 @@ module.exports = function (jwtString, secretOrPublicKey, options, callback) {
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 var bufferEqual = __nccwpck_require__(9239);
-var Buffer = __nccwpck_require__(89341).Buffer;
+var Buffer = __nccwpck_require__(21867).Buffer;
 var crypto = __nccwpck_require__(76417);
 var formatEcdsa = __nccwpck_require__(11728);
 var util = __nccwpck_require__(31669);
@@ -67141,78 +67417,6 @@ module.exports = function jwa(algorithm) {
 
 /***/ }),
 
-/***/ 89341:
-/***/ ((module, exports, __nccwpck_require__) => {
-
-/*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
-/* eslint-disable node/no-deprecated-api */
-var buffer = __nccwpck_require__(64293)
-var Buffer = buffer.Buffer
-
-// alternative to using Object.keys for old browsers
-function copyProps (src, dst) {
-  for (var key in src) {
-    dst[key] = src[key]
-  }
-}
-if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
-  module.exports = buffer
-} else {
-  // Copy properties from require('buffer')
-  copyProps(buffer, exports)
-  exports.Buffer = SafeBuffer
-}
-
-function SafeBuffer (arg, encodingOrOffset, length) {
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.prototype = Object.create(Buffer.prototype)
-
-// Copy static methods from Buffer
-copyProps(Buffer, SafeBuffer)
-
-SafeBuffer.from = function (arg, encodingOrOffset, length) {
-  if (typeof arg === 'number') {
-    throw new TypeError('Argument must not be a number')
-  }
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.alloc = function (size, fill, encoding) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  var buf = Buffer(size)
-  if (fill !== undefined) {
-    if (typeof encoding === 'string') {
-      buf.fill(fill, encoding)
-    } else {
-      buf.fill(fill)
-    }
-  } else {
-    buf.fill(0)
-  }
-  return buf
-}
-
-SafeBuffer.allocUnsafe = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return Buffer(size)
-}
-
-SafeBuffer.allocUnsafeSlow = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return buffer.SlowBuffer(size)
-}
-
-
-/***/ }),
-
 /***/ 4636:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -67246,7 +67450,7 @@ exports.createVerify = function createVerify(opts) {
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /*global module, process*/
-var Buffer = __nccwpck_require__(76216).Buffer;
+var Buffer = __nccwpck_require__(21867).Buffer;
 var Stream = __nccwpck_require__(92413);
 var util = __nccwpck_require__(31669);
 
@@ -67308,7 +67512,7 @@ module.exports = DataStream;
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /*global module*/
-var Buffer = __nccwpck_require__(76216).Buffer;
+var Buffer = __nccwpck_require__(21867).Buffer;
 var DataStream = __nccwpck_require__(61868);
 var jwa = __nccwpck_require__(96010);
 var Stream = __nccwpck_require__(92413);
@@ -67410,7 +67614,7 @@ module.exports = function toString(obj) {
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /*global module*/
-var Buffer = __nccwpck_require__(76216).Buffer;
+var Buffer = __nccwpck_require__(21867).Buffer;
 var DataStream = __nccwpck_require__(61868);
 var jwa = __nccwpck_require__(96010);
 var Stream = __nccwpck_require__(92413);
@@ -67529,78 +67733,6 @@ VerifyStream.isValid = isValidJws;
 VerifyStream.verify = jwsVerify;
 
 module.exports = VerifyStream;
-
-
-/***/ }),
-
-/***/ 76216:
-/***/ ((module, exports, __nccwpck_require__) => {
-
-/*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
-/* eslint-disable node/no-deprecated-api */
-var buffer = __nccwpck_require__(64293)
-var Buffer = buffer.Buffer
-
-// alternative to using Object.keys for old browsers
-function copyProps (src, dst) {
-  for (var key in src) {
-    dst[key] = src[key]
-  }
-}
-if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
-  module.exports = buffer
-} else {
-  // Copy properties from require('buffer')
-  copyProps(buffer, exports)
-  exports.Buffer = SafeBuffer
-}
-
-function SafeBuffer (arg, encodingOrOffset, length) {
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.prototype = Object.create(Buffer.prototype)
-
-// Copy static methods from Buffer
-copyProps(Buffer, SafeBuffer)
-
-SafeBuffer.from = function (arg, encodingOrOffset, length) {
-  if (typeof arg === 'number') {
-    throw new TypeError('Argument must not be a number')
-  }
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.alloc = function (size, fill, encoding) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  var buf = Buffer(size)
-  if (fill !== undefined) {
-    if (typeof encoding === 'string') {
-      buf.fill(fill, encoding)
-    } else {
-      buf.fill(fill)
-    }
-  } else {
-    buf.fill(0)
-  }
-  return buf
-}
-
-SafeBuffer.allocUnsafe = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return Buffer(size)
-}
-
-SafeBuffer.allocUnsafeSlow = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return buffer.SlowBuffer(size)
-}
 
 
 /***/ }),
@@ -89707,6 +89839,7 @@ function rfdcCircles (opts) {
 /***/ 21867:
 /***/ ((module, exports, __nccwpck_require__) => {
 
+/*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
 /* eslint-disable node/no-deprecated-api */
 var buffer = __nccwpck_require__(64293)
 var Buffer = buffer.Buffer
@@ -89728,6 +89861,8 @@ if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow)
 function SafeBuffer (arg, encodingOrOffset, length) {
   return Buffer(arg, encodingOrOffset, length)
 }
+
+SafeBuffer.prototype = Object.create(Buffer.prototype)
 
 // Copy static methods from Buffer
 copyProps(Buffer, SafeBuffer)
@@ -95713,7 +95848,7 @@ function status (code) {
 
 /*<replacement>*/
 
-var Buffer = __nccwpck_require__(2279).Buffer;
+var Buffer = __nccwpck_require__(21867).Buffer;
 /*</replacement>*/
 
 var isEncoding = Buffer.isEncoding || function (encoding) {
@@ -95984,78 +96119,6 @@ function simpleWrite(buf) {
 function simpleEnd(buf) {
   return buf && buf.length ? this.write(buf) : '';
 }
-
-/***/ }),
-
-/***/ 2279:
-/***/ ((module, exports, __nccwpck_require__) => {
-
-/*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
-/* eslint-disable node/no-deprecated-api */
-var buffer = __nccwpck_require__(64293)
-var Buffer = buffer.Buffer
-
-// alternative to using Object.keys for old browsers
-function copyProps (src, dst) {
-  for (var key in src) {
-    dst[key] = src[key]
-  }
-}
-if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
-  module.exports = buffer
-} else {
-  // Copy properties from require('buffer')
-  copyProps(buffer, exports)
-  exports.Buffer = SafeBuffer
-}
-
-function SafeBuffer (arg, encodingOrOffset, length) {
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.prototype = Object.create(Buffer.prototype)
-
-// Copy static methods from Buffer
-copyProps(Buffer, SafeBuffer)
-
-SafeBuffer.from = function (arg, encodingOrOffset, length) {
-  if (typeof arg === 'number') {
-    throw new TypeError('Argument must not be a number')
-  }
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.alloc = function (size, fill, encoding) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  var buf = Buffer(size)
-  if (fill !== undefined) {
-    if (typeof encoding === 'string') {
-      buf.fill(fill, encoding)
-    } else {
-      buf.fill(fill)
-    }
-  } else {
-    buf.fill(0)
-  }
-  return buf
-}
-
-SafeBuffer.allocUnsafe = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return Buffer(size)
-}
-
-SafeBuffer.allocUnsafeSlow = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return buffer.SlowBuffer(size)
-}
-
 
 /***/ }),
 
@@ -100247,6 +100310,315 @@ function toIdentifier (str) {
     .join('')
     .replace(/[^ _0-9a-z]/gi, '')
 }
+
+
+/***/ }),
+
+/***/ 4351:
+/***/ ((module) => {
+
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global global, define, System, Reflect, Promise */
+var __extends;
+var __assign;
+var __rest;
+var __decorate;
+var __param;
+var __metadata;
+var __awaiter;
+var __generator;
+var __exportStar;
+var __values;
+var __read;
+var __spread;
+var __spreadArrays;
+var __spreadArray;
+var __await;
+var __asyncGenerator;
+var __asyncDelegator;
+var __asyncValues;
+var __makeTemplateObject;
+var __importStar;
+var __importDefault;
+var __classPrivateFieldGet;
+var __classPrivateFieldSet;
+var __createBinding;
+(function (factory) {
+    var root = typeof global === "object" ? global : typeof self === "object" ? self : typeof this === "object" ? this : {};
+    if (typeof define === "function" && define.amd) {
+        define("tslib", ["exports"], function (exports) { factory(createExporter(root, createExporter(exports))); });
+    }
+    else if ( true && typeof module.exports === "object") {
+        factory(createExporter(root, createExporter(module.exports)));
+    }
+    else {
+        factory(createExporter(root));
+    }
+    function createExporter(exports, previous) {
+        if (exports !== root) {
+            if (typeof Object.create === "function") {
+                Object.defineProperty(exports, "__esModule", { value: true });
+            }
+            else {
+                exports.__esModule = true;
+            }
+        }
+        return function (id, v) { return exports[id] = previous ? previous(id, v) : v; };
+    }
+})
+(function (exporter) {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+
+    __extends = function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+
+    __assign = Object.assign || function (t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+
+    __rest = function (s, e) {
+        var t = {};
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+            t[p] = s[p];
+        if (s != null && typeof Object.getOwnPropertySymbols === "function")
+            for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+                if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                    t[p[i]] = s[p[i]];
+            }
+        return t;
+    };
+
+    __decorate = function (decorators, target, key, desc) {
+        var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+        else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+
+    __param = function (paramIndex, decorator) {
+        return function (target, key) { decorator(target, key, paramIndex); }
+    };
+
+    __metadata = function (metadataKey, metadataValue) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+    };
+
+    __awaiter = function (thisArg, _arguments, P, generator) {
+        function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+        return new (P || (P = Promise))(function (resolve, reject) {
+            function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+            function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+            function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+            step((generator = generator.apply(thisArg, _arguments || [])).next());
+        });
+    };
+
+    __generator = function (thisArg, body) {
+        var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+        function verb(n) { return function (v) { return step([n, v]); }; }
+        function step(op) {
+            if (f) throw new TypeError("Generator is already executing.");
+            while (_) try {
+                if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+                if (y = 0, t) op = [op[0] & 2, t.value];
+                switch (op[0]) {
+                    case 0: case 1: t = op; break;
+                    case 4: _.label++; return { value: op[1], done: false };
+                    case 5: _.label++; y = op[1]; op = [0]; continue;
+                    case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                    default:
+                        if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                        if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                        if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                        if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                        if (t[2]) _.ops.pop();
+                        _.trys.pop(); continue;
+                }
+                op = body.call(thisArg, _);
+            } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+            if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+        }
+    };
+
+    __exportStar = function(m, o) {
+        for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p)) __createBinding(o, m, p);
+    };
+
+    __createBinding = Object.create ? (function(o, m, k, k2) {
+        if (k2 === undefined) k2 = k;
+        Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    }) : (function(o, m, k, k2) {
+        if (k2 === undefined) k2 = k;
+        o[k2] = m[k];
+    });
+
+    __values = function (o) {
+        var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+        if (m) return m.call(o);
+        if (o && typeof o.length === "number") return {
+            next: function () {
+                if (o && i >= o.length) o = void 0;
+                return { value: o && o[i++], done: !o };
+            }
+        };
+        throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+    };
+
+    __read = function (o, n) {
+        var m = typeof Symbol === "function" && o[Symbol.iterator];
+        if (!m) return o;
+        var i = m.call(o), r, ar = [], e;
+        try {
+            while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+        }
+        catch (error) { e = { error: error }; }
+        finally {
+            try {
+                if (r && !r.done && (m = i["return"])) m.call(i);
+            }
+            finally { if (e) throw e.error; }
+        }
+        return ar;
+    };
+
+    /** @deprecated */
+    __spread = function () {
+        for (var ar = [], i = 0; i < arguments.length; i++)
+            ar = ar.concat(__read(arguments[i]));
+        return ar;
+    };
+
+    /** @deprecated */
+    __spreadArrays = function () {
+        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+        for (var r = Array(s), k = 0, i = 0; i < il; i++)
+            for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+                r[k] = a[j];
+        return r;
+    };
+
+    __spreadArray = function (to, from) {
+        for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+            to[j] = from[i];
+        return to;
+    };
+
+    __await = function (v) {
+        return this instanceof __await ? (this.v = v, this) : new __await(v);
+    };
+
+    __asyncGenerator = function (thisArg, _arguments, generator) {
+        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        var g = generator.apply(thisArg, _arguments || []), i, q = [];
+        return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+        function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+        function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+        function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);  }
+        function fulfill(value) { resume("next", value); }
+        function reject(value) { resume("throw", value); }
+        function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+    };
+
+    __asyncDelegator = function (o) {
+        var i, p;
+        return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+        function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+    };
+
+    __asyncValues = function (o) {
+        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        var m = o[Symbol.asyncIterator], i;
+        return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+        function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+        function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+    };
+
+    __makeTemplateObject = function (cooked, raw) {
+        if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+        return cooked;
+    };
+
+    var __setModuleDefault = Object.create ? (function(o, v) {
+        Object.defineProperty(o, "default", { enumerable: true, value: v });
+    }) : function(o, v) {
+        o["default"] = v;
+    };
+
+    __importStar = function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+
+    __importDefault = function (mod) {
+        return (mod && mod.__esModule) ? mod : { "default": mod };
+    };
+
+    __classPrivateFieldGet = function (receiver, state, kind, f) {
+        if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+        if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+        return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+    };
+
+    __classPrivateFieldSet = function (receiver, state, value, kind, f) {
+        if (kind === "m") throw new TypeError("Private method is not writable");
+        if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+        if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+        return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+    };
+
+    exporter("__extends", __extends);
+    exporter("__assign", __assign);
+    exporter("__rest", __rest);
+    exporter("__decorate", __decorate);
+    exporter("__param", __param);
+    exporter("__metadata", __metadata);
+    exporter("__awaiter", __awaiter);
+    exporter("__generator", __generator);
+    exporter("__exportStar", __exportStar);
+    exporter("__createBinding", __createBinding);
+    exporter("__values", __values);
+    exporter("__read", __read);
+    exporter("__spread", __spread);
+    exporter("__spreadArrays", __spreadArrays);
+    exporter("__spreadArray", __spreadArray);
+    exporter("__await", __await);
+    exporter("__asyncGenerator", __asyncGenerator);
+    exporter("__asyncDelegator", __asyncDelegator);
+    exporter("__asyncValues", __asyncValues);
+    exporter("__makeTemplateObject", __makeTemplateObject);
+    exporter("__importStar", __importStar);
+    exporter("__importDefault", __importDefault);
+    exporter("__classPrivateFieldGet", __classPrivateFieldGet);
+    exporter("__classPrivateFieldSet", __classPrivateFieldSet);
+});
 
 
 /***/ }),
@@ -106645,11 +107017,24 @@ var main = __nccwpck_require__(92170);
 var external_path_ = __nccwpck_require__(85622);
 // EXTERNAL MODULE: ./node_modules/probot/lib/index.js
 var lib = __nccwpck_require__(58930);
+// EXTERNAL MODULE: ./node_modules/@sapphire/fetch/dist/index.js
+var dist = __nccwpck_require__(99555);
+;// CONCATENATED MODULE: ./node_modules/@sapphire/fetch/dist/index.mjs
+
+
+/* harmony default export */ const fetch_dist = ((/* unused pure expression or super */ null && (mod)));
+const FetchMethods = dist.FetchMethods;
+const FetchResultTypes = dist.FetchResultTypes;
+const QueryError = dist.QueryError;
+const __esModule = dist.__esModule;
+const fetch = dist.fetch;
+
 ;// CONCATENATED MODULE: ./src/constants.ts
 function isNullish(value) {
     return value === undefined || value === null;
 }
 const ContinuousDeliveryWorkflow = 'continuous-delivery.yml';
+const PublishJobName = 'publish next to npm';
 const VerifiedSenders = new Map([
     [4019718, 'Favna'],
     [24852502, 'kyranet'],
@@ -106657,6 +107042,7 @@ const VerifiedSenders = new Map([
 ]);
 
 ;// CONCATENATED MODULE: ./src/app.ts
+
 
 /* harmony default export */ const app = ((app) => {
     app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
@@ -106673,12 +107059,15 @@ const VerifiedSenders = new Map([
             const commentBodyLowerCase = context.payload.comment.body.toLowerCase();
             const workflowUrl = `https://github.com/${context.payload.repository.full_name}/actions/workflows/${ContinuousDeliveryWorkflow}`;
             const fullPrData = await context.octokit.pulls.get(context.pullRequest());
-            if (commentBodyLowerCase.startsWith('@sapphiredev deploy')) {
+            if (commentBodyLowerCase.includes('@sapphiredev pack')) {
                 await context.octokit.actions.createWorkflowDispatch({
                     workflow_id: ContinuousDeliveryWorkflow,
                     owner: (_a = context.payload.repository.owner.name) !== null && _a !== void 0 ? _a : 'sapphiredev',
                     repo: context.payload.repository.name,
-                    ref: fullPrData.data.head.ref
+                    ref: fullPrData.data.head.ref,
+                    inputs: {
+                        prNumber: context.payload.issue.number.toString()
+                    }
                 });
                 const replyMessage = context.issue({
                     body: [
@@ -106687,6 +107076,42 @@ const VerifiedSenders = new Map([
                     ].join(' ')
                 });
                 await context.octokit.issues.createComment(replyMessage);
+            }
+        }
+    });
+    app.on('workflow_run.completed', async (context) => {
+        var _a, _b, _c;
+        if (
+        /** Validate that the action is completed */
+        context.payload.action === 'completed' &&
+            ((_a = context.payload.workflow) === null || _a === void 0 ? void 0 : _a.path.endsWith(ContinuousDeliveryWorkflow))) {
+            const workflowRunInfo = context.payload.workflow_run;
+            const pullRequestInfo = (_b = workflowRunInfo === null || workflowRunInfo === void 0 ? void 0 : workflowRunInfo.pull_requests) === null || _b === void 0 ? void 0 : _b[0];
+            const { owner, repo } = context.issue();
+            if (workflowRunInfo && pullRequestInfo) {
+                const workflowJobs = await context.octokit.actions.listJobsForWorkflowRun({ owner, repo, run_id: workflowRunInfo.id });
+                const publishJobId = (_c = workflowJobs.data.jobs.find((job) => job.name.toLowerCase() === PublishJobName)) === null || _c === void 0 ? void 0 : _c.id;
+                if (publishJobId) {
+                    const jobLogsData = await context.octokit.actions.downloadJobLogsForWorkflowRun({ owner, repo, job_id: publishJobId });
+                    if (jobLogsData.url) {
+                        const jobLogs = await fetch(jobLogsData.url, "text" /* Text */);
+                        const matched = jobLogs.match(/📦\s+@sapphire\/[a-z\-0-9.]+/g);
+                        if (matched) {
+                            const packageNames = matched.map((a) => a.slice(4));
+                            await context.octokit.issues.createComment({
+                                owner,
+                                repo,
+                                body: [
+                                    `The deployment workflow has finished successfully. You can install it for testing like so:`,
+                                    '```sh',
+                                    packageNames.map((name) => `npm install ${name}@pr-${pullRequestInfo.number}`).join('\n'),
+                                    '```'
+                                ].join('\n'),
+                                issue_number: pullRequestInfo.number
+                            });
+                        }
+                    }
+                }
             }
         }
     });
