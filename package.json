@@ -24,7 +24,7 @@
 		"@sapphire/fetch": "^1.0.3",
 		"dotenv-cra": "^2.0.2",
 		"probot": "^11.4.1",
-		"tslib": "^2.2.0"
+		"tslib": "^2.3.0"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^12.1.4",
