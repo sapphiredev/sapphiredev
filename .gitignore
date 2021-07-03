@@ -1,3 +1,8 @@
+# Folders that are on other branches
+node_modules/
+.github/
+dist/
+
 # Ignore heapsnapshot and log files
 *.heapsnapshot
 *.log
@@ -10,7 +15,3 @@ package-lock.json
 .env.development.local
 .env.test.local
 .env.production.local
-
-# Certificate files
-*.pem
-!mock-cert.pem
