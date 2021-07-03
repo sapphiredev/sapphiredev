@@ -68171,6 +68171,100 @@ module.exports = VerifyStream;
 
 /***/ }),
 
+/***/ 75978:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const path = __nccwpck_require__(85622);
+const fs = __nccwpck_require__(77758);
+const stripBom = __nccwpck_require__(89383);
+const parseJson = __nccwpck_require__(81680);
+const pify = __nccwpck_require__(64810);
+
+const parse = (data, filePath, options = {}) => {
+	data = stripBom(data);
+
+	if (typeof options.beforeParse === 'function') {
+		data = options.beforeParse(data);
+	}
+
+	return parseJson(data, options.reviver, path.relative(process.cwd(), filePath));
+};
+
+const loadJsonFile = (filePath, options) => pify(fs.readFile)(filePath, 'utf8').then(data => parse(data, filePath, options));
+
+module.exports = loadJsonFile;
+// TODO: Remove this for the next major release
+module.exports.default = loadJsonFile;
+module.exports.sync = (filePath, options) => parse(fs.readFileSync(filePath, 'utf8'), filePath, options);
+
+
+/***/ }),
+
+/***/ 81680:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const errorEx = __nccwpck_require__(23505);
+const fallback = __nccwpck_require__(55586);
+
+const JSONError = errorEx('JSONError', {
+	fileName: errorEx.append('in %s')
+});
+
+module.exports = (input, reviver, filename) => {
+	if (typeof reviver === 'string') {
+		filename = reviver;
+		reviver = null;
+	}
+
+	try {
+		try {
+			return JSON.parse(input, reviver);
+		} catch (err) {
+			fallback(input, reviver);
+
+			throw err;
+		}
+	} catch (err) {
+		err.message = err.message.replace(/\n/g, '');
+
+		const jsonErr = new JSONError(err);
+		if (filename) {
+			jsonErr.fileName = filename;
+		}
+
+		throw jsonErr;
+	}
+};
+
+
+/***/ }),
+
+/***/ 89383:
+/***/ ((module) => {
+
+"use strict";
+
+module.exports = x => {
+	if (typeof x !== 'string') {
+		throw new TypeError('Expected a string, got ' + typeof x);
+	}
+
+	// Catches EFBBBF (UTF-8 BOM) because the buffer-to-string
+	// conversion translates it to FEFF (UTF-16 BOM)
+	if (x.charCodeAt(0) === 0xFEFF) {
+		return x.slice(1);
+	}
+
+	return x;
+};
+
+
+/***/ }),
+
 /***/ 11289:
 /***/ ((module) => {
 
@@ -76339,47 +76433,6 @@ module.exports.default = pTry;
 
 /***/ }),
 
-/***/ 86615:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-const errorEx = __nccwpck_require__(23505);
-const fallback = __nccwpck_require__(55586);
-
-const JSONError = errorEx('JSONError', {
-	fileName: errorEx.append('in %s')
-});
-
-module.exports = (input, reviver, filename) => {
-	if (typeof reviver === 'string') {
-		filename = reviver;
-		reviver = null;
-	}
-
-	try {
-		try {
-			return JSON.parse(input, reviver);
-		} catch (err) {
-			fallback(input, reviver);
-
-			throw err;
-		}
-	} catch (err) {
-		err.message = err.message.replace(/\n/g, '');
-
-		const jsonErr = new JSONError(err);
-		if (filename) {
-			jsonErr.fileName = filename;
-		}
-
-		throw jsonErr;
-	}
-};
-
-
-/***/ }),
-
 /***/ 89808:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -76760,6 +76813,82 @@ function pathtoRegexp(path, keys, options) {
   path += (end ? '$' : (path[path.length - 1] === '/' ? '' : '(?=\\/|$)'));
 
   return new RegExp(path, flags);
+};
+
+
+/***/ }),
+
+/***/ 64810:
+/***/ ((module) => {
+
+"use strict";
+
+
+const processFn = (fn, options) => function (...args) {
+	const P = options.promiseModule;
+
+	return new P((resolve, reject) => {
+		if (options.multiArgs) {
+			args.push((...result) => {
+				if (options.errorFirst) {
+					if (result[0]) {
+						reject(result);
+					} else {
+						result.shift();
+						resolve(result);
+					}
+				} else {
+					resolve(result);
+				}
+			});
+		} else if (options.errorFirst) {
+			args.push((error, result) => {
+				if (error) {
+					reject(error);
+				} else {
+					resolve(result);
+				}
+			});
+		} else {
+			args.push(resolve);
+		}
+
+		fn.apply(this, args);
+	});
+};
+
+module.exports = (input, options) => {
+	options = Object.assign({
+		exclude: [/.+(Sync|Stream)$/],
+		errorFirst: true,
+		promiseModule: Promise
+	}, options);
+
+	const objType = typeof input;
+	if (!(input !== null && (objType === 'object' || objType === 'function'))) {
+		throw new TypeError(`Expected \`input\` to be a \`Function\` or \`Object\`, got \`${input === null ? 'null' : objType}\``);
+	}
+
+	const filter = key => {
+		const match = pattern => typeof pattern === 'string' ? key === pattern : pattern.test(key);
+		return options.include ? options.include.some(match) : !options.exclude.some(match);
+	};
+
+	let ret;
+	if (objType === 'function') {
+		ret = function (...args) {
+			return options.excludeMain ? input(...args) : processFn(input, options).apply(this, args);
+		};
+	} else {
+		ret = Object.create(Object.getPrototypeOf(input));
+	}
+
+	for (const key in input) { // eslint-disable-line guard-for-in
+		const property = input[key];
+		ret[key] = typeof property === 'function' && filter(key) ? processFn(property, options) : property;
+	}
+
+	return ret;
 };
 
 
@@ -79585,7 +79714,7 @@ module.exports.pino = pino
 
 const path = __nccwpck_require__(85622);
 const findUp = __nccwpck_require__(26428);
-const loadJsonFile = __nccwpck_require__(79835);
+const loadJsonFile = __nccwpck_require__(75978);
 
 const filepaths = new WeakMap();
 const filepath = conf => filepaths.get(conf);
@@ -79702,37 +79831,6 @@ module.exports.sync = (filename, opts = {}) => {
 
 /***/ }),
 
-/***/ 79835:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-const path = __nccwpck_require__(85622);
-const fs = __nccwpck_require__(77758);
-const stripBom = __nccwpck_require__(88551);
-const parseJson = __nccwpck_require__(86615);
-const pify = __nccwpck_require__(39319);
-
-const parse = (data, filePath, options = {}) => {
-	data = stripBom(data);
-
-	if (typeof options.beforeParse === 'function') {
-		data = options.beforeParse(data);
-	}
-
-	return parseJson(data, options.reviver, path.relative(process.cwd(), filePath));
-};
-
-const loadJsonFile = (filePath, options) => pify(fs.readFile)(filePath, 'utf8').then(data => parse(data, filePath, options));
-
-module.exports = loadJsonFile;
-// TODO: Remove this for the next major release
-module.exports.default = loadJsonFile;
-module.exports.sync = (filePath, options) => parse(fs.readFileSync(filePath, 'utf8'), filePath, options);
-
-
-/***/ }),
-
 /***/ 47619:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -79827,82 +79925,6 @@ module.exports.sync = fp => {
 	} catch (err) {
 		return false;
 	}
-};
-
-
-/***/ }),
-
-/***/ 39319:
-/***/ ((module) => {
-
-"use strict";
-
-
-const processFn = (fn, options) => function (...args) {
-	const P = options.promiseModule;
-
-	return new P((resolve, reject) => {
-		if (options.multiArgs) {
-			args.push((...result) => {
-				if (options.errorFirst) {
-					if (result[0]) {
-						reject(result);
-					} else {
-						result.shift();
-						resolve(result);
-					}
-				} else {
-					resolve(result);
-				}
-			});
-		} else if (options.errorFirst) {
-			args.push((error, result) => {
-				if (error) {
-					reject(error);
-				} else {
-					resolve(result);
-				}
-			});
-		} else {
-			args.push(resolve);
-		}
-
-		fn.apply(this, args);
-	});
-};
-
-module.exports = (input, options) => {
-	options = Object.assign({
-		exclude: [/.+(Sync|Stream)$/],
-		errorFirst: true,
-		promiseModule: Promise
-	}, options);
-
-	const objType = typeof input;
-	if (!(input !== null && (objType === 'object' || objType === 'function'))) {
-		throw new TypeError(`Expected \`input\` to be a \`Function\` or \`Object\`, got \`${input === null ? 'null' : objType}\``);
-	}
-
-	const filter = key => {
-		const match = pattern => typeof pattern === 'string' ? key === pattern : pattern.test(key);
-		return options.include ? options.include.some(match) : !options.exclude.some(match);
-	};
-
-	let ret;
-	if (objType === 'function') {
-		ret = function (...args) {
-			return options.excludeMain ? input(...args) : processFn(input, options).apply(this, args);
-		};
-	} else {
-		ret = Object.create(Object.getPrototypeOf(input));
-	}
-
-	for (const key in input) { // eslint-disable-line guard-for-in
-		const property = input[key];
-		ret[key] = typeof property === 'function' && filter(key) ? processFn(property, options) : property;
-	}
-
-	return ret;
 };
 
 
@@ -96553,28 +96575,6 @@ function simpleWrite(buf) {
 function simpleEnd(buf) {
   return buf && buf.length ? this.write(buf) : '';
 }
-
-/***/ }),
-
-/***/ 88551:
-/***/ ((module) => {
-
-"use strict";
-
-module.exports = x => {
-	if (typeof x !== 'string') {
-		throw new TypeError('Expected a string, got ' + typeof x);
-	}
-
-	// Catches EFBBBF (UTF-8 BOM) because the buffer-to-string
-	// conversion translates it to FEFF (UTF-16 BOM)
-	if (x.charCodeAt(0) === 0xFEFF) {
-		return x.slice(1);
-	}
-
-	return x;
-};
-
 
 /***/ }),
 
