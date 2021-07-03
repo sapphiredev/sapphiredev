@@ -107151,7 +107151,6 @@ var dist = __nccwpck_require__(99555);
 const FetchMethods = dist.FetchMethods;
 const FetchResultTypes = dist.FetchResultTypes;
 const QueryError = dist.QueryError;
-const __esModule = dist.__esModule;
 const fetch = dist.fetch;
 
 ;// CONCATENATED MODULE: ./src/constants.ts
