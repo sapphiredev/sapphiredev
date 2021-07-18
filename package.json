@@ -21,7 +21,7 @@
 	},
 	"dependencies": {
 		"@sapphire/fetch": "^1.0.5",
-		"dotenv-cra": "^2.1.0",
+		"dotenv-cra": "^2.2.0",
 		"probot": "^11.4.1",
 		"tslib": "^2.3.0"
 	},
@@ -31,8 +31,8 @@
 		"@sapphire/eslint-config": "^3.2.1",
 		"@sapphire/prettier-config": "^1.1.6",
 		"@sapphire/ts-config": "^2.3.1",
-		"@types/node": "^16.3.1",
-		"@types/node-fetch": "^2.5.10",
+		"@types/node": "^16.3.3",
+		"@types/node-fetch": "^2.5.11",
 		"@vercel/ncc": "^0.28.6",
 		"cz-conventional-changelog": "^3.3.0",
 		"husky": "^7.0.1",
