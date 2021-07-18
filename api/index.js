@@ -36935,6 +36935,21 @@ function config(options) {
         }
         parsed = { ...result.parsed, ...parsed };
     }
+    // Reference:
+    // https://github.com/facebook/create-react-app/blob/8b7b819b4b9e6ba457e011e92e33266690e26957/packages/react-scripts/config/env.js#L72-L89
+    if (options === null || options === void 0 ? void 0 : options.prefix) {
+        const prefixRegExp = new RegExp(`^${options.prefix}`, 'i');
+        parsed = Object.keys(parsed)
+            .filter((key) => {
+            const match = prefixRegExp.test(key);
+            log(`Prefix for key \`${key}\` ${match ? 'matches' : 'does not match'} \`${options.prefix}\``);
+            return match;
+        })
+            .reduce((obj, key) => {
+            obj[key] = parsed[key];
+            return obj;
+        }, {});
+    }
     return {
         parsed,
     };
