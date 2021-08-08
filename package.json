@@ -31,7 +31,7 @@
 		"@sapphire/eslint-config": "^3.2.3",
 		"@sapphire/prettier-config": "^1.1.6",
 		"@sapphire/ts-config": "^2.3.2",
-		"@types/node": "^16.4.10",
+		"@types/node": "^16.4.13",
 		"@types/node-fetch": "^2.5.12",
 		"@vercel/ncc": "^0.28.6",
 		"cz-conventional-changelog": "^3.3.0",
