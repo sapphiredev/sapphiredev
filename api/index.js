@@ -107187,6 +107187,7 @@ const VerifiedSenders = new Map([
 ;// CONCATENATED MODULE: ./src/app.ts
 
 
+let lastPrNumber = 0;
 /* harmony default export */ const app = ((app) => {
     app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
         var _a;
@@ -107203,13 +107204,17 @@ const VerifiedSenders = new Map([
             const workflowUrl = `https://github.com/${context.payload.repository.full_name}/actions/workflows/${ContinuousDeliveryWorkflow}`;
             const fullPrData = await context.octokit.pulls.get(context.pullRequest());
             if (commentBodyLowerCase.includes('@sapphiredev pack')) {
+                // Store the this PR number
+                lastPrNumber = context.payload.issue.number;
                 await context.octokit.actions.createWorkflowDispatch({
                     workflow_id: ContinuousDeliveryWorkflow,
                     owner: (_a = context.payload.repository.owner.name) !== null && _a !== void 0 ? _a : 'sapphiredev',
                     repo: context.payload.repository.name,
-                    ref: fullPrData.data.head.ref,
+                    ref: 'main',
                     inputs: {
-                        prNumber: context.payload.issue.number.toString()
+                        prNumber: context.payload.issue.number.toString(),
+                        ref: fullPrData.data.head.ref,
+                        repository: fullPrData.data.head.repo.full_name
                     }
                 });
                 const replyMessage = context.issue({
@@ -107223,17 +107228,16 @@ const VerifiedSenders = new Map([
         }
     });
     app.on('workflow_run.completed', async (context) => {
-        var _a, _b, _c;
+        var _a, _b;
         if (
         /** Validate that the action is completed */
         context.payload.action === 'completed' &&
             ((_a = context.payload.workflow) === null || _a === void 0 ? void 0 : _a.path.endsWith(ContinuousDeliveryWorkflow))) {
             const workflowRunInfo = context.payload.workflow_run;
-            const pullRequestInfo = (_b = workflowRunInfo === null || workflowRunInfo === void 0 ? void 0 : workflowRunInfo.pull_requests) === null || _b === void 0 ? void 0 : _b[0];
             const { owner, repo } = context.issue();
-            if (workflowRunInfo && pullRequestInfo) {
+            if (workflowRunInfo) {
                 const workflowJobs = await context.octokit.actions.listJobsForWorkflowRun({ owner, repo, run_id: workflowRunInfo.id });
-                const publishJobId = (_c = workflowJobs.data.jobs.find((job) => job.name.toLowerCase() === PublishJobName)) === null || _c === void 0 ? void 0 : _c.id;
+                const publishJobId = (_b = workflowJobs.data.jobs.find((job) => job.name.toLowerCase() === PublishJobName)) === null || _b === void 0 ? void 0 : _b.id;
                 if (publishJobId) {
                     const jobLogsData = await context.octokit.actions.downloadJobLogsForWorkflowRun({ owner, repo, job_id: publishJobId });
                     if (jobLogsData.url) {
@@ -107247,15 +107251,17 @@ const VerifiedSenders = new Map([
                                 body: [
                                     `The deployment workflow has finished successfully. You can install it for testing like so:`,
                                     '```sh',
-                                    packageNames.map((name) => `npm install ${name}@pr-${pullRequestInfo.number}`).join('\n'),
+                                    packageNames.map((name) => `npm install ${name}@pr-${lastPrNumber}`).join('\n'),
                                     '```'
                                 ].join('\n'),
-                                issue_number: pullRequestInfo.number
+                                issue_number: lastPrNumber
                             });
                         }
                     }
                 }
             }
+            // Reset value to 0
+            lastPrNumber = 0;
         }
     });
 });
