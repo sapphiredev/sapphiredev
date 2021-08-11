@@ -1,7 +1,8 @@
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import type { Probot } from 'probot';
-import { ContinuousDeliveryWorkflow, isNullish, PublishJobName, PullRequestData, VerifiedSenders } from './constants';
+import { ContinuousDeliveryWorkflow, isNullish, PublishJobName, VerifiedSenders } from './constants';
 
+let lastPrNumber = 0;
 export default (app: Probot) => {
 	app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
 		type IssueWithPullRequestPayload = typeof context.payload.issue & {
@@ -26,13 +27,18 @@ export default (app: Probot) => {
 			const fullPrData = await context.octokit.pulls.get(context.pullRequest());
 
 			if (commentBodyLowerCase.includes('@sapphiredev pack')) {
+				// Store the this PR number
+				lastPrNumber = context.payload.issue.number;
+
 				await context.octokit.actions.createWorkflowDispatch({
 					workflow_id: ContinuousDeliveryWorkflow,
 					owner: context.payload.repository.owner.name ?? 'sapphiredev',
 					repo: context.payload.repository.name,
-					ref: fullPrData.data.head.ref,
+					ref: 'main',
 					inputs: {
-						prNumber: context.payload.issue.number.toString()
+						prNumber: context.payload.issue.number.toString(),
+						ref: fullPrData.data.head.ref,
+						repository: fullPrData.data.head.repo.full_name
 					}
 				});
 
@@ -55,10 +61,9 @@ export default (app: Probot) => {
 			context.payload.workflow?.path.endsWith(ContinuousDeliveryWorkflow)
 		) {
 			const workflowRunInfo = context.payload.workflow_run;
-			const pullRequestInfo: PullRequestData | undefined = workflowRunInfo?.pull_requests?.[0];
 			const { owner, repo } = context.issue();
 
-			if (workflowRunInfo && pullRequestInfo) {
+			if (workflowRunInfo) {
 				const workflowJobs = await context.octokit.actions.listJobsForWorkflowRun({ owner, repo, run_id: workflowRunInfo.id });
 
 				const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase() === PublishJobName)?.id;
@@ -80,15 +85,18 @@ export default (app: Probot) => {
 								body: [
 									`The deployment workflow has finished successfully. You can install it for testing like so:`,
 									'```sh',
-									packageNames.map((name) => `npm install ${name}@pr-${pullRequestInfo.number}`).join('\n'),
+									packageNames.map((name) => `npm install ${name}@pr-${lastPrNumber}`).join('\n'),
 									'```'
 								].join('\n'),
-								issue_number: pullRequestInfo.number
+								issue_number: lastPrNumber
 							});
 						}
 					}
 				}
 			}
+
+			// Reset value to 0
+			lastPrNumber = 0;
 		}
 	});
 };
