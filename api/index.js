@@ -107214,8 +107214,7 @@ let lastPrNumber = 0;
                     inputs: {
                         prNumber: context.payload.issue.number.toString(),
                         ref: fullPrData.data.head.ref,
-                        repository: fullPrData.data.head.repo.full_name,
-                        fetchDepth: '1'
+                        repository: fullPrData.data.head.repo.full_name
                     }
                 });
                 const replyMessage = context.issue({
