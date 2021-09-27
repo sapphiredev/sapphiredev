@@ -106927,7 +106927,7 @@ module.exports = JSON.parse('{"100":"Continue","101":"Switching Protocols","102"
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("assert");;
+module.exports = require("assert");
 
 /***/ }),
 
@@ -106935,7 +106935,7 @@ module.exports = require("assert");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("buffer");;
+module.exports = require("buffer");
 
 /***/ }),
 
@@ -106943,7 +106943,7 @@ module.exports = require("buffer");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("child_process");;
+module.exports = require("child_process");
 
 /***/ }),
 
@@ -106951,7 +106951,7 @@ module.exports = require("child_process");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("console");;
+module.exports = require("console");
 
 /***/ }),
 
@@ -106959,7 +106959,7 @@ module.exports = require("console");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("constants");;
+module.exports = require("constants");
 
 /***/ }),
 
@@ -106967,7 +106967,7 @@ module.exports = require("constants");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("crypto");;
+module.exports = require("crypto");
 
 /***/ }),
 
@@ -106975,7 +106975,7 @@ module.exports = require("crypto");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("dns");;
+module.exports = require("dns");
 
 /***/ }),
 
@@ -106983,7 +106983,7 @@ module.exports = require("dns");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("domain");;
+module.exports = require("domain");
 
 /***/ }),
 
@@ -106991,7 +106991,7 @@ module.exports = require("domain");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("events");;
+module.exports = require("events");
 
 /***/ }),
 
@@ -106999,7 +106999,7 @@ module.exports = require("events");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("fs");;
+module.exports = require("fs");
 
 /***/ }),
 
@@ -107007,7 +107007,7 @@ module.exports = require("fs");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("http");;
+module.exports = require("http");
 
 /***/ }),
 
@@ -107015,7 +107015,7 @@ module.exports = require("http");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("http2");;
+module.exports = require("http2");
 
 /***/ }),
 
@@ -107023,7 +107023,7 @@ module.exports = require("http2");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("https");;
+module.exports = require("https");
 
 /***/ }),
 
@@ -107031,7 +107031,7 @@ module.exports = require("https");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("net");;
+module.exports = require("net");
 
 /***/ }),
 
@@ -107039,7 +107039,7 @@ module.exports = require("net");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("os");;
+module.exports = require("os");
 
 /***/ }),
 
@@ -107047,7 +107047,7 @@ module.exports = require("os");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("path");;
+module.exports = require("path");
 
 /***/ }),
 
@@ -107055,7 +107055,7 @@ module.exports = require("path");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("punycode");;
+module.exports = require("punycode");
 
 /***/ }),
 
@@ -107063,7 +107063,7 @@ module.exports = require("punycode");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("querystring");;
+module.exports = require("querystring");
 
 /***/ }),
 
@@ -107071,7 +107071,7 @@ module.exports = require("querystring");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("stream");;
+module.exports = require("stream");
 
 /***/ }),
 
@@ -107079,7 +107079,7 @@ module.exports = require("stream");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("string_decoder");;
+module.exports = require("string_decoder");
 
 /***/ }),
 
@@ -107087,7 +107087,7 @@ module.exports = require("string_decoder");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("tls");;
+module.exports = require("tls");
 
 /***/ }),
 
@@ -107095,7 +107095,7 @@ module.exports = require("tls");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("tty");;
+module.exports = require("tty");
 
 /***/ }),
 
@@ -107103,7 +107103,7 @@ module.exports = require("tty");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("url");;
+module.exports = require("url");
 
 /***/ }),
 
@@ -107111,7 +107111,7 @@ module.exports = require("url");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("util");;
+module.exports = require("util");
 
 /***/ }),
 
@@ -107119,7 +107119,7 @@ module.exports = require("util");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("vm");;
+module.exports = require("vm");
 
 /***/ }),
 
@@ -107127,7 +107127,7 @@ module.exports = require("vm");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("zlib");;
+module.exports = require("zlib");
 
 /***/ })
 
@@ -107206,7 +107206,9 @@ module.exports = require("zlib");;
 /******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
-/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";/************************************************************************/
+/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
@@ -107254,7 +107256,6 @@ const VerifiedSenders = new Map([
 let lastPrNumber = 0;
 /* harmony default export */ const app = ((app) => {
     app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
-        var _a;
         /** Do not trigger if the comment was made by a bot */
         if (context.isBot) {
             return;
@@ -107272,7 +107273,7 @@ let lastPrNumber = 0;
                 lastPrNumber = context.payload.issue.number;
                 await context.octokit.actions.createWorkflowDispatch({
                     workflow_id: ContinuousDeliveryWorkflow,
-                    owner: (_a = context.payload.repository.owner.name) !== null && _a !== void 0 ? _a : 'sapphiredev',
+                    owner: context.payload.repository.owner.name ?? 'sapphiredev',
                     repo: context.payload.repository.name,
                     ref: 'main',
                     inputs: {
@@ -107292,16 +107293,15 @@ let lastPrNumber = 0;
         }
     });
     app.on('workflow_run.completed', async (context) => {
-        var _a, _b;
         if (
         /** Validate that the action is completed */
         context.payload.action === 'completed' &&
-            ((_a = context.payload.workflow) === null || _a === void 0 ? void 0 : _a.path.endsWith(ContinuousDeliveryWorkflow))) {
+            context.payload.workflow?.path.endsWith(ContinuousDeliveryWorkflow)) {
             const workflowRunInfo = context.payload.workflow_run;
             const { owner, repo } = context.issue();
             if (workflowRunInfo) {
                 const workflowJobs = await context.octokit.actions.listJobsForWorkflowRun({ owner, repo, run_id: workflowRunInfo.id });
-                const publishJobId = (_b = workflowJobs.data.jobs.find((job) => job.name.toLowerCase() === PublishJobName)) === null || _b === void 0 ? void 0 : _b.id;
+                const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase() === PublishJobName)?.id;
                 if (publishJobId) {
                     const jobLogsData = await context.octokit.actions.downloadJobLogsForWorkflowRun({ owner, repo, job_id: publishJobId });
                     if (jobLogsData.url) {
