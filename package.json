@@ -33,7 +33,7 @@
 		"@sapphire/ts-config": "^2.3.2",
 		"@types/node": "^16.9.1",
 		"@types/node-fetch": "^2.5.12",
-		"@vercel/ncc": "^0.28.6",
+		"@vercel/ncc": "^0.31.1",
 		"cz-conventional-changelog": "^3.3.0",
 		"husky": "^7.0.2",
 		"lint-staged": "^11.1.2",
