@@ -4782,6 +4782,84 @@ exports.request = request;
 
 /***/ }),
 
+/***/ 49768:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+var crypto = __nccwpck_require__(76417);
+var buffer = __nccwpck_require__(64293);
+
+const VERSION = "2.0.0";
+
+var Algorithm;
+
+(function (Algorithm) {
+  Algorithm["SHA1"] = "sha1";
+  Algorithm["SHA256"] = "sha256";
+})(Algorithm || (Algorithm = {}));
+
+async function sign(options, payload) {
+  const {
+    secret,
+    algorithm
+  } = typeof options === "object" ? {
+    secret: options.secret,
+    algorithm: options.algorithm || Algorithm.SHA256
+  } : {
+    secret: options,
+    algorithm: Algorithm.SHA256
+  };
+
+  if (!secret || !payload) {
+    throw new TypeError("[@octokit/webhooks-methods] secret & payload required for sign()");
+  }
+
+  if (!Object.values(Algorithm).includes(algorithm)) {
+    throw new TypeError(`[@octokit/webhooks] Algorithm ${algorithm} is not supported. Must be  'sha1' or 'sha256'`);
+  }
+
+  return `${algorithm}=${crypto.createHmac(algorithm, secret).update(payload).digest("hex")}`;
+}
+sign.VERSION = VERSION;
+
+const getAlgorithm = signature => {
+  return signature.startsWith("sha256=") ? "sha256" : "sha1";
+};
+
+async function verify(secret, eventPayload, signature) {
+  if (!secret || !eventPayload || !signature) {
+    throw new TypeError("[@octokit/webhooks-methods] secret, eventPayload & signature required");
+  }
+
+  const signatureBuffer = buffer.Buffer.from(signature);
+  const algorithm = getAlgorithm(signature);
+  const verificationBuffer = buffer.Buffer.from(await sign({
+    secret,
+    algorithm
+  }, eventPayload));
+
+  if (signatureBuffer.length !== verificationBuffer.length) {
+    return false;
+  } // constant time comparison to prevent timing attachs
+  // https://stackoverflow.com/a/31096242/206879
+  // https://en.wikipedia.org/wiki/Timing_attack
+
+
+  return crypto.timingSafeEqual(signatureBuffer, verificationBuffer);
+}
+verify.VERSION = VERSION;
+
+exports.sign = sign;
+exports.verify = verify;
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
 /***/ 18513:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -4793,13 +4871,71 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var AggregateError = _interopDefault(__nccwpck_require__(61231));
-var crypto = __nccwpck_require__(76417);
-var buffer = __nccwpck_require__(64293);
-var debug = __nccwpck_require__(38237);
+var webhooksMethods = __nccwpck_require__(49768);
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+
+    if (enumerableOnly) {
+      symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+    }
+
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+const createLogger = logger => _objectSpread2({
+  debug: () => {},
+  info: () => {},
+  warn: console.warn.bind(console),
+  error: console.error.bind(console)
+}, logger);
 
 // THIS FILE IS GENERATED - DO NOT EDIT DIRECTLY
-// make edits in scripts/update-known-events.js
-const webhookNames = ["*", "check_run", "check_run.completed", "check_run.created", "check_run.requested_action", "check_run.rerequested", "check_suite", "check_suite.completed", "check_suite.requested", "check_suite.rerequested", "code_scanning_alert", "code_scanning_alert.appeared_in_branch", "code_scanning_alert.closed_by_user", "code_scanning_alert.created", "code_scanning_alert.fixed", "code_scanning_alert.reopened", "code_scanning_alert.reopened_by_user", "commit_comment", "commit_comment.created", "content_reference", "content_reference.created", "create", "delete", "deploy_key", "deploy_key.created", "deploy_key.deleted", "deployment", "deployment.created", "deployment_status", "deployment_status.created", "error", "fork", "github_app_authorization", "github_app_authorization.revoked", "gollum", "installation", "installation.created", "installation.deleted", "installation.new_permissions_accepted", "installation.suspend", "installation.unsuspend", "installation_repositories", "installation_repositories.added", "installation_repositories.removed", "issue_comment", "issue_comment.created", "issue_comment.deleted", "issue_comment.edited", "issues", "issues.assigned", "issues.closed", "issues.deleted", "issues.demilestoned", "issues.edited", "issues.labeled", "issues.locked", "issues.milestoned", "issues.opened", "issues.pinned", "issues.reopened", "issues.transferred", "issues.unassigned", "issues.unlabeled", "issues.unlocked", "issues.unpinned", "label", "label.created", "label.deleted", "label.edited", "marketplace_purchase", "marketplace_purchase.cancelled", "marketplace_purchase.changed", "marketplace_purchase.pending_change", "marketplace_purchase.pending_change_cancelled", "marketplace_purchase.purchased", "member", "member.added", "member.edited", "member.removed", "membership", "membership.added", "membership.removed", "meta", "meta.deleted", "milestone", "milestone.closed", "milestone.created", "milestone.deleted", "milestone.edited", "milestone.opened", "org_block", "org_block.blocked", "org_block.unblocked", "organization", "organization.deleted", "organization.member_added", "organization.member_invited", "organization.member_removed", "organization.renamed", "package", "package.published", "package.updated", "page_build", "ping", "project", "project.closed", "project.created", "project.deleted", "project.edited", "project.reopened", "project_card", "project_card.converted", "project_card.created", "project_card.deleted", "project_card.edited", "project_card.moved", "project_column", "project_column.created", "project_column.deleted", "project_column.edited", "project_column.moved", "public", "pull_request", "pull_request.assigned", "pull_request.closed", "pull_request.edited", "pull_request.labeled", "pull_request.locked", "pull_request.merged", "pull_request.opened", "pull_request.ready_for_review", "pull_request.reopened", "pull_request.review_request_removed", "pull_request.review_requested", "pull_request.synchronize", "pull_request.unassigned", "pull_request.unlabeled", "pull_request.unlocked", "pull_request_review", "pull_request_review.dismissed", "pull_request_review.edited", "pull_request_review.submitted", "pull_request_review_comment", "pull_request_review_comment.created", "pull_request_review_comment.deleted", "pull_request_review_comment.edited", "push", "release", "release.created", "release.deleted", "release.edited", "release.prereleased", "release.published", "release.released", "release.unpublished", "repository", "repository.archived", "repository.created", "repository.deleted", "repository.edited", "repository.privatized", "repository.publicized", "repository.renamed", "repository.transferred", "repository.unarchived", "repository_dispatch", "repository_dispatch.on-demand-test", "repository_import", "repository_vulnerability_alert", "repository_vulnerability_alert.create", "repository_vulnerability_alert.dismiss", "repository_vulnerability_alert.resolve", "secret_scanning_alert", "secret_scanning_alert.created", "secret_scanning_alert.reopened", "secret_scanning_alert.resolved", "security_advisory", "security_advisory.performed", "security_advisory.published", "security_advisory.updated", "sponsorship", "sponsorship.cancelled", "sponsorship.created", "sponsorship.edited", "sponsorship.pending_cancellation", "sponsorship.pending_tier_change", "sponsorship.tier_changed", "star", "star.created", "star.deleted", "status", "team", "team.added_to_repository", "team.created", "team.deleted", "team.edited", "team.removed_from_repository", "team_add", "watch", "watch.started", "workflow_dispatch", "workflow_run", "workflow_run.action", "workflow_run.completed", "workflow_run.requested"];
+// make edits in scripts/generate-types.ts
+const emitterEventNames = ["branch_protection_rule", "branch_protection_rule.created", "branch_protection_rule.deleted", "branch_protection_rule.edited", "check_run", "check_run.completed", "check_run.created", "check_run.requested_action", "check_run.rerequested", "check_suite", "check_suite.completed", "check_suite.requested", "check_suite.rerequested", "code_scanning_alert", "code_scanning_alert.appeared_in_branch", "code_scanning_alert.closed_by_user", "code_scanning_alert.created", "code_scanning_alert.fixed", "code_scanning_alert.reopened", "code_scanning_alert.reopened_by_user", "commit_comment", "commit_comment.created", "content_reference", "content_reference.created", "create", "delete", "deploy_key", "deploy_key.created", "deploy_key.deleted", "deployment", "deployment.created", "deployment_status", "deployment_status.created", "discussion", "discussion.answered", "discussion.category_changed", "discussion.created", "discussion.deleted", "discussion.edited", "discussion.labeled", "discussion.locked", "discussion.pinned", "discussion.transferred", "discussion.unanswered", "discussion.unlabeled", "discussion.unlocked", "discussion.unpinned", "discussion_comment", "discussion_comment.created", "discussion_comment.deleted", "discussion_comment.edited", "fork", "github_app_authorization", "github_app_authorization.revoked", "gollum", "installation", "installation.created", "installation.deleted", "installation.new_permissions_accepted", "installation.suspend", "installation.unsuspend", "installation_repositories", "installation_repositories.added", "installation_repositories.removed", "issue_comment", "issue_comment.created", "issue_comment.deleted", "issue_comment.edited", "issues", "issues.assigned", "issues.closed", "issues.deleted", "issues.demilestoned", "issues.edited", "issues.labeled", "issues.locked", "issues.milestoned", "issues.opened", "issues.pinned", "issues.reopened", "issues.transferred", "issues.unassigned", "issues.unlabeled", "issues.unlocked", "issues.unpinned", "label", "label.created", "label.deleted", "label.edited", "marketplace_purchase", "marketplace_purchase.cancelled", "marketplace_purchase.changed", "marketplace_purchase.pending_change", "marketplace_purchase.pending_change_cancelled", "marketplace_purchase.purchased", "member", "member.added", "member.edited", "member.removed", "membership", "membership.added", "membership.removed", "meta", "meta.deleted", "milestone", "milestone.closed", "milestone.created", "milestone.deleted", "milestone.edited", "milestone.opened", "org_block", "org_block.blocked", "org_block.unblocked", "organization", "organization.deleted", "organization.member_added", "organization.member_invited", "organization.member_removed", "organization.renamed", "package", "package.published", "package.updated", "page_build", "ping", "project", "project.closed", "project.created", "project.deleted", "project.edited", "project.reopened", "project_card", "project_card.converted", "project_card.created", "project_card.deleted", "project_card.edited", "project_card.moved", "project_column", "project_column.created", "project_column.deleted", "project_column.edited", "project_column.moved", "public", "pull_request", "pull_request.assigned", "pull_request.auto_merge_disabled", "pull_request.auto_merge_enabled", "pull_request.closed", "pull_request.converted_to_draft", "pull_request.edited", "pull_request.labeled", "pull_request.locked", "pull_request.opened", "pull_request.ready_for_review", "pull_request.reopened", "pull_request.review_request_removed", "pull_request.review_requested", "pull_request.synchronize", "pull_request.unassigned", "pull_request.unlabeled", "pull_request.unlocked", "pull_request_review", "pull_request_review.dismissed", "pull_request_review.edited", "pull_request_review.submitted", "pull_request_review_comment", "pull_request_review_comment.created", "pull_request_review_comment.deleted", "pull_request_review_comment.edited", "push", "release", "release.created", "release.deleted", "release.edited", "release.prereleased", "release.published", "release.released", "release.unpublished", "repository", "repository.archived", "repository.created", "repository.deleted", "repository.edited", "repository.privatized", "repository.publicized", "repository.renamed", "repository.transferred", "repository.unarchived", "repository_dispatch", "repository_dispatch.on-demand-test", "repository_import", "repository_vulnerability_alert", "repository_vulnerability_alert.create", "repository_vulnerability_alert.dismiss", "repository_vulnerability_alert.resolve", "secret_scanning_alert", "secret_scanning_alert.created", "secret_scanning_alert.reopened", "secret_scanning_alert.resolved", "security_advisory", "security_advisory.performed", "security_advisory.published", "security_advisory.updated", "security_advisory.withdrawn", "sponsorship", "sponsorship.cancelled", "sponsorship.created", "sponsorship.edited", "sponsorship.pending_cancellation", "sponsorship.pending_tier_change", "sponsorship.tier_changed", "star", "star.created", "star.deleted", "status", "team", "team.added_to_repository", "team.created", "team.deleted", "team.edited", "team.removed_from_repository", "team_add", "watch", "watch.started", "workflow_dispatch", "workflow_job", "workflow_job.completed", "workflow_job.queued", "workflow_job.started", "workflow_run", "workflow_run.completed", "workflow_run.requested"];
 
 function handleEventHandlers(state, webhookName, handler) {
   if (!state.hooks[webhookName]) {
@@ -4815,13 +4951,14 @@ function receiverOn(state, webhookNameOrNames, handler) {
     return;
   }
 
-  if (webhookNames.indexOf(webhookNameOrNames) === -1) {
-    console.warn(`"${webhookNameOrNames}" is not a known webhook name (https://developer.github.com/v3/activity/events/types/)`);
+  if (["*", "error"].includes(webhookNameOrNames)) {
+    const webhookName = webhookNameOrNames === "*" ? "any" : webhookNameOrNames;
+    const message = `Using the "${webhookNameOrNames}" event with the regular Webhooks.on() function is not supported. Please use the Webhooks.on${webhookName.charAt(0).toUpperCase() + webhookName.slice(1)}() method instead`;
+    throw new Error(message);
   }
 
-  if (webhookNameOrNames === "*" || webhookNameOrNames === "error") {
-    const webhookName = webhookNameOrNames === "*" ? "any" : webhookNameOrNames;
-    console.warn(`Using the "${webhookNameOrNames}" event with the regular Webhooks.on() function is deprecated. Please use the Webhooks.on${webhookName.charAt(0).toUpperCase() + webhookName.slice(1)}() method instead`);
+  if (!emitterEventNames.includes(webhookNameOrNames)) {
+    state.log.warn(`"${webhookNameOrNames}" is not a known webhook name (https://developer.github.com/v3/activity/events/types/)`);
   }
 
   handleEventHandlers(state, webhookNameOrNames, handler);
@@ -4835,20 +4972,20 @@ function receiverOnError(state, handler) {
 
 // Errors thrown or rejected Promises in "error" event handlers are not handled
 // as they are in the webhook event handlers. If errors occur, we log a
-// "Fatal: Error occured" message to stdout
+// "Fatal: Error occurred" message to stdout
 function wrapErrorHandler(handler, error) {
   let returnValue;
 
   try {
     returnValue = handler(error);
   } catch (error) {
-    console.log('FATAL: Error occured in "error" event handler');
+    console.log('FATAL: Error occurred in "error" event handler');
     console.log(error);
   }
 
   if (returnValue && returnValue.catch) {
     returnValue.catch(error => {
-      console.log('FATAL: Error occured in "error" event handler');
+      console.log('FATAL: Error occurred in "error" event handler');
       console.log(error);
     });
   }
@@ -4857,9 +4994,12 @@ function wrapErrorHandler(handler, error) {
 // @ts-ignore to address #245
 
 function getHooks(state, eventPayloadAction, eventName) {
-  const hooks = [state.hooks[`${eventName}.${eventPayloadAction}`]];
-  hooks.push(state.hooks[eventName]);
-  hooks.push(state.hooks["*"]);
+  const hooks = [state.hooks[eventName], state.hooks["*"]];
+
+  if (eventPayloadAction) {
+    hooks.unshift(state.hooks[`${eventName}.${eventPayloadAction}`]);
+  }
+
   return [].concat(...hooks.filter(Boolean));
 } // main handler function
 
@@ -4885,7 +5025,7 @@ function receiverHandle(state, event) {
   } // flatten arrays of event listeners and remove undefined values
 
 
-  const hooks = getHooks(state, event.payload.action, event.name);
+  const hooks = getHooks(state, "action" in event.payload ? event.payload.action : null, event.name);
 
   if (hooks.length === 0) {
     return Promise.resolve();
@@ -4942,7 +5082,8 @@ function removeListener(state, webhookNameOrNames, handler) {
 
 function createEventHandler(options) {
   const state = {
-    hooks: {}
+    hooks: {},
+    log: createLogger(options && options.log)
   };
 
   if (options && options.transform) {
@@ -4958,23 +5099,44 @@ function createEventHandler(options) {
   };
 }
 
-function isntWebhook(request, options) {
-  // GitHub sends all events as POST requests
-  if (request.method !== "POST") {
-    return true;
-  } // We must match the configured path to allow custom POST routes which include
-  // the webhook route. For example if the webhook route is / then it would be
-  // impossible to define a `POST /my/custom/app` route as the `POST /`.
-
-
-  if (typeof request.url !== "string" || request.url.split("?")[0] !== options.path) {
-    return true;
-  }
-
-  return false;
+/**
+ * GitHub sends its JSON with an indentation of 2 spaces and a line break at the end
+ */
+function toNormalizedJsonString(payload) {
+  const payloadString = JSON.stringify(payload);
+  return payloadString.replace(/[^\\]\\u[\da-f]{4}/g, s => {
+    return s.substr(0, 3) + s.substr(3).toUpperCase();
+  });
 }
 
-const WEBHOOK_HEADERS = ["x-github-event", "x-hub-signature", "x-github-delivery"]; // https://developer.github.com/webhooks/#delivery-headers
+async function sign(secret, payload) {
+  return webhooksMethods.sign(secret, typeof payload === "string" ? payload : toNormalizedJsonString(payload));
+}
+
+async function verify(secret, payload, signature) {
+  return webhooksMethods.verify(secret, typeof payload === "string" ? payload : toNormalizedJsonString(payload), signature);
+}
+
+async function verifyAndReceive(state, event) {
+  // verify will validate that the secret is not undefined
+  const matchesSignature = await webhooksMethods.verify(state.secret, typeof event.payload === "object" ? toNormalizedJsonString(event.payload) : event.payload, event.signature);
+
+  if (!matchesSignature) {
+    const error = new Error("[@octokit/webhooks] signature does not match event payload and secret");
+    return state.eventHandler.receive(Object.assign(error, {
+      event,
+      status: 400
+    }));
+  }
+
+  return state.eventHandler.receive({
+    id: event.id,
+    name: event.name,
+    payload: typeof event.payload === "string" ? JSON.parse(event.payload) : event.payload
+  });
+}
+
+const WEBHOOK_HEADERS = ["x-github-event", "x-hub-signature-256", "x-github-delivery"]; // https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#delivery-headers
 
 function getMissingHeaders(request) {
   return WEBHOOK_HEADERS.filter(header => !(header in request.headers));
@@ -4984,11 +5146,11 @@ function getMissingHeaders(request) {
 function getPayload(request) {
   // If request.body already exists we can stop here
   // See https://github.com/octokit/webhooks.js/pull/23
-  // @ts-expect-error
   if (request.body) return Promise.resolve(request.body);
   return new Promise((resolve, reject) => {
     let data = "";
-    request.setEncoding("utf8");
+    request.setEncoding("utf8"); // istanbul ignore next
+
     request.on("error", error => reject(new AggregateError([error])));
     request.on("data", chunk => data += chunk);
     request.on("end", () => {
@@ -5003,120 +5165,48 @@ function getPayload(request) {
   });
 }
 
-var Algorithm;
+async function middleware(webhooks, options, request, response, next) {
+  let pathname;
 
-(function (Algorithm) {
-  Algorithm["SHA1"] = "sha1";
-  Algorithm["SHA256"] = "sha256";
-})(Algorithm || (Algorithm = {}));
-
-function sign(options, payload) {
-  const {
-    secret,
-    algorithm
-  } = typeof options === "string" ? {
-    secret: options,
-    algorithm: Algorithm.SHA1
-  } : {
-    secret: options.secret,
-    algorithm: options.algorithm || Algorithm.SHA1
-  };
-
-  if (!secret || !payload) {
-    throw new TypeError("[@octokit/webhooks] secret & payload required");
-  }
-
-  if (!Object.values(Algorithm).includes(algorithm)) {
-    throw new TypeError(`[@octokit/webhooks] Algorithm ${algorithm} is not supported. Must be  'sha1' or 'sha256'`);
-  }
-
-  payload = typeof payload === "string" ? payload : toNormalizedJsonString(payload);
-  return `${algorithm}=${crypto.createHmac(algorithm, secret).update(payload).digest("hex")}`;
-}
-
-function toNormalizedJsonString(payload) {
-  return JSON.stringify(payload).replace(/[^\\]\\u[\da-f]{4}/g, s => {
-    return s.substr(0, 3) + s.substr(3).toUpperCase();
-  });
-}
-
-const getAlgorithm = signature => {
-  return signature.startsWith("sha256=") ? "sha256" : "sha1";
-};
-
-function verify(secret, eventPayload, signature) {
-  if (!secret || !eventPayload || !signature) {
-    throw new TypeError("[@octokit/webhooks] secret, eventPayload & signature required");
-  }
-
-  const signatureBuffer = buffer.Buffer.from(signature);
-  const algorithm = getAlgorithm(signature);
-  const verificationBuffer = buffer.Buffer.from(sign({
-    secret,
-    algorithm
-  }, eventPayload));
-
-  if (signatureBuffer.length !== verificationBuffer.length) {
-    return false;
-  }
-
-  return crypto.timingSafeEqual(signatureBuffer, verificationBuffer);
-}
-
-function verifyAndReceive(state, event) {
-  // verify will validate that the secret is not undefined
-  const matchesSignature = verify(state.secret, event.payload, event.signature);
-
-  if (!matchesSignature) {
-    const error = new Error("[@octokit/webhooks] signature does not match event payload and secret");
-    return state.eventHandler.receive(Object.assign(error, {
-      event,
-      status: 400
+  try {
+    pathname = new URL(request.url, "http://localhost").pathname;
+  } catch (error) {
+    response.writeHead(422, {
+      "content-type": "application/json"
+    });
+    response.end(JSON.stringify({
+      error: `Request URL could not be parsed: ${request.url}`
     }));
+    return;
   }
 
-  return state.eventHandler.receive({
-    id: event.id,
-    name: event.name,
-    payload: event.payload
-  });
-}
+  const isUnknownRoute = request.method !== "POST" || pathname !== options.path;
+  const isExpressMiddleware = typeof next === "function";
 
-const debugWebhooks = debug.debug("webhooks:receiver");
-function middleware(state, request, response, next) {
-  if (isntWebhook(request, {
-    path: state.path
-  })) {
-    // the next callback is set when used as an express middleware. That allows
-    // it to define custom routes like /my/custom/page while the webhooks are
-    // expected to be sent to the / root path. Otherwise the root path would
-    // match all requests and would make it impossible to define custom rooutes
-    if (next) {
-      next();
-      return;
+  if (isUnknownRoute) {
+    if (isExpressMiddleware) {
+      return next();
+    } else {
+      return options.onUnhandledRequest(request, response);
     }
-
-    debugWebhooks(`ignored: ${request.method} ${request.url}`);
-    response.statusCode = 404;
-    response.end("Not found");
-    return;
   }
 
   const missingHeaders = getMissingHeaders(request).join(", ");
 
   if (missingHeaders) {
-    const error = new Error(`[@octokit/webhooks] Required headers missing: ${missingHeaders}`);
-    return state.eventHandler.receive(error).catch(() => {
-      response.statusCode = 400;
-      response.end(error.message);
+    response.writeHead(400, {
+      "content-type": "application/json"
     });
+    response.end(JSON.stringify({
+      error: `Required headers missing: ${missingHeaders}`
+    }));
+    return;
   }
 
   const eventName = request.headers["x-github-event"];
-  const signatureSHA1 = request.headers["x-hub-signature"];
   const signatureSHA256 = request.headers["x-hub-signature-256"];
   const id = request.headers["x-github-delivery"];
-  debugWebhooks(`${eventName} event received (id: ${id})`); // GitHub will abort the request if it does not receive a response within 10s
+  options.log.debug(`${eventName} event received (id: ${id})`); // GitHub will abort the request if it does not receive a response within 10s
   // See https://github.com/octokit/webhooks.js/issues/185
 
   let didTimeout = false;
@@ -5125,41 +5215,46 @@ function middleware(state, request, response, next) {
     response.statusCode = 202;
     response.end("still processing\n");
   }, 9000).unref();
-  return getPayload(request).then(payload => {
-    return verifyAndReceive(state, {
+
+  try {
+    const payload = await getPayload(request);
+    await webhooks.verifyAndReceive({
       id: id,
       name: eventName,
-      payload,
-      signature: signatureSHA256 || signatureSHA1
+      payload: payload,
+      signature: signatureSHA256
     });
-  }).then(() => {
     clearTimeout(timeout);
     if (didTimeout) return;
     response.end("ok\n");
-  }).catch(error => {
+  } catch (error) {
     clearTimeout(timeout);
     if (didTimeout) return;
     const statusCode = Array.from(error)[0].status;
-    response.statusCode = statusCode || 500;
-    response.end(error.toString());
-  });
+    response.statusCode = typeof statusCode !== "undefined" ? statusCode : 500;
+    response.end(String(error));
+  }
 }
 
-function createMiddleware(options) {
-  if (!options || !options.secret) {
-    throw new Error("[@octokit/webhooks] options.secret required");
-  }
+function onUnhandledRequestDefault(request, response) {
+  response.writeHead(404, {
+    "content-type": "application/json"
+  });
+  response.end(JSON.stringify({
+    error: `Unknown route: ${request.method} ${request.url}`
+  }));
+}
 
-  const state = {
-    eventHandler: createEventHandler(options),
-    path: options.path || "/",
-    secret: options.secret,
-    hooks: {}
-  };
-  const api = middleware.bind(null, state);
-  api.on = state.eventHandler.on;
-  api.removeListener = state.eventHandler.removeListener;
-  return api;
+function createNodeMiddleware(webhooks, {
+  path = "/api/github/webhooks",
+  onUnhandledRequest = onUnhandledRequestDefault,
+  log = createLogger()
+} = {}) {
+  return middleware.bind(null, webhooks, {
+    path,
+    onUnhandledRequest,
+    log
+  });
 }
 
 class Webhooks {
@@ -5170,9 +5265,9 @@ class Webhooks {
 
     const state = {
       eventHandler: createEventHandler(options),
-      path: options.path || "/",
       secret: options.secret,
-      hooks: {}
+      hooks: {},
+      log: createLogger(options.log)
     };
     this.sign = sign.bind(null, options.secret);
     this.verify = verify.bind(null, options.secret);
@@ -5181,20 +5276,15 @@ class Webhooks {
     this.onError = state.eventHandler.onError;
     this.removeListener = state.eventHandler.removeListener;
     this.receive = state.eventHandler.receive;
-    this.middleware = middleware.bind(null, state);
     this.verifyAndReceive = verifyAndReceive.bind(null, state);
   }
 
 }
 
-const createWebhooksApi = Webhooks.prototype.constructor;
-
 exports.Webhooks = Webhooks;
 exports.createEventHandler = createEventHandler;
-exports.createMiddleware = createMiddleware;
-exports.createWebhooksApi = createWebhooksApi;
-exports.sign = sign;
-exports.verify = verify;
+exports.createNodeMiddleware = createNodeMiddleware;
+exports.emitterEventNames = emitterEventNames;
 //# sourceMappingURL=index.js.map
 
 
@@ -53550,6 +53640,7 @@ function mapSet(set) {
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const PromiseContainer = __nccwpck_require__(71475);
+const lodash_1 = __nccwpck_require__(20961);
 const calculateSlot = __nccwpck_require__(48481);
 const standard_as_callback_1 = __nccwpck_require__(91543);
 exports.kExec = Symbol("exec");
@@ -53567,19 +53658,22 @@ exports.notAllowedAutoPipelineCommands = [
     "unsubscribe",
     "unpsubscribe",
 ];
-function findAutoPipeline(client, _commandName, ...args) {
-    if (!client.isCluster) {
-        return "main";
-    }
-    // We have slot information, we can improve routing by grouping slots served by the same subset of nodes
-    return client.slots[calculateSlot(args[0])].join(",");
-}
 function executeAutoPipeline(client, slotKey) {
     /*
       If a pipeline is already executing, keep queueing up commands
       since ioredis won't serve two pipelines at the same time
     */
     if (client._runningAutoPipelines.has(slotKey)) {
+        return;
+    }
+    if (!client._autoPipelines.has(slotKey)) {
+        /*
+          Rare edge case. Somehow, something has deleted this running autopipeline in an immediate
+          call to executeAutoPipeline.
+         
+          Maybe the callback in the pipeline.exec is sometimes called in the same tick,
+          e.g. if redis is disconnected?
+        */
         return;
     }
     client._runningAutoPipelines.add(slotKey);
@@ -53618,6 +53712,29 @@ function shouldUseAutoPipelining(client, functionName, commandName) {
         !client.options.autoPipeliningIgnoredCommands.includes(commandName));
 }
 exports.shouldUseAutoPipelining = shouldUseAutoPipelining;
+/**
+ * @private
+ */
+function getFirstValueInFlattenedArray(args) {
+    for (let i = 0; i < args.length; i++) {
+        const arg = args[i];
+        if (typeof arg === "string") {
+            return arg;
+        }
+        else if (Array.isArray(arg) || lodash_1.isArguments(arg)) {
+            if (arg.length === 0) {
+                continue;
+            }
+            return arg[0];
+        }
+        const flattened = lodash_1.flatten([arg]);
+        if (flattened.length > 0) {
+            return flattened[0];
+        }
+    }
+    return undefined;
+}
+exports.getFirstValueInFlattenedArray = getFirstValueInFlattenedArray;
 function executeWithAutoPipelining(client, functionName, commandName, args, callback) {
     const CustomPromise = PromiseContainer.get();
     // On cluster mode let's wait for slots to be available
@@ -53632,7 +53749,13 @@ function executeWithAutoPipelining(client, functionName, commandName, args, call
             });
         });
     }
-    const slotKey = findAutoPipeline(client, commandName, ...args);
+    // If we have slot information, we can improve routing by grouping slots served by the same subset of nodes
+    // Note that the first value in args may be a (possibly empty) array.
+    // ioredis will only flatten one level of the array, in the Command constructor.
+    const prefix = client.options.keyPrefix || "";
+    const slotKey = client.isCluster
+        ? client.slots[calculateSlot(`${prefix}${getFirstValueInFlattenedArray(args)}`)].join(",")
+        : "main";
     if (!client._autoPipelines.has(slotKey)) {
         const pipeline = client.pipeline();
         pipeline[exports.kExec] = false;
@@ -54098,6 +54221,8 @@ class Cluster extends events_1.EventEmitter {
         this.isRefreshing = false;
         this.isCluster = true;
         this._autoPipelines = new Map();
+        this._groupsIds = {};
+        this._groupsBySlot = Array(16384);
         this._runningAutoPipelines = new Set();
         this._readyDelayedCallbacks = [];
         this._addedScriptHashes = {};
@@ -54183,7 +54308,9 @@ class Cluster extends events_1.EventEmitter {
                 reject(new Error("Redis is already connecting/connected"));
                 return;
             }
+            // Make sure only one timer is active at a time
             clearInterval(this._addedScriptHashesCleanInterval);
+            // Start the script cache cleaning
             this._addedScriptHashesCleanInterval = setInterval(() => {
                 this._addedScriptHashes = {};
             }, this.options.maxScriptsCachingTime);
@@ -54547,6 +54674,7 @@ class Cluster extends events_1.EventEmitter {
                         else {
                             _this.slots[slot] = [key];
                         }
+                        _this._groupsBySlot[slot] = _this._groupsIds[_this.slots[slot].join(';')];
                         _this.connectionPool.findOrCreate(_this.natMapper(key));
                         tryConnection();
                         debug("refreshing slot caches... (triggered by MOVED error)");
@@ -54748,6 +54876,20 @@ class Cluster extends events_1.EventEmitter {
                 for (let slot = slotRangeStart; slot <= slotRangeEnd; slot++) {
                     this.slots[slot] = keys;
                 }
+            }
+            // Assign to each node keys a numeric value to make autopipeline comparison faster.
+            this._groupsIds = Object.create(null);
+            let j = 0;
+            for (let i = 0; i < 16384; i++) {
+                const target = (this.slots[i] || []).join(';');
+                if (!target.length) {
+                    this._groupsBySlot[i] = undefined;
+                    continue;
+                }
+                if (!this._groupsIds[target]) {
+                    this._groupsIds[target] = ++j;
+                }
+                this._groupsBySlot[i] = this._groupsIds[target];
             }
             this.connectionPool.reset(nodes);
             callback();
@@ -55319,7 +55461,21 @@ Command.setReplyTransformer("hgetall", function (result) {
     if (Array.isArray(result)) {
         const obj = {};
         for (let i = 0; i < result.length; i += 2) {
-            obj[result[i]] = result[i + 1];
+            const key = result[i];
+            const value = result[i + 1];
+            if (key in obj) {
+                // can only be truthy if the property is special somehow, like '__proto__' or 'constructor'
+                // https://github.com/luin/ioredis/issues/1267
+                Object.defineProperty(obj, key, {
+                    value,
+                    configurable: true,
+                    enumerable: true,
+                    writable: true,
+                });
+            }
+            else {
+                obj[key] = value;
+            }
         }
         return obj;
     }
@@ -56189,10 +56345,9 @@ const commander_1 = __nccwpck_require__(33642);
 */
 function generateMultiWithNodes(redis, keys) {
     const slot = calculateSlot(keys[0]);
-    const target = redis.slots[slot].join(",");
+    const target = redis._groupsBySlot[slot];
     for (let i = 1; i < keys.length; i++) {
-        const currentTarget = redis.slots[calculateSlot(keys[i])].join(",");
-        if (currentTarget !== target) {
+        if (redis._groupsBySlot[calculateSlot(keys[i])] !== target) {
             return -1;
         }
     }
@@ -56315,6 +56470,7 @@ Pipeline.prototype.fillResult = function (value, position) {
                 moved: function (slot, key) {
                     _this.preferKey = key;
                     _this.redis.slots[errv[1]] = [key];
+                    _this.redis._groupsBySlot[errv[1]] = _this.redis._groupsIds[_this.redis.slots[errv[1]].join(";")];
                     _this.redis.refreshSlotsCache();
                     _this.exec();
                 },
@@ -57199,7 +57355,9 @@ Redis.prototype.connect = function (callback) {
             reject(new Error("Redis is already connecting/connected"));
             return;
         }
+        // Make sure only one timer is active at a time
         clearInterval(this._addedScriptHashesCleanInterval);
+        // Start the script cache cleaning
         this._addedScriptHashesCleanInterval = setInterval(() => {
             this._addedScriptHashes = {};
         }, this.options.maxScriptsCachingTime);
@@ -58288,6 +58446,8 @@ const defaults = __nccwpck_require__(11289);
 exports.defaults = defaults;
 const flatten = __nccwpck_require__(48919);
 exports.flatten = flatten;
+const isArguments = __nccwpck_require__(44130);
+exports.isArguments = isArguments;
 function noop() { }
 exports.noop = noop;
 
@@ -69754,6 +69914,242 @@ module.exports = includes;
 
 /***/ }),
 
+/***/ 44130:
+/***/ ((module) => {
+
+/**
+ * lodash (Custom Build) <https://lodash.com/>
+ * Build: `lodash modularize exports="npm" -o ./`
+ * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+ * Released under MIT license <https://lodash.com/license>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ */
+
+/** Used as references for various `Number` constants. */
+var MAX_SAFE_INTEGER = 9007199254740991;
+
+/** `Object#toString` result references. */
+var argsTag = '[object Arguments]',
+    funcTag = '[object Function]',
+    genTag = '[object GeneratorFunction]';
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var objectToString = objectProto.toString;
+
+/** Built-in value references. */
+var propertyIsEnumerable = objectProto.propertyIsEnumerable;
+
+/**
+ * Checks if `value` is likely an `arguments` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an `arguments` object,
+ *  else `false`.
+ * @example
+ *
+ * _.isArguments(function() { return arguments; }());
+ * // => true
+ *
+ * _.isArguments([1, 2, 3]);
+ * // => false
+ */
+function isArguments(value) {
+  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
+  return isArrayLikeObject(value) && hasOwnProperty.call(value, 'callee') &&
+    (!propertyIsEnumerable.call(value, 'callee') || objectToString.call(value) == argsTag);
+}
+
+/**
+ * Checks if `value` is array-like. A value is considered array-like if it's
+ * not a function and has a `value.length` that's an integer greater than or
+ * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+ * @example
+ *
+ * _.isArrayLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isArrayLike(document.body.children);
+ * // => true
+ *
+ * _.isArrayLike('abc');
+ * // => true
+ *
+ * _.isArrayLike(_.noop);
+ * // => false
+ */
+function isArrayLike(value) {
+  return value != null && isLength(value.length) && !isFunction(value);
+}
+
+/**
+ * This method is like `_.isArrayLike` except that it also checks if `value`
+ * is an object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array-like object,
+ *  else `false`.
+ * @example
+ *
+ * _.isArrayLikeObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isArrayLikeObject(document.body.children);
+ * // => true
+ *
+ * _.isArrayLikeObject('abc');
+ * // => false
+ *
+ * _.isArrayLikeObject(_.noop);
+ * // => false
+ */
+function isArrayLikeObject(value) {
+  return isObjectLike(value) && isArrayLike(value);
+}
+
+/**
+ * Checks if `value` is classified as a `Function` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a function, else `false`.
+ * @example
+ *
+ * _.isFunction(_);
+ * // => true
+ *
+ * _.isFunction(/abc/);
+ * // => false
+ */
+function isFunction(value) {
+  // The use of `Object#toString` avoids issues with the `typeof` operator
+  // in Safari 8-9 which returns 'object' for typed array and other constructors.
+  var tag = isObject(value) ? objectToString.call(value) : '';
+  return tag == funcTag || tag == genTag;
+}
+
+/**
+ * Checks if `value` is a valid array-like length.
+ *
+ * **Note:** This method is loosely based on
+ * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+ * @example
+ *
+ * _.isLength(3);
+ * // => true
+ *
+ * _.isLength(Number.MIN_VALUE);
+ * // => false
+ *
+ * _.isLength(Infinity);
+ * // => false
+ *
+ * _.isLength('3');
+ * // => false
+ */
+function isLength(value) {
+  return typeof value == 'number' &&
+    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+}
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return !!value && (type == 'object' || type == 'function');
+}
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return !!value && typeof value == 'object';
+}
+
+module.exports = isArguments;
+
+
+/***/ }),
+
 /***/ 16501:
 /***/ ((module) => {
 
@@ -79952,6 +80348,7 @@ class Context {
      *
      */
     repo(object) {
+        // @ts-ignore `repository` is not always present in this.payload
         const repo = this.payload.repository;
         if (!repo) {
             throw new Error("context.repo() is not supported for this webhook event.");
@@ -79974,9 +80371,11 @@ class Context {
      * @param object - Params to be merged with the issue params.
      */
     issue(object) {
-        const payload = this.payload;
         return Object.assign({
-            issue_number: (payload.issue || payload.pull_request || payload).number,
+            issue_number: 
+            // @ts-ignore - this.payload may not have `issue` or `pull_request` keys
+            (this.payload.issue || this.payload.pull_request || this.payload)
+                .number,
         }, this.repo(object));
     }
     /**
@@ -79994,6 +80393,7 @@ class Context {
     pullRequest(object) {
         const payload = this.payload;
         return Object.assign({
+            // @ts-ignore - this.payload may not have `issue` or `pull_request` keys
             pull_number: (payload.issue || payload.pull_request || payload).number,
         }, this.repo(object));
     }
@@ -80002,6 +80402,8 @@ class Context {
      * @type {boolean}
      */
     get isBot() {
+        // @ts-expect-error - `sender` key is currently not present in all events
+        // see https://github.com/octokit/webhooks/issues/510
         return this.payload.sender.type === "Bot";
     }
     /**
@@ -80076,15 +80478,18 @@ exports.Context = Context;
 /***/ }),
 
 /***/ 95960:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createNodeMiddleware = void 0;
-function createNodeMiddleware(appFn, { probot }) {
+const webhooks_1 = __nccwpck_require__(18513);
+function createNodeMiddleware(appFn, { probot, webhooksPath }) {
     probot.load(appFn);
-    return probot.webhooks.middleware;
+    return webhooks_1.createNodeMiddleware(probot.webhooks, {
+        path: webhooksPath || "/",
+    });
 }
 exports.createNodeMiddleware = createNodeMiddleware;
 //# sourceMappingURL=create-node-middleware.js.map
@@ -80196,13 +80601,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getErrorHandler = void 0;
 function getErrorHandler(log) {
     return (error) => {
-        const errors = (error.name === "AggregateError"
-            ? error
-            : [error]);
+        const errors = (error.name === "AggregateError" ? error : [error]);
         const event = error.event;
         for (const error of errors) {
             const errMessage = (error.message || "").toLowerCase();
-            if (errMessage.includes("x-hub-signature")) {
+            if (errMessage.includes("x-hub-signature-256")) {
                 log.error(error, "Go to https://github.com/settings/apps/YOUR_APP and verify that the Webhook secret matches the value of the WEBHOOK_SECRET environment variable.");
                 continue;
             }
@@ -80618,9 +81021,12 @@ exports.getWebhooks = void 0;
 const webhooks_1 = __nccwpck_require__(18513);
 const get_error_handler_1 = __nccwpck_require__(25625);
 const octokit_webhooks_transform_1 = __nccwpck_require__(50645);
+// import { Context } from "../context";
 function getWebhooks(state) {
+    // TODO: This should be webhooks = new Webhooks<Context>({...}) but fails with
+    //       > The context of the event that was triggered, including the payload and
+    //         helpers for extracting information can be passed to GitHub API calls
     const webhooks = new webhooks_1.Webhooks({
-        path: state.webhooks.path,
         secret: state.webhooks.secret,
         transform: octokit_webhooks_transform_1.webhookTransform.bind(null, state),
     });
@@ -80751,7 +81157,6 @@ const probot_octokit_1 = __nccwpck_require__(45351);
 const version_1 = __nccwpck_require__(23972);
 class Probot {
     constructor(options = {}) {
-        options.webhookPath = options.webhookPath || "/";
         options.secret = options.secret || "development";
         let level = options.logLevel;
         const logMessageKey = options.logMessageKey;
@@ -80781,7 +81186,6 @@ class Probot {
             Octokit,
             octokit,
             webhooks: {
-                path: options.webhookPath,
                 secret: options.secret,
             },
             appId: Number(options.appId),
@@ -80791,14 +81195,7 @@ class Probot {
         };
         this.auth = auth_1.auth.bind(null, this.state);
         this.webhooks = get_webhooks_1.getWebhooks(this.state);
-        this.on = (eventNameOrNames, callback) => {
-            if (eventNameOrNames === "*") {
-                this.log.warn(`[probot] Using the "*" event with the regular app.on() function is deprecated. Please use the app.webhooks.onAny() method instead`);
-                // @ts-ignore this.webhooks.on("*") is deprecated
-                return this.webhooks.onAny(callback);
-            }
-            return this.webhooks.on(eventNameOrNames, callback);
-        };
+        this.on = this.webhooks.on;
         this.onAny = this.webhooks.onAny;
         this.onError = this.webhooks.onError;
         this.version = version_1.VERSION;
@@ -81016,6 +81413,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Server = void 0;
 const express_1 = __importStar(__nccwpck_require__(71204));
 const path_1 = __nccwpck_require__(85622);
+const webhooks_1 = __nccwpck_require__(18513);
 const get_log_1 = __nccwpck_require__(75942);
 const logging_middleware_1 = __nccwpck_require__(27530);
 const webhook_proxy_1 = __nccwpck_require__(32415);
@@ -81034,7 +81432,9 @@ class Server {
         };
         this.expressApp.use(logging_middleware_1.getLoggingMiddleware(this.log));
         this.expressApp.use("/probot/static/", express_1.default.static(__nccwpck_require__.ab + "static"));
-        this.expressApp.use(this.state.webhookPath, this.probotApp.webhooks.middleware);
+        this.expressApp.use(this.state.webhookPath, webhooks_1.createNodeMiddleware(this.probotApp.webhooks, {
+            path: "/",
+        }));
         this.expressApp.set("view engine", "hbs");
         this.expressApp.set("views", __nccwpck_require__.ab + "views");
         this.expressApp.get("/ping", (req, res) => res.end("PONG"));
@@ -81102,7 +81502,7 @@ Server.version = version_1.VERSION;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.VERSION = void 0;
 // The version is set automatically before publish to npm
-exports.VERSION = "11.4.1";
+exports.VERSION = "12.1.1";
 //# sourceMappingURL=version.js.map
 
 /***/ }),
@@ -107338,12 +107738,10 @@ let lastPrNumber = 0;
 (0,main.config)({
     path: process.env.NODE_ENV === 'production' ? (0,external_path_.join)(__dirname, '.env') : (0,external_path_.join)(__dirname, '..', '.env')
 });
-const probot = (0,lib.createProbot)({
-    defaults: {
-        webhookPath: '/api/'
-    }
-});
-/* harmony default export */ const src = ((0,lib.createNodeMiddleware)(app, { probot }));
+/* harmony default export */ const src = ((0,lib.createNodeMiddleware)(app, {
+    probot: (0,lib.createProbot)(),
+    webhooksPath: '/api/'
+}));
 
 })();
 
