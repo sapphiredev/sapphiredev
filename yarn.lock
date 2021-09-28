@@ -1599,10 +1599,10 @@ dot-prop@^5.1.0, dot-prop@^5.2.0, dot-prop@^6.0.1:
   dependencies:
     is-obj "^2.0.0"
 
-dotenv-cra@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/dotenv-cra/-/dotenv-cra-2.2.0.tgz#65f58469251dca05c40a1d4d7b781a03a8f1d185"
-  integrity sha512-A7IMB5nsUVEjovsCuR+01ajeEIgd/UWYs+jJzo2UBkaMmecquIKav2zf68B43m7oSV1mlzAjXLgk2kRz4cJ/RA==
+dotenv-cra@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/dotenv-cra/-/dotenv-cra-3.0.2.tgz#ce1565aaa0bb21402f9e7f6f44c8f751ae35219c"
+  integrity sha512-4SJ1L6tAzAmRgBw7k6B7XaP8ARV8nFvQb2pfLC8Tiudz27auSgkzPPvtfLmmSg6jzhHtsQ6c/USNlqLfWE7mfg==
   dependencies:
     dotenv "^10.0.0"
     dotenv-expand "^5.1.0"
