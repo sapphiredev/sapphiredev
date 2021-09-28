@@ -7,10 +7,7 @@ config({
 	path: process.env.NODE_ENV === 'production' ? join(__dirname, '.env') : join(__dirname, '..', '.env')
 });
 
-const probot = createProbot({
-	defaults: {
-		webhookPath: '/api/'
-	}
+export default createNodeMiddleware(app, {
+	probot: createProbot(),
+	webhooksPath: '/api/'
 });
-
-export default createNodeMiddleware(app, { probot });
