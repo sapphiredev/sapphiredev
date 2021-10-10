@@ -26,7 +26,7 @@ export default (app: Probot) => {
 
 			const fullPrData = await context.octokit.pulls.get(context.pullRequest());
 
-			if (commentBodyLowerCase.includes('@sapphiredev pack')) {
+			if (commentBodyLowerCase.includes('@sapphiredev pack') && fullPrData.data.head.repo) {
 				// Store the this PR number
 				lastPrNumber = context.payload.issue.number;
 

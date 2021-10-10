@@ -14,13 +14,13 @@
 		"watch": "tsc -b src -w",
 		"clean": "node scripts/clean.mjs",
 		"vercel-build": "ncc build src/index.ts -o api",
-		"update": "yarn upgrade-interactive --latest",
+		"update": "yarn up \"*\" -i",
 		"commit": "git-cz",
 		"cz": "git-cz",
 		"prepare": "husky install .github/husky"
 	},
 	"dependencies": {
-		"@sapphire/fetch": "^1.0.5",
+		"@sapphire/fetch": "^2.0.0",
 		"dotenv-cra": "^3.0.2",
 		"probot": "^12.1.1",
 		"tslib": "^2.3.1"
@@ -31,12 +31,13 @@
 		"@sapphire/eslint-config": "^3.3.1",
 		"@sapphire/prettier-config": "^1.2.1",
 		"@sapphire/ts-config": "^3.1.0",
-		"@types/node": "^16.9.1",
-		"@types/node-fetch": "^2.5.12",
+		"@types/node": "^16.10.3",
 		"@vercel/ncc": "^0.31.1",
 		"cz-conventional-changelog": "^3.3.0",
+		"eslint": "^7",
 		"husky": "^7.0.2",
 		"lint-staged": "^11.2.2",
+		"prettier": "^2.4.1",
 		"pretty-quick": "^3.1.1",
 		"smee-client": "^1.2.2",
 		"typescript": "^4.4.3"
@@ -62,17 +63,9 @@
 			"path": "./node_modules/cz-conventional-changelog"
 		}
 	},
-	"resolutions": {
-		"minimist": "^1.2.5",
-		"kind-of": "^6.0.3",
-		"dot-prop": "^6.0.1",
-		"lodash": "^4.17.21",
-		"marked": "^3.0.7",
-		"merge": "^2.1.1",
-		"trim": "^1.0.1"
-	},
 	"prettier": "@sapphire/prettier-config",
 	"eslintConfig": {
 		"extends": "@sapphire/eslint-config"
-	}
+	},
+	"packageManager": "yarn@3.0.2"
 }
