@@ -890,7 +890,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^16.11.9":
+"@types/node@npm:*, @types/node@npm:^16.11.10":
   version: 16.11.10
   resolution: "@types/node@npm:16.11.10"
   checksum: 9c79419c5c3d92d5825bffa30f3668533f598d8b63a73ea7fc24e47f162bdbed92b0f8e4f4261cc3314b39cee050e303366d2aa154abc95c63a572a110b8c160
@@ -5594,7 +5594,7 @@ __metadata:
     "@sapphire/fetch": ^2.0.3
     "@sapphire/prettier-config": ^1.2.6
     "@sapphire/ts-config": ^3.1.6
-    "@types/node": ^16.11.9
+    "@types/node": ^16.11.10
     "@vercel/ncc": ^0.32.0
     cz-conventional-changelog: ^3.3.0
     dotenv-cra: ^3.0.2
