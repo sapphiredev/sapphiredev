@@ -46,6 +46,11 @@
 		"smee-client": "^1.2.2",
 		"typescript": "^4.6.3"
 	},
+	"resolutions": {
+		"ansi-regex": "^5.0.1",
+		"jest-environment-jsdom": "https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.3.tgz",
+		"jest-jasmine2": "https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.3.tgz"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/sapphiredev/sapphiredev.git"
