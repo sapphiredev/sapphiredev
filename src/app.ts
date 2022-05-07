@@ -3,6 +3,10 @@ import type { Probot } from 'probot';
 import { ContinuousDeliveryWorkflow, isNullish, PublishJobName, VerifiedSenders } from './constants';
 
 let lastPrNumber = 0;
+let lastCommenter: string | undefined;
+
+const packageMatchRegex = /📦\s+Bumped (?<name>@sapphire\/[a-z\-0-9.]+)/g;
+
 export default (app: Probot) => {
 	app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
 		type IssueWithPullRequestPayload = typeof context.payload.issue & {
@@ -29,6 +33,7 @@ export default (app: Probot) => {
 			if (commentBodyLowerCase.includes('@sapphiredev pack') && fullPrData.data.head.repo) {
 				// Store the this PR number
 				lastPrNumber = context.payload.issue.number;
+				lastCommenter = context.payload.sender.login;
 
 				await context.octokit.actions.createWorkflowDispatch({
 					workflow_id: ContinuousDeliveryWorkflow,
@@ -44,7 +49,7 @@ export default (app: Probot) => {
 
 				const replyMessage = context.issue({
 					body: [
-						`Heya @${context.payload.sender.login}, I've started to run the deployment workflow on this PR.`,
+						`Heya @${lastCommenter}, I've started to run the deployment workflow on this PR at ${fullPrData.data.head.sha.slice(0, 7)}.`,
 						`You can monitor the build [here](${workflowUrl})!`
 					].join(' ')
 				});
@@ -74,16 +79,15 @@ export default (app: Probot) => {
 					if (jobLogsData.url) {
 						const jobLogs = await fetch(jobLogsData.url, FetchResultTypes.Text);
 
-						const matched = jobLogs.match(/📦\s+@sapphire\/[a-z\-0-9.]+/g);
+						const regexMatches = jobLogs.matchAll(packageMatchRegex);
+						const packageNames = [...regexMatches].map((match) => match.groups?.name).filter(Boolean);
 
-						if (matched) {
-							const packageNames = matched.map((a) => a.slice(4));
-
+						if (packageNames.length) {
 							await context.octokit.issues.createComment({
 								owner,
 								repo,
 								body: [
-									`The deployment workflow has finished successfully. You can install it for testing like so:`,
+									`Hey ${lastCommenter}, I've released this to NPM. You can install it for testing like so:`,
 									'```sh',
 									packageNames.map((name) => `npm install ${name}@pr-${lastPrNumber}`).join('\n'),
 									'```'
