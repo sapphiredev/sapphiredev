@@ -1,13 +1,13 @@
 process.env.NODE_ENV = 'development';
 
-import { setup } from '@skyra/env-utilities';
+import { config } from 'dotenv-cra';
 import { run } from 'probot';
 import { fileURLToPath } from 'url';
 import App from '../dist/app.js';
 
 const app = App.default;
 
-setup({
+config({
 	path: fileURLToPath(new URL('../.env', import.meta.url))
 });
 
