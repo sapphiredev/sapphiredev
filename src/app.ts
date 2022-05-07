@@ -87,7 +87,7 @@ export default (app: Probot) => {
 								owner,
 								repo,
 								body: [
-									`Hey ${lastCommenter}, I've released this to NPM. You can install it for testing like so:`,
+									`Hey @${lastCommenter}, I've released this to NPM. You can install it for testing like so:`,
 									'```sh',
 									packageNames.map((name) => `npm install ${name}@pr-${lastPrNumber}`).join('\n'),
 									'```'
