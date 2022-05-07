@@ -2,7 +2,7 @@ import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import type { Probot } from 'probot';
 import { ContinuousDeliveryWorkflow, isNullish, PublishJobName, VerifiedSenders } from './constants';
 
-let lastPrNumber = 0;
+let lastPrNumber: number | undefined;
 let lastCommenter: string | undefined;
 
 const packageMatchRegex = /📦\s+Bumped (?<name>@sapphire\/[a-z\-0-9.]+)/g;
@@ -62,6 +62,8 @@ export default (app: Probot) => {
 	app.on('workflow_run.completed', async (context) => {
 		if (
 			/** Validate that the action is completed */
+			lastPrNumber &&
+			lastCommenter &&
 			context.payload.action === 'completed' &&
 			context.payload.workflow?.path.endsWith(ContinuousDeliveryWorkflow)
 		) {
@@ -99,8 +101,9 @@ export default (app: Probot) => {
 				}
 			}
 
-			// Reset value to 0
-			lastPrNumber = 0;
+			// Reset stored values to undefined
+			lastPrNumber = undefined;
+			lastCommenter = undefined;
 		}
 	});
 };
