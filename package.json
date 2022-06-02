@@ -15,7 +15,7 @@
 		"clean": "node scripts/clean.mjs",
 		"vercel-build": "ncc build src/index.ts -o api",
 		"update": "yarn upgrade-interactive",
-		"prepare": "husky install .github/husky"
+		"postinstall": "husky install .github/husky"
 	},
 	"dependencies": {
 		"@sapphire/fetch": "^2.3.1",
