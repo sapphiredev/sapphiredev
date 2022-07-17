@@ -18,7 +18,7 @@
 		"postinstall": "husky install .github/husky"
 	},
 	"dependencies": {
-		"@sapphire/fetch": "^2.4.0",
+		"@sapphire/fetch": "^2.4.1",
 		"dotenv-cra": "^3.0.2",
 		"probot": "^12.2.5",
 		"tslib": "^2.4.0"
