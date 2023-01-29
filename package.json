@@ -21,7 +21,7 @@
 		"@sapphire/fetch": "^2.4.1",
 		"dotenv-cra": "^3.0.3",
 		"probot": "^12.3.0",
-		"tslib": "^2.4.1"
+		"tslib": "^2.5.0"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^17.4.2",
@@ -30,11 +30,11 @@
 		"@sapphire/prettier-config": "^1.4.5",
 		"@sapphire/ts-config": "^3.3.4",
 		"@types/node": "^18.11.18",
-		"@typescript-eslint/eslint-plugin": "^5.48.2",
-		"@typescript-eslint/parser": "^5.48.2",
-		"@vercel/ncc": "^0.36.0",
+		"@typescript-eslint/eslint-plugin": "^5.49.0",
+		"@typescript-eslint/parser": "^5.49.0",
+		"@vercel/ncc": "^0.36.1",
 		"cz-conventional-changelog": "^3.3.0",
-		"eslint": "^8.32.0",
+		"eslint": "^8.33.0",
 		"eslint-config-prettier": "^8.6.0",
 		"eslint-plugin-prettier": "^4.2.1",
 		"husky": "^8.0.3",
