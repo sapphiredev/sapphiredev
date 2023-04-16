@@ -59,6 +59,7 @@ export default (app: Probot) => {
 		}
 	});
 
+	// @ts-ignore The union of the function is too complex to represent but we don't care about the exact type anyway so we ignore this line
 	app.on('workflow_run.completed', async (context) => {
 		if (
 			/** Validate that the action is completed */

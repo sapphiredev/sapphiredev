@@ -12,16 +12,6 @@ node_modules/
 api/
 dist/
 
-# Ignore JavaScript files
-**/*.js
-**/*.mjs
-**/*.js.map
-**/*.d.ts
-**/*.tsbuildinfo
-!api/**/*.d.ts
-!scripts/*.mjs
-!jest.config.ts
-
 # Ignore heapsnapshot and log files
 *.heapsnapshot
 *.log
