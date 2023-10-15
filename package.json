@@ -14,8 +14,7 @@
 		"watch": "tsc -b src -w",
 		"clean": "node scripts/clean.mjs",
 		"vercel-build": "ncc build src/index.ts -o api",
-		"update": "yarn upgrade-interactive",
-		"postinstall": "husky install .github/husky"
+		"update": "yarn upgrade-interactive"
 	},
 	"dependencies": {
 		"@sapphire/fetch": "^2.4.1",
@@ -38,7 +37,6 @@
 		"eslint": "^8.51.0",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-prettier": "^5.0.1",
-		"husky": "^8.0.3",
 		"lint-staged": "^15.0.0",
 		"prettier": "^3.0.3",
 		"smee-client": "^1.2.3",
