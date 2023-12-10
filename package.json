@@ -18,7 +18,7 @@
 	},
 	"dependencies": {
 		"@sapphire/fetch": "^2.4.2",
-		"@skyra/env-utilities": "^1.2.1",
+		"@skyra/env-utilities": "^1.2.2",
 		"probot": "^12.3.3",
 		"tslib": "^2.6.2"
 	},
