@@ -763,12 +763,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/fetch@npm:^2.4.2":
-  version: 2.4.2
-  resolution: "@sapphire/fetch@npm:2.4.2"
-  dependencies:
-    cross-fetch: "npm:^4.0.0"
-  checksum: 995c1a9464ca3d7612e2297f85afb78adce20170d229ba251a0cb230fa60ddee1888cf01c12be4725242bdaf4563168e07f5a9f56d80ccd983327f88cec6ea1b
+"@sapphire/fetch@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@sapphire/fetch@npm:3.0.0"
+  checksum: 3e3d6bf722766e9781e589e675c5181a6818475eaa580026c4a5c704854742a302237424af641e919eaa16d4d7112aa221092e6295cbef1f45606afdb5383dc8
   languageName: node
   linkType: hard
 
@@ -2031,15 +2029,6 @@ __metadata:
     typescript:
       optional: true
   checksum: 91d082baca0f33b1c085bf010f9ded4af43cbedacba8821da0fb5667184d0a848addc52c31fadd080007f904a555319c238cf5f4c03e6d58ece2e4876b2e73d6
-  languageName: node
-  linkType: hard
-
-"cross-fetch@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "cross-fetch@npm:4.0.0"
-  dependencies:
-    node-fetch: "npm:^2.6.12"
-  checksum: e231a71926644ef122d334a3a4e73d9ba3ba4b480a8a277fb9badc434c1ba905b3d60c8034e18b348361a09afbec40ba9371036801ba2b675a7b84588f9f55d8
   languageName: node
   linkType: hard
 
@@ -4537,7 +4526,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.6.12, node-fetch@npm:^2.6.7":
+"node-fetch@npm:^2.6.7":
   version: 2.7.0
   resolution: "node-fetch@npm:2.7.0"
   dependencies:
@@ -5442,7 +5431,7 @@ __metadata:
     "@commitlint/cli": "npm:^18.4.3"
     "@commitlint/config-conventional": "npm:^18.4.3"
     "@sapphire/eslint-config": "npm:^5.0.3"
-    "@sapphire/fetch": "npm:^2.4.2"
+    "@sapphire/fetch": "npm:^3.0.0"
     "@sapphire/prettier-config": "npm:^2.0.0"
     "@sapphire/ts-config": "npm:^5.0.0"
     "@skyra/env-utilities": "npm:^1.2.2"
