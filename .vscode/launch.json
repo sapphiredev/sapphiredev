@@ -1,18 +1,22 @@
 {
 	"configurations": [
 		{
+			"name": "Wrangler Dev",
 			"type": "node",
 			"request": "launch",
-			"runtimeArgs": ["run-script", "dev"],
-			"name": "Debugger",
-			"runtimeExecutable": "npm",
-			"skipFiles": ["<node_internals>/**", "node_modules/tslib/**"],
-			"internalConsoleOptions": "openOnSessionStart",
-			"env": {
-				"NODE_ENV": "development"
-			},
-			"console": "internalConsole",
-			"outputCapture": "std"
+			"resolveSourceMapLocations": ["**", "!**/node_modules/**"],
+			"program": "${workspaceFolder}/node_modules/wrangler/bin/wrangler.js",
+			"args": ["dev", "-r", "--port=8000", "--inspector-port=59229"],
+			"attachSimplePort": 59229,
+			"internalConsoleOptions": "neverOpen",
+			"console": "integratedTerminal",
+			"autoAttachChildProcesses": false
+		},
+		{
+			"name": "Attach to existing Wrangler",
+			"type": "node",
+			"request": "attach",
+			"resolveSourceMapLocations": ["**", "!**/node_modules/**"]
 		}
 	]
 }
