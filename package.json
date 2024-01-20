@@ -9,7 +9,7 @@
 	"main": "dist/index.js",
 	"scripts": {
 		"build": "tsc",
-		"deploy": "wrangler deploy src/index.ts",
+		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
 		"lint": "eslint src --ext ts --fix",
 		"format": "prettier --write src/**/*.ts"
