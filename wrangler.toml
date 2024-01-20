@@ -5,3 +5,7 @@ workers_dev = true
 main = "src/index.ts"
 compatibility_date = "2023-07-01"
 node_compat = true
+
+kv_namespaces = [
+    { binding = "cache", id = "9c35e418145e436790787db37bb4b341" }
+]

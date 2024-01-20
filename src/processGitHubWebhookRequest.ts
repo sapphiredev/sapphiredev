@@ -10,9 +10,6 @@ import {
 import type { Env } from './types.js';
 import { verifyWebhookSignature } from './verify.js';
 
-let lastPrNumber: number | null = null;
-let lastCommenter: string | null = null;
-
 export async function processGitHubWebhookRequest(request: Request, env: Env): Promise<Response> {
 	const appId = env.APP_ID;
 	const secret = env.WEBHOOK_SECRET;
@@ -57,8 +54,8 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 
 			if (commentBodyLowerCase.includes('@sapphiredev pack') && fullPrData.data.head.repo) {
 				// Store the this PR number
-				lastPrNumber = payload.issue.number;
-				lastCommenter = payload.sender.login;
+				const lastPrNumber = payload.issue.number;
+				const lastCommenter = payload.sender.login;
 
 				await octokit.request('POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches', {
 					workflow_id: ContinuousDeliveryWorkflow,
@@ -83,11 +80,17 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 					].join(' '),
 					headers: OctokitRequestHeaders
 				});
+
+				await env.SAPPHIREDEV_CACHE.put('LAST_PR_NUMBER', lastPrNumber.toString());
+				await env.SAPPHIREDEV_CACHE.put('LAST_COMMENTER', lastCommenter);
 			}
 		}
 	});
 
 	app.webhooks.on('workflow_run.completed', async ({ octokit, payload }) => {
+		const lastPrNumber = await env.SAPPHIREDEV_CACHE.get('LAST_PR_NUMBER');
+		const lastCommenter = await env.SAPPHIREDEV_CACHE.get('LAST_COMMENTER');
+
 		console.log('Processing workflow completed');
 		console.log('lastPrNumber', lastPrNumber);
 		console.log('lastCommenter', lastCommenter);
@@ -138,7 +141,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 							await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
 								owner,
 								repo,
-								issue_number: lastPrNumber,
+								issue_number: Number(lastPrNumber),
 								body: [
 									`Hey @${lastCommenter}, I've released this to NPM. You can install it for testing like so:`,
 									'```sh',
@@ -152,9 +155,9 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 				}
 			}
 
-			// Reset stored values to null
-			lastPrNumber = null;
-			lastCommenter = null;
+			// Remove values from KV
+			await env.SAPPHIREDEV_CACHE.delete('LAST_PR_NUMBER');
+			await env.SAPPHIREDEV_CACHE.delete('LAST_COMMENTER');
 		}
 	});
 
