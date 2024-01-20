@@ -81,15 +81,15 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 					headers: OctokitRequestHeaders
 				});
 
-				await env.CACHE.put('LAST_PR_NUMBER', lastPrNumber.toString());
-				await env.CACHE.put('LAST_COMMENTER', lastCommenter);
+				await env.cache.put('LAST_PR_NUMBER', lastPrNumber.toString());
+				await env.cache.put('LAST_COMMENTER', lastCommenter);
 			}
 		}
 	});
 
 	app.webhooks.on('workflow_run.completed', async ({ octokit, payload }) => {
-		const lastPrNumber = await env.CACHE.get('LAST_PR_NUMBER');
-		const lastCommenter = await env.CACHE.get('LAST_COMMENTER');
+		const lastPrNumber = await env.cache.get('LAST_PR_NUMBER');
+		const lastCommenter = await env.cache.get('LAST_COMMENTER');
 
 		console.log('Processing workflow completed');
 		console.log('lastPrNumber', lastPrNumber);
@@ -156,8 +156,8 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 			}
 
 			// Remove values from KV
-			await env.CACHE.delete('LAST_PR_NUMBER');
-			await env.CACHE.delete('LAST_COMMENTER');
+			await env.cache.delete('LAST_PR_NUMBER');
+			await env.cache.delete('LAST_COMMENTER');
 		}
 	});
 

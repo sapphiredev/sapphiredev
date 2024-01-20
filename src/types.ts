@@ -2,7 +2,7 @@ export interface Env {
 	APP_ID: string;
 	PRIVATE_KEY: string;
 	WEBHOOK_SECRET: string;
-	CACHE: KVNamespace;
+	cache: KVNamespace;
 }
 
 export interface PullRequestData {
