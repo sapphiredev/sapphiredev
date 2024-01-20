@@ -10,7 +10,7 @@
 	"scripts": {
 		"build": "tsc",
 		"deploy": "wrangler deploy",
-		"dev": "wrangler dev",
+		"dev": "wrangler dev --port 8000 -r",
 		"lint": "eslint src --ext ts --fix",
 		"format": "prettier --write src/**/*.ts"
 	},
