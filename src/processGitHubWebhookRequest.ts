@@ -91,25 +91,13 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 		const lastPrNumber = await env.cache.get('LAST_PR_NUMBER');
 		const lastCommenter = await env.cache.get('LAST_COMMENTER');
 
-		console.log('Processing workflow completed');
-		console.log('lastPrNumber', lastPrNumber);
-		console.log('lastCommenter', lastCommenter);
-		console.log('payload.action', payload.action);
-		console.log('payload.workflow.path', payload.workflow.path);
-		console.log(
-			"lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow.path.endsWith(ContinuousDeliveryWorkflow)",
-			Boolean(lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow.path.endsWith(ContinuousDeliveryWorkflow))
-		);
-
 		// Validate that the action is completed
 		if (lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow.path.endsWith(ContinuousDeliveryWorkflow)) {
 			const workflowRunInfo = payload.workflow_run;
 			const owner = payload.repository.owner.name ?? 'sapphiredev';
 			const repo = payload.repository.name;
 
-			console.log('If checks passed: 1');
 			if (workflowRunInfo) {
-				console.log('If checks passed: 2');
 				const workflowJobs = await octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
 					owner,
 					repo,
@@ -120,7 +108,6 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 				const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase() === ContinuousDeliveryName)?.id;
 
 				if (publishJobId) {
-					console.log('If checks passed: 3');
 					const jobLogsData = await octokit.request('GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs', {
 						owner,
 						repo,
@@ -129,7 +116,6 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 					});
 
 					if (jobLogsData.url) {
-						console.log('If checks passed: 4');
 						const jobLogsResult = await fetch(jobLogsData.url);
 						const jobLogs = await jobLogsResult.text();
 
@@ -137,7 +123,6 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 						const packageNames = [...regexMatches].map((match) => match.groups?.name).filter(Boolean);
 
 						if (packageNames.length) {
-							console.log('If checks passed: 5');
 							await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
 								owner,
 								repo,
