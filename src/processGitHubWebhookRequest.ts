@@ -88,13 +88,8 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 	app.webhooks.on('workflow_run.completed', async ({ octokit, payload }) => {
 		const lastPrNumber = getLastPrNumber();
 
-		if (
-			/** Validate that the action is completed */
-			lastPrNumber &&
-			getLastCommenter() &&
-			payload.action === 'completed' &&
-			payload.workflow?.path.endsWith(ContinuousDeliveryWorkflow)
-		) {
+		// Validate that the action is completed
+		if (lastPrNumber && getLastCommenter() && payload.action === 'completed' && payload.workflow?.path.endsWith(ContinuousDeliveryWorkflow)) {
 			const workflowRunInfo = payload.workflow_run;
 			const owner = payload.repository.owner.name ?? 'sapphiredev';
 			const repo = payload.repository.name;
