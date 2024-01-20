@@ -1,5 +1,4 @@
 import { App } from '@octokit/app';
-import { getLastCommenter, setLastCommenter, setLastPrNumber } from './cache.js';
 import {
 	ContinuousDeliveryName,
 	ContinuousDeliveryWorkflow,
@@ -10,6 +9,9 @@ import {
 } from './constants.js';
 import type { Env } from './types.js';
 import { verifyWebhookSignature } from './verify.js';
+
+let lastPrNumber: number | null = null;
+let lastCommenter: string | null = null;
 
 export async function processGitHubWebhookRequest(request: Request, env: Env): Promise<Response> {
 	const appId = env.APP_ID;
@@ -55,8 +57,8 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 
 			if (commentBodyLowerCase.includes('@sapphiredev pack') && fullPrData.data.head.repo) {
 				// Store the this PR number
-				setLastPrNumber(payload.issue.number);
-				setLastCommenter(payload.sender.login);
+				lastPrNumber = payload.issue.number;
+				lastCommenter = payload.sender.login;
 
 				await octokit.request('POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches', {
 					workflow_id: ContinuousDeliveryWorkflow,
@@ -76,7 +78,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 					repo,
 					issue_number: payload.issue.number,
 					body: [
-						`Heya @${getLastCommenter()}, I've started to run the deployment workflow on this PR at ${fullPrData.data.head.sha.slice(0, 7)}.`,
+						`Heya @${lastCommenter}, I've started to run the deployment workflow on this PR at ${fullPrData.data.head.sha.slice(0, 7)}.`,
 						`You can monitor the build [here](${workflowUrl})!`
 					].join(' '),
 					headers: OctokitRequestHeaders
@@ -86,29 +88,18 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 	});
 
 	app.webhooks.on('workflow_run.completed', async ({ octokit, payload }) => {
-		// console.log('Processing workflow completed');
-		// const lastPrNumber = getLastPrNumber();
-		// const lastCommenter = getLastCommenter();
-		// console.log('lastPrNumber', lastPrNumber);
-		// console.log('lastCommenter', lastCommenter);
-		// console.log('payload.workflow.name', payload.workflow.name);
-		// console.log('payload.workflow.state', payload.workflow.state);
-		// console.log('payload.workflow_run.name', payload.workflow_run.name);
-		// console.log('payload.workflow_run.status', payload.workflow_run.status);
-		// console.log('payload.action', payload.action);
-		// console.log('payload.workflow.path', payload.workflow.path);
-		// console.log('ContinuousDeliveryWorkflow', ContinuousDeliveryWorkflow);
-		// console.log(
-		// 	"lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow.path.endsWith(ContinuousDeliveryWorkflow)",
-		// 	lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow.path.endsWith(ContinuousDeliveryWorkflow)
-		// );
+		console.log('Processing workflow completed');
+		console.log('lastPrNumber', lastPrNumber);
+		console.log('lastCommenter', lastCommenter);
+		console.log('payload.action', payload.action);
+		console.log('payload.workflow.path', payload.workflow.path);
+		console.log(
+			"lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow.path.endsWith(ContinuousDeliveryWorkflow)",
+			Boolean(lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow.path.endsWith(ContinuousDeliveryWorkflow))
+		);
 
 		// Validate that the action is completed
-		if (
-			// lastPrNumber && lastCommenter &&
-			payload.action === 'completed' &&
-			payload.workflow.path.endsWith(ContinuousDeliveryWorkflow)
-		) {
+		if (lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow.path.endsWith(ContinuousDeliveryWorkflow)) {
 			const workflowRunInfo = payload.workflow_run;
 			const owner = payload.repository.owner.name ?? 'sapphiredev';
 			const repo = payload.repository.name;
@@ -144,26 +135,26 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 
 						if (packageNames.length) {
 							console.log('If checks passed: 5');
-							// await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
-							// 	owner,
-							// 	repo,
-							// 	issue_number: lastPrNumber,
-							// 	body: [
-							// 		`Hey @${lastCommenter}, I've released this to NPM. You can install it for testing like so:`,
-							// 		'```sh',
-							// 		packageNames.map((name) => `npm install ${name}@pr-${lastPrNumber}`).join('\n'),
-							// 		'```'
-							// 	].join('\n'),
-							// 	headers: OctokitRequestHeaders
-							// });
+							await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+								owner,
+								repo,
+								issue_number: lastPrNumber,
+								body: [
+									`Hey @${lastCommenter}, I've released this to NPM. You can install it for testing like so:`,
+									'```sh',
+									packageNames.map((name) => `npm install ${name}@pr-${lastPrNumber}`).join('\n'),
+									'```'
+								].join('\n'),
+								headers: OctokitRequestHeaders
+							});
 						}
 					}
 				}
 			}
 
-			// Reset stored values to undefined
-			setLastPrNumber(null);
-			setLastCommenter(null);
+			// Reset stored values to null
+			lastPrNumber = null;
+			lastCommenter = null;
 		}
 	});
 
