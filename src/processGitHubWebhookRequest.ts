@@ -171,7 +171,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 	} catch (error) {
 		const typedError = error as Error;
 		app.log.warn(typedError.message);
-		return new Response(`{ "error": "${typedError.message}" }`, {
+		return new Response(`{ "error": "W-Webhook signyatuwe vewification faiwed. Awe you a b-bad actow? UwU" }`, {
 			status: 400,
 			headers: { 'content-type': 'application/json' }
 		});
@@ -179,7 +179,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 
 	// Verify that the headers were provided
 	if (!id || !name) {
-		return new Response(`{ "error": "Missing required headers" }`, {
+		return new Response(`{ "error": "Missing wequiwed headews. Maybe you awe not CwoudFwawe? UwU" }`, {
 			status: 400,
 			headers: { 'content-type': 'application/json' }
 		});
@@ -200,7 +200,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 		const typedError = error as Error;
 		app.log.error(typedError.message);
 
-		return new Response(`{ "error": "${typedError.message}" }`, {
+		return new Response(`{ "error": "Oopsie woopsie an ewwow occuwed on the sewvew. This won't wowk. UwU 😅" }`, {
 			status: 500,
 			headers: { 'content-type': 'application/json' }
 		});
