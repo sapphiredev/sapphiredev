@@ -2,7 +2,7 @@ export interface Env {
 	APP_ID: string;
 	PRIVATE_KEY: string;
 	WEBHOOK_SECRET: string;
-	SAPPHIREDEV_CACHE: KVNamespace;
+	CACHE: KVNamespace;
 }
 
 export interface PullRequestData {
