@@ -12,11 +12,6 @@ jobs:
     steps:
       - name: Checkout Project
         uses: actions/checkout@v4
-      - name: Checkout Project
-        uses: actions/checkout@v4
-        with:
-          ref: vercel
-          path: out
       - name: Use Node.js v20
         uses: actions/setup-node@v4
         with:
@@ -25,21 +20,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Install Dependencies
         run: yarn --immutable
-      - name: Build code for Vercel
-        run: yarn vercel-build
-      - name: Push new code
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          echo -e "\n# Remove any old files in the dist folder"
-          rm -rfv out/api/*
-
-          echo -e "\n# Move the generated docs to the newly-checked-out repo, to be committed and pushed"
-          rsync -vaI api/ out/api
-
-          echo -e "\n# Commit and push"
-          cd out
-          git add --all .
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -m "build: vercel build for ${GITHUB_SHA}" || true
-          git push origin vercel
+      # - name: Deploy to CF Workers
+      #   uses: cloudflare/wrangler-action@2.0.0
+      #   with:
+      #     apiToken: ${{ secrets.CF_API_TOKEN }}

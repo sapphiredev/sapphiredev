@@ -1,0 +1,7 @@
+name = "sapphiredev"
+account_id = "c764ca18cc7569c05f37305e31aff359"
+workers_dev = true
+
+main = "src/index.ts"
+compatibility_date = "2023-07-01"
+node_compat = true

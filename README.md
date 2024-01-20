@@ -21,23 +21,29 @@ The GitHub app that we use in Sapphire for automating various tasks.
 ```sh
 # Install dependencies
 yarn install
-
-# Compile
-yarn build
 ```
 
-Next duplicate the [`.env`](.env) file and rename it to [`.env.local`](.env.local). Fill in at least these required environment variables:
+You will need to configure the Wrangler secrets for Cloudflare Workers environment. You will need the following secrets:
 
 -   `APP_ID`
--   `PRIVATE_KEY`
--   `WEBHOOK_PROXY_URL`
+
 -   `WEBHOOK_SECRET`
 
-For information on each environment see [probot configuration](https://probot.github.io/docs/configuration/)
+-   `PRIVATE_KEY`
 
-### Running with debugging
+The private-key.pem file from GitHub needs to be transformed from the PKCS#1 format to PKCS#8, as the crypto APIs do not support PKCS#1:
 
-You can read [Manually Configuring a GitHub App](https://probot.github.io/docs/development/#manually-configuring-a-github-app) on the Probot documentation to learn how to setup the variables above as well as the GitHub application to learn how to setup this project for debugging. Once configured, use `npm run-script debug` with your debugger of choice to start a debug session.
+```sh
+openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in private-key.pem -out private-key-pkcs8.pem
+```
+
+Then set the private key
+
+```sh
+cat private-key-pkcs8.pem | wrangler secret put PRIVATE_KEY
+```
+
+For information on what these values are and how to get them see [this guide](https://dev.to/opensauced/deploy-a-github-application-to-cloudflare-workers-2gpm)
 
 ## Buy us some doughnuts
 

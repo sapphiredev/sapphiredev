@@ -5,42 +5,35 @@
 	"author": "@sapphire <contact@sapphirejs.dev>",
 	"license": "MIT",
 	"private": true,
+	"type": "module",
 	"main": "dist/index.js",
 	"scripts": {
-		"debug": "node scripts/DebugRun.mjs",
+		"build": "tsc",
+		"deploy": "wrangler deploy src/index.ts",
+		"dev": "wrangler dev",
 		"lint": "eslint src --ext ts --fix",
-		"format": "prettier --write src/**/*.ts",
-		"build": "tsc -b src",
-		"watch": "tsc -b src -w",
-		"clean": "node scripts/clean.mjs",
-		"vercel-build": "ncc build src/index.ts -o api",
-		"update": "yarn upgrade-interactive"
+		"format": "prettier --write src/**/*.ts"
 	},
 	"dependencies": {
-		"@sapphire/fetch": "^3.0.2",
-		"@skyra/env-utilities": "^1.3.0",
-		"probot": "^12.3.3",
-		"tslib": "^2.6.2"
+		"@octokit/app": "^14.0.2"
 	},
 	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20240117.0",
 		"@commitlint/cli": "^18.4.4",
 		"@commitlint/config-conventional": "^18.4.4",
 		"@sapphire/eslint-config": "^5.0.3",
 		"@sapphire/prettier-config": "^2.0.0",
 		"@sapphire/ts-config": "^5.0.0",
-		"@types/lru-cache": "^5.1.1",
-		"@types/node": "^20.11.5",
 		"@typescript-eslint/eslint-plugin": "^6.19.0",
 		"@typescript-eslint/parser": "^6.19.0",
-		"@vercel/ncc": "^0.38.1",
 		"cz-conventional-changelog": "^3.3.0",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-prettier": "^5.1.3",
 		"lint-staged": "^15.2.0",
 		"prettier": "^3.2.4",
-		"smee-client": "^2.0.0",
-		"typescript": "^5.3.3"
+		"typescript": "^5.3.3",
+		"wrangler": "^3.23.0"
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",

@@ -1,9 +1,9 @@
 {
 	"configurations": [
 		{
-			"type": "pwa-node",
+			"type": "node",
 			"request": "launch",
-			"runtimeArgs": ["run-script", "debug"],
+			"runtimeArgs": ["run-script", "dev"],
 			"name": "Debugger",
 			"runtimeExecutable": "npm",
 			"skipFiles": ["<node_internals>/**", "node_modules/tslib/**"],
@@ -12,8 +12,7 @@
 				"NODE_ENV": "development"
 			},
 			"console": "internalConsole",
-			"outputCapture": "std",
-			"outFiles": ["${workspaceFolder}/dist/**/*.js"]
+			"outputCapture": "std"
 		}
 	]
 }

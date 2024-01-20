@@ -1,13 +1,8 @@
-import { setup } from '@skyra/env-utilities';
-import { join } from 'path';
-import { createNodeMiddleware, createProbot } from 'probot';
-import app from './app';
+import { processGitHubWebhookRequest } from './processGitHubWebhookRequest.js';
+import type { Env } from './types.js';
 
-setup({
-	path: process.env.NODE_ENV === 'production' ? join(__dirname, '.env') : join(__dirname, '..', '.env')
-});
-
-export default createNodeMiddleware(app, {
-	probot: createProbot(),
-	webhooksPath: '/api/'
-});
+export default {
+	fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
+		return processGitHubWebhookRequest(request, env);
+	}
+};

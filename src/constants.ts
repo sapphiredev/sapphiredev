@@ -1,9 +1,5 @@
-export function isNullish(value: unknown): value is undefined | null {
-	return value === undefined || value === null;
-}
-
 export const ContinuousDeliveryWorkflow = 'continuous-delivery.yml';
-export const PublishJobName = 'publish next to npm';
+export const ContinuousDeliveryName = 'publish next to npm';
 
 export const VerifiedSenders = new Map<number, string>([
 	[4019718, 'Favna'],
@@ -11,22 +7,13 @@ export const VerifiedSenders = new Map<number, string>([
 	[17960496, 'vladfrangu']
 ]);
 
-export interface PullRequestData {
-	url: string;
-	id: number;
-	number: number;
-	head: Ref;
-	base: Ref;
-}
+export const packageMatchRegex = /📦\s+Bumped (?<name>@sapphire\/[a-z\-0-9.]+)/g;
 
-interface Ref {
-	ref: string;
-	sha: string;
-	repo: Repo;
-}
+export const OctokitRequestHeaders = {
+	'X-GitHub-Api-Version': '2022-11-28',
+	Accept: 'application/vnd.github+json'
+};
 
-interface Repo {
-	id: number;
-	url: string;
-	name: string;
+export function isNullish(value: unknown): value is null | undefined {
+	return value === undefined || value === null;
 }
