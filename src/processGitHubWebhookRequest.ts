@@ -7,7 +7,7 @@ import {
 	isNullish,
 	packageMatchRegex
 } from './constants.js';
-import type { Env } from './types.js';
+import type { Env, SupportedWebhookEvents } from './types.js';
 import { verifyWebhookSignature } from './verify.js';
 
 export async function processGitHubWebhookRequest(request: Request, env: Env): Promise<Response> {
@@ -189,7 +189,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 	try {
 		await app.webhooks.receive({
 			id,
-			name: name as any,
+			name: name as SupportedWebhookEvents,
 			payload
 		});
 

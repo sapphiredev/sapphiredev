@@ -1,3 +1,7 @@
+import type { WebhookEventName } from '@octokit/webhooks-types';
+
+export type SupportedWebhookEvents = Extract<WebhookEventName, 'workflow_run.completed' | 'issue_comment.created' | 'issue_comment.edited'>;
+
 export interface Env {
 	APP_ID: string;
 	PRIVATE_KEY: string;
