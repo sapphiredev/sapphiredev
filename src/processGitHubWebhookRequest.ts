@@ -86,6 +86,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 	});
 
 	app.webhooks.on('workflow_run.completed', async ({ octokit, payload }) => {
+		octokit.log.info('Processing workflow completed');
 		const lastPrNumber = getLastPrNumber();
 
 		// Validate that the action is completed
@@ -94,7 +95,9 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 			const owner = payload.repository.owner.name ?? 'sapphiredev';
 			const repo = payload.repository.name;
 
+			octokit.log.info('If checks passed: 1');
 			if (workflowRunInfo) {
+				octokit.log.info('If checks passed: 2');
 				const workflowJobs = await octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
 					owner,
 					repo,
@@ -105,6 +108,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 				const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase() === ContinuousDeliveryName)?.id;
 
 				if (publishJobId) {
+					octokit.log.info('If checks passed: 3');
 					const jobLogsData = await octokit.request('GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs', {
 						owner,
 						repo,
@@ -113,6 +117,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 					});
 
 					if (jobLogsData.url) {
+						octokit.log.info('If checks passed: 4');
 						const jobLogsResult = await fetch(jobLogsData.url);
 						const jobLogs = await jobLogsResult.text();
 
@@ -120,6 +125,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 						const packageNames = [...regexMatches].map((match) => match.groups?.name).filter(Boolean);
 
 						if (packageNames.length) {
+							octokit.log.info('If checks passed: 5');
 							await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
 								owner,
 								repo,
