@@ -4,13 +4,12 @@ node_modules/
 .idea/
 *.iml
 
+# Wrangler directory
+.wrangler/
+
 # Yarn files
 .yarn/install-state.gz
 .yarn/build-state.yml
-
-# Output directory
-api/
-dist/
 
 # Ignore heapsnapshot and log files
 *.heapsnapshot
@@ -20,10 +19,7 @@ dist/
 package-lock.json
 
 # Environment variables
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
 
 # Certificate files
 *.pem
