@@ -10,9 +10,9 @@ import {
 	isNullish,
 	packageMatchRegex
 } from './constants.js';
+import { getJobLogs } from './octokit/getJobLogs.js';
 import type { Env, SupportedWebhookEvents } from './types.js';
 import { verifyWebhookSignature } from './verify.js';
-import { RequestError } from '@octokit/request-error';
 
 const HydratedOctokit = Octokit.plugin(restEndpointMethods).plugin(retry).defaults({
 	userAgent: 'Sapphire Deployer/ (@octokit/core) (https://github.com/sapphiredev/sapphiredev/tree/main)'
@@ -115,67 +115,31 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 
 				const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase().startsWith(ContinuousDeliveryName))?.id;
 
-				console.log('publishJobId=', publishJobId);
-
 				if (publishJobId) {
-					try {
-						const jobLogsData = await octokit.rest.actions.downloadJobLogsForWorkflowRun({
-							owner,
-							repo,
-							job_id: publishJobId,
-							headers: OctokitRequestHeaders
-						});
+					const jobLogsUrl = await getJobLogs(octokit, owner, repo, publishJobId);
 
-						console.log('jobLogsData=', jobLogsData);
+					if (jobLogsUrl) {
+						const jobLogsResult = await fetch(jobLogsUrl);
+						const jobLogs = await jobLogsResult.text();
 
-						if (jobLogsData.url) {
-							const jobLogsResult = await fetch(jobLogsData.url);
-							const jobLogs = await jobLogsResult.text();
+						const regexMatches = jobLogs.matchAll(packageMatchRegex);
+						const packageNames = [...regexMatches].map((match) => match.groups?.name).filter(Boolean);
 
-							const regexMatches = jobLogs.matchAll(packageMatchRegex);
-							const packageNames = [...regexMatches].map((match) => match.groups?.name).filter(Boolean);
-
-							if (packageNames.length) {
-								try {
-									await octokit.rest.issues.createComment({
-										owner,
-										repo,
-										issue_number: Number(lastPrNumber),
-										body: [
-											`Hey @${lastCommenter}, I've released this to NPM. You can install it for testing like so:`,
-											'```sh',
-											packageNames.map((name) => `npm install ${name}@pr-${lastPrNumber}`).join('\n'),
-											'```'
-										].join('\n'),
-										headers: OctokitRequestHeaders
-									});
-								} catch (error) {
-									console.log('failed to send comment', error);
-								}
-							} else {
-								console.log('no packages found');
-							}
-						} else {
-							console.log('no job log data url found', jobLogsData);
-						}
-					} catch (error) {
-						console.log('an error occurred when fetching the logs');
-						console.error('error=', error);
-						if (error instanceof Error) {
-							console.error('error message=', error.message);
-							console.error('error cause=', error.cause);
-							console.error('error stack=', error.stack);
-
-							if (error instanceof RequestError) {
-								console.log('is instanceof RequestError');
-								console.error('error status=', error.status);
-								console.error('error request=', error.request);
-								console.error('error response=', error.response);
-							}
+						if (packageNames.length) {
+							await octokit.rest.issues.createComment({
+								owner,
+								repo,
+								issue_number: Number(lastPrNumber),
+								body: [
+									`Hey @${lastCommenter}, I've released this to NPM. You can install it for testing like so:`,
+									'```sh',
+									packageNames.map((name) => `npm install ${name}@pr-${lastPrNumber}`).join('\n'),
+									'```'
+								].join('\n'),
+								headers: OctokitRequestHeaders
+							});
 						}
 					}
-				} else {
-					console.log('failed to find publish job id, all jobs:', workflowJobs);
 				}
 			}
 
@@ -208,8 +172,6 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 	try {
 		await verifyWebhookSignature(payloadString, signature, secret);
 	} catch (error) {
-		const typedError = error as Error;
-		app.log.warn(typedError.message);
 		return new Response(`{ "error": "W-Webhook signyatuwe vewification faiwed. Awe you a b-bad actow? UwU" }`, {
 			status: 400,
 			headers: { 'content-type': 'application/json' }
@@ -236,9 +198,6 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 			headers: { 'content-type': 'application/json' }
 		});
 	} catch (error) {
-		const typedError = error as Error;
-		app.log.error(typedError.message);
-
 		return new Response(`{ "error": "Oopsie woopsie an ewwow occuwed on the sewvew. This won't wowk. UwU 😅" }`, {
 			status: 500,
 			headers: { 'content-type': 'application/json' }
