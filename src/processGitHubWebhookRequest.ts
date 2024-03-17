@@ -10,6 +10,10 @@ import {
 import type { Env, SupportedWebhookEvents } from './types.js';
 import { verifyWebhookSignature } from './verify.js';
 
+function log(...args: unknown[]) {
+	console.log('LOG :: ', ...args);
+}
+
 export async function processGitHubWebhookRequest(request: Request, env: Env): Promise<Response> {
 	const appId = env.APP_ID;
 	const secret = env.WEBHOOK_SECRET;
@@ -91,7 +95,10 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 		const lastPrNumber = await env.cache.get('LAST_PR_NUMBER');
 		const lastCommenter = await env.cache.get('LAST_COMMENTER');
 
-		console.log(lastPrNumber, lastCommenter, payload.action, payload.workflow.path);
+		log('lastPrNumber=', lastPrNumber);
+		log('lastCommenter=', lastCommenter);
+		log('payload.action=', payload.action);
+		log('payload.workflow.path=', payload.workflow.path);
 
 		// Validate that the action is completed
 		if (lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow.path.endsWith(ContinuousDeliveryWorkflow)) {
@@ -99,7 +106,9 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 			const owner = payload.repository.owner.name ?? 'sapphiredev';
 			const repo = payload.repository.name;
 
-			console.log({ workflowRunInfo, owner, repo });
+			log('workflowRunInfo=', workflowRunInfo);
+			log('owner=', owner);
+			log('repo=', repo);
 
 			if (workflowRunInfo) {
 				const workflowJobs = await octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
@@ -109,13 +118,13 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 					headers: OctokitRequestHeaders
 				});
 
-				console.log('workflowJobs: ', workflowJobs);
+				log('workflowJobs=', workflowJobs);
 
 				const publishJobIdOld = workflowJobs.data.jobs.find((job) => job.name.toLowerCase() === ContinuousDeliveryName)?.id;
 				const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase().startsWith(ContinuousDeliveryName))?.id;
 
-				console.log('old way publishJobId: ', publishJobIdOld);
-				console.log('publishJobId: ', publishJobId);
+				log('old way publishJobId=', publishJobIdOld);
+				log('publishJobId=', publishJobId);
 
 				if (publishJobId) {
 					const jobLogsData = await octokit.request('GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs', {
