@@ -18,14 +18,14 @@
 		"@octokit/app": "^14.0.2"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20240222.0",
-		"@commitlint/cli": "^19.0.3",
-		"@commitlint/config-conventional": "^19.0.3",
-		"@sapphire/eslint-config": "^5.0.3",
+		"@cloudflare/workers-types": "^4.20240314.0",
+		"@commitlint/cli": "^19.2.0",
+		"@commitlint/config-conventional": "^19.1.0",
+		"@sapphire/eslint-config": "^5.0.4",
 		"@sapphire/prettier-config": "^2.0.0",
-		"@sapphire/ts-config": "^5.0.0",
-		"@typescript-eslint/eslint-plugin": "^7.1.1",
-		"@typescript-eslint/parser": "^7.1.1",
+		"@sapphire/ts-config": "^5.0.1",
+		"@typescript-eslint/eslint-plugin": "^7.2.0",
+		"@typescript-eslint/parser": "^7.2.0",
 		"cz-conventional-changelog": "^3.3.0",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
@@ -33,7 +33,7 @@
 		"lint-staged": "^15.2.2",
 		"prettier": "^3.2.5",
 		"typescript": "^5.4.2",
-		"wrangler": "^3.32.0"
+		"wrangler": "^3.34.2"
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
