@@ -123,44 +123,48 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 				console.log('publishJobId=', publishJobId);
 
 				if (publishJobId) {
-					const jobLogsData = await octokit.request('GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs', {
-						owner,
-						repo,
-						job_id: publishJobId,
-						headers: OctokitRequestHeaders
-					});
+					try {
+						const jobLogsData = await octokit.request('GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs', {
+							owner,
+							repo,
+							job_id: publishJobId,
+							headers: OctokitRequestHeaders
+						});
 
-					console.log('jobLogsData=', jobLogsData);
+						console.log('jobLogsData=', jobLogsData);
 
-					if (jobLogsData.url) {
-						const jobLogsResult = await fetch(jobLogsData.url);
-						const jobLogs = await jobLogsResult.text();
+						if (jobLogsData.url) {
+							const jobLogsResult = await fetch(jobLogsData.url);
+							const jobLogs = await jobLogsResult.text();
 
-						const regexMatches = jobLogs.matchAll(packageMatchRegex);
-						const packageNames = [...regexMatches].map((match) => match.groups?.name).filter(Boolean);
+							const regexMatches = jobLogs.matchAll(packageMatchRegex);
+							const packageNames = [...regexMatches].map((match) => match.groups?.name).filter(Boolean);
 
-						if (packageNames.length) {
-							try {
-								await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
-									owner,
-									repo,
-									issue_number: Number(lastPrNumber),
-									body: [
-										`Hey @${lastCommenter}, I've released this to NPM. You can install it for testing like so:`,
-										'```sh',
-										packageNames.map((name) => `npm install ${name}@pr-${lastPrNumber}`).join('\n'),
-										'```'
-									].join('\n'),
-									headers: OctokitRequestHeaders
-								});
-							} catch (error) {
-								console.log('failed to send comment', error);
+							if (packageNames.length) {
+								try {
+									await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+										owner,
+										repo,
+										issue_number: Number(lastPrNumber),
+										body: [
+											`Hey @${lastCommenter}, I've released this to NPM. You can install it for testing like so:`,
+											'```sh',
+											packageNames.map((name) => `npm install ${name}@pr-${lastPrNumber}`).join('\n'),
+											'```'
+										].join('\n'),
+										headers: OctokitRequestHeaders
+									});
+								} catch (error) {
+									console.log('failed to send comment', error);
+								}
+							} else {
+								console.log('no packages found');
 							}
 						} else {
-							console.log('no packages found');
+							console.log('no job log data url found', jobLogsData);
 						}
-					} else {
-						console.log('no job log data url found', jobLogsData);
+					} catch (error) {
+						console.error(error);
 					}
 				} else {
 					console.log('failed to find publish job id, all jobs:', workflowJobs);
