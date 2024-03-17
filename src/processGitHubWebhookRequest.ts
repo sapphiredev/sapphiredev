@@ -1,4 +1,7 @@
 import { App } from '@octokit/app';
+import { Octokit } from '@octokit/core';
+import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods';
+import { retry } from '@octokit/plugin-retry';
 import {
 	ContinuousDeliveryName,
 	ContinuousDeliveryWorkflow,
@@ -10,6 +13,10 @@ import {
 import type { Env, SupportedWebhookEvents } from './types.js';
 import { verifyWebhookSignature } from './verify.js';
 
+const HydratedOctokit = Octokit.plugin(restEndpointMethods).plugin(retry).defaults({
+	userAgent: 'Sapphire Deployer/ (@octokit/core) (https://github.com/sapphiredev/sapphiredev/tree/main)'
+});
+
 export async function processGitHubWebhookRequest(request: Request, env: Env): Promise<Response> {
 	const appId = env.APP_ID;
 	const secret = env.WEBHOOK_SECRET;
@@ -20,7 +27,8 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 		privateKey,
 		webhooks: {
 			secret
-		}
+		},
+		Octokit: HydratedOctokit
 	});
 
 	app.webhooks.on(['issue_comment.created', 'issue_comment.edited'], async ({ octokit, payload }) => {
@@ -45,7 +53,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 			const commentBodyLowerCase = payload.comment.body.toLowerCase();
 			const workflowUrl = `https://github.com/${payload.repository.full_name}/actions/workflows/${ContinuousDeliveryWorkflow}`;
 
-			const fullPrData = await octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}', {
+			const fullPrData = await octokit.rest.pulls.get({
 				owner,
 				repo,
 				pull_number: payload.issue.number,
@@ -57,7 +65,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 				const lastPrNumber = payload.issue.number;
 				const lastCommenter = payload.sender.login;
 
-				await octokit.request('POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches', {
+				await octokit.rest.actions.createWorkflowDispatch({
 					workflow_id: ContinuousDeliveryWorkflow,
 					owner,
 					repo,
@@ -70,7 +78,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 					headers: OctokitRequestHeaders
 				});
 
-				await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+				await octokit.rest.issues.createComment({
 					owner,
 					repo,
 					issue_number: payload.issue.number,
@@ -107,7 +115,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 			console.log('repo=', repo);
 
 			if (workflowRunInfo) {
-				const workflowJobs = await octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
+				const workflowJobs = await octokit.rest.actions.listJobsForWorkflowRun({
 					owner,
 					repo,
 					run_id: workflowRunInfo.id,
@@ -124,7 +132,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 
 				if (publishJobId) {
 					try {
-						const jobLogsData = await octokit.request('GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs', {
+						const jobLogsData = await octokit.rest.actions.downloadJobLogsForWorkflowRun({
 							owner,
 							repo,
 							job_id: publishJobId,
@@ -142,7 +150,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 
 							if (packageNames.length) {
 								try {
-									await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+									await octokit.rest.issues.createComment({
 										owner,
 										repo,
 										issue_number: Number(lastPrNumber),
