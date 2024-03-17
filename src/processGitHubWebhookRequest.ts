@@ -109,7 +109,13 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 					headers: OctokitRequestHeaders
 				});
 
-				const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase() === ContinuousDeliveryName)?.id;
+				console.log('workflowJobs: ', workflowJobs);
+
+				const publishJobIdOld = workflowJobs.data.jobs.find((job) => job.name.toLowerCase() === ContinuousDeliveryName)?.id;
+				const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase().startsWith(ContinuousDeliveryName))?.id;
+
+				console.log('old way publishJobId: ', publishJobIdOld);
+				console.log('publishJobId: ', publishJobId);
 
 				if (publishJobId) {
 					const jobLogsData = await octokit.request('GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs', {
