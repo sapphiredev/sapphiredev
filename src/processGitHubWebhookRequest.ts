@@ -10,19 +10,6 @@ import {
 import type { Env, SupportedWebhookEvents } from './types.js';
 import { verifyWebhookSignature } from './verify.js';
 
-function log(template: string, ...args: unknown[]) {
-	for (const arg of args) {
-		if (typeof arg === 'object') {
-			template = template.replace('{}', JSON.stringify(arg, null, 0));
-		} else if (arg !== null && arg !== undefined) {
-			// eslint-disable-next-line @typescript-eslint/no-base-to-string
-			template = template.replace('{}', arg.toString());
-		}
-	}
-
-	console.log('LOG ::', template);
-}
-
 export async function processGitHubWebhookRequest(request: Request, env: Env): Promise<Response> {
 	const appId = env.APP_ID;
 	const secret = env.WEBHOOK_SECRET;
@@ -104,13 +91,10 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 		const lastPrNumber = await env.cache.get('LAST_PR_NUMBER');
 		const lastCommenter = await env.cache.get('LAST_COMMENTER');
 
-		log(
-			'lastPrNumber={}, lastCommenter={}, payload.action={}, payload.workflow.path={}',
-			lastPrNumber,
-			lastCommenter,
-			payload.action,
-			payload.workflow.path
-		);
+		console.log('lastPrNumber=', lastPrNumber);
+		console.log('lastCommenter=', lastCommenter);
+		console.log('payload.action=', payload.action);
+		console.log('payload.workflow.path=', payload.workflow.path);
 
 		// Validate that the action is completed
 		if (lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow.path.endsWith(ContinuousDeliveryWorkflow)) {
@@ -118,7 +102,9 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 			const owner = payload.repository.owner.name ?? 'sapphiredev';
 			const repo = payload.repository.name;
 
-			log('workflowRunInfo={}, owner={}, repo={}', workflowRunInfo, owner, repo);
+			console.log('workflowRunInfo=', workflowRunInfo);
+			console.log('owner=', owner);
+			console.log('repo=', repo);
 
 			if (workflowRunInfo) {
 				const workflowJobs = await octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
@@ -128,10 +114,13 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 					headers: OctokitRequestHeaders
 				});
 
+				console.log('workflowJobs=', workflowJobs);
+
 				const publishJobIdOld = workflowJobs.data.jobs.find((job) => job.name.toLowerCase() === ContinuousDeliveryName)?.id;
 				const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase().startsWith(ContinuousDeliveryName))?.id;
 
-				log('workflowJobs={}, old way publishJobId={}, publishJobId={}', workflowJobs, publishJobIdOld, publishJobId);
+				console.log('old way publishJobId=', publishJobIdOld);
+				console.log('publishJobId=', publishJobId);
 
 				if (publishJobId) {
 					const jobLogsData = await octokit.request('GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs', {
@@ -141,7 +130,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 						headers: OctokitRequestHeaders
 					});
 
-					log('jobLogsData={}', jobLogsData);
+					console.log('jobLogsData=', jobLogsData);
 
 					if (jobLogsData.url) {
 						const jobLogsResult = await fetch(jobLogsData.url);
