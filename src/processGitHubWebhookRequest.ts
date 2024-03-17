@@ -12,6 +12,7 @@ import {
 } from './constants.js';
 import type { Env, SupportedWebhookEvents } from './types.js';
 import { verifyWebhookSignature } from './verify.js';
+import { RequestError } from '@octokit/request-error';
 
 const HydratedOctokit = Octokit.plugin(restEndpointMethods).plugin(retry).defaults({
 	userAgent: 'Sapphire Deployer/ (@octokit/core) (https://github.com/sapphiredev/sapphiredev/tree/main)'
@@ -98,21 +99,11 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 	app.webhooks.on('workflow_run.completed', async ({ octokit, payload }) => {
 		const lastPrNumber = await env.cache.get('LAST_PR_NUMBER');
 		const lastCommenter = await env.cache.get('LAST_COMMENTER');
-
-		console.log('lastPrNumber=', lastPrNumber);
-		console.log('lastCommenter=', lastCommenter);
-		console.log('payload.action=', payload.action);
-		console.log('payload.workflow.path=', payload.workflow.path);
-
 		// Validate that the action is completed
 		if (lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow.path.endsWith(ContinuousDeliveryWorkflow)) {
 			const workflowRunInfo = payload.workflow_run;
 			const owner = payload.repository.owner.name ?? 'sapphiredev';
 			const repo = payload.repository.name;
-
-			console.log('workflowRunInfo=', workflowRunInfo);
-			console.log('owner=', owner);
-			console.log('repo=', repo);
 
 			if (workflowRunInfo) {
 				const workflowJobs = await octokit.rest.actions.listJobsForWorkflowRun({
@@ -122,12 +113,8 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 					headers: OctokitRequestHeaders
 				});
 
-				console.log('workflowJobs=', workflowJobs);
-
-				const publishJobIdOld = workflowJobs.data.jobs.find((job) => job.name.toLowerCase() === ContinuousDeliveryName)?.id;
 				const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase().startsWith(ContinuousDeliveryName))?.id;
 
-				console.log('old way publishJobId=', publishJobIdOld);
 				console.log('publishJobId=', publishJobId);
 
 				if (publishJobId) {
@@ -172,7 +159,20 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 							console.log('no job log data url found', jobLogsData);
 						}
 					} catch (error) {
-						console.error(error);
+						console.log('an error occurred when fetching the logs');
+						console.error('error=', error);
+						if (error instanceof Error) {
+							console.error('error message=', error.message);
+							console.error('error cause=', error.cause);
+							console.error('error stack=', error.stack);
+
+							if (error instanceof RequestError) {
+								console.log('is instanceof RequestError');
+								console.error('error status=', error.status);
+								console.error('error request=', error.request);
+								console.error('error response=', error.response);
+							}
+						}
 					}
 				} else {
 					console.log('failed to find publish job id, all jobs:', workflowJobs);
