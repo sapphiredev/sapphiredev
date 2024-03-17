@@ -141,6 +141,8 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 						headers: OctokitRequestHeaders
 					});
 
+					log('jobLogsData={}', jobLogsData);
+
 					if (jobLogsData.url) {
 						const jobLogsResult = await fetch(jobLogsData.url);
 						const jobLogs = await jobLogsResult.text();
