@@ -16,7 +16,7 @@
 	},
 	"dependencies": {
 		"@octokit/app": "^14.1.0",
-		"@octokit/plugin-rest-endpoint-methods": "^12.2.2",
+		"@octokit/plugin-rest-endpoint-methods": "^13.0.1",
 		"@octokit/plugin-retry": "^7.1.0"
 	},
 	"devDependencies": {
