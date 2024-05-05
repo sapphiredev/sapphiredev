@@ -15,7 +15,7 @@
 		"format": "prettier --write src/**/*.ts"
 	},
 	"dependencies": {
-		"@octokit/app": "^14.1.0",
+		"@octokit/app": "^15.0.1",
 		"@octokit/plugin-rest-endpoint-methods": "^13.2.1",
 		"@octokit/plugin-retry": "^7.1.1"
 	},
