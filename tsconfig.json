@@ -5,6 +5,7 @@
 		"noEmit": true,
 		"incremental": false,
 		"lib": ["ESNext"],
+		"skipLibCheck": true,
 		"types": ["@cloudflare/workers-types"]
 	},
 	"include": ["src"]
