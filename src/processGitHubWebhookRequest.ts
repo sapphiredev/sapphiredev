@@ -100,7 +100,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 		const lastPrNumber = await env.cache.get('LAST_PR_NUMBER');
 		const lastCommenter = await env.cache.get('LAST_COMMENTER');
 		// Validate that the action is completed
-		if (lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow.path.endsWith(ContinuousDeliveryWorkflow)) {
+		if (lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow?.path.endsWith(ContinuousDeliveryWorkflow)) {
 			const workflowRunInfo = payload.workflow_run;
 			const owner = payload.repository.owner.name ?? 'sapphiredev';
 			const repo = payload.repository.name;
