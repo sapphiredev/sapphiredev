@@ -20,7 +20,7 @@
 		"@octokit/plugin-retry": "^7.1.1"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20240725.0",
+		"@cloudflare/workers-types": "^4.20240729.0",
 		"@commitlint/cli": "^19.3.0",
 		"@commitlint/config-conventional": "^19.2.2",
 		"@octokit/webhooks-types": "^7.5.1",
@@ -33,10 +33,10 @@
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-prettier": "^5.2.1",
-		"lint-staged": "^15.2.7",
+		"lint-staged": "^15.2.8",
 		"prettier": "^3.3.3",
 		"typescript": "^5.5.2",
-		"wrangler": "^3.67.1"
+		"wrangler": "^3.68.0"
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
@@ -60,5 +60,5 @@
 	"eslintConfig": {
 		"extends": "@sapphire"
 	},
-	"packageManager": "yarn@4.3.1"
+	"packageManager": "yarn@4.4.0"
 }
