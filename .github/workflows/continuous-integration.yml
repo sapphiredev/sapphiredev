@@ -14,3 +14,10 @@ jobs:
   building:
     name: Building
     uses: sapphiredev/.github/.github/workflows/reusable-build.yml@main
+
+  sonar:
+    name: Sonar Analysis
+    uses: sapphiredev/.github/.github/workflows/reusable-sonar.yml@main
+    secrets:
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
