@@ -78,17 +78,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cloudflare/workers-shared@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@cloudflare/workers-shared@npm:0.1.0"
-  checksum: 10/b59857801f896912ddce58aca6343df704c8e131b344edcdb8607b2282cbaa3f957a331cce2e954da236e936b7b2d4ec7f17128676ad19ad9c5f1bfbc3e33e98
+"@cloudflare/workers-shared@npm:0.2.0":
+  version: 0.2.0
+  resolution: "@cloudflare/workers-shared@npm:0.2.0"
+  checksum: 10/5950232b5b67394a23c2badc743d229197b31c6c3f58499a59ab2ff813e32e20840c21c9a137f61f16dee0089644dbdf5adb46bf5edaf91197dd8b5acc60bc10
   languageName: node
   linkType: hard
 
-"@cloudflare/workers-types@npm:^4.20240806.0":
-  version: 4.20240806.0
-  resolution: "@cloudflare/workers-types@npm:4.20240806.0"
-  checksum: 10/63234eec30e88b94fcf29c2849e016ea924a7ae787b509669d6e34fc5282eb93d309f977f810248a90cad8464d2c30d9cf0982155e6c5c6f17802061c146505f
+"@cloudflare/workers-types@npm:^4.20240815.0":
+  version: 4.20240815.0
+  resolution: "@cloudflare/workers-types@npm:4.20240815.0"
+  checksum: 10/7b3b2c18ecac20738c4cca7c8bdb6b41858cec18b9be74abf365f928a8b6bd6f34edc1bc0c24a4766ae9837ee6eb81ef55bf1d9ef1aee4e0e7c1b4b39cbe956c
   languageName: node
   linkType: hard
 
@@ -3116,9 +3116,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:^15.2.8":
-  version: 15.2.8
-  resolution: "lint-staged@npm:15.2.8"
+"lint-staged@npm:^15.2.9":
+  version: 15.2.9
+  resolution: "lint-staged@npm:15.2.9"
   dependencies:
     chalk: "npm:~5.3.0"
     commander: "npm:~12.1.0"
@@ -3132,7 +3132,7 @@ __metadata:
     yaml: "npm:~2.5.0"
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 10/cabeb0540775cafa71d8d55be74b6854f65f083efa43886a5b47bfad36d23bc302c70c67dc952303ffa646e5563cfb92005a5d5ea3944c71f7ee3ff5b7bdcd71
+  checksum: 10/2f7342ca3fc7e2a8a0cc3db79ca8d2ad0269b98b13220f3a6745a514aacf1f83487a23a550569081ea962f9a576af7df8d687a8330a9c3c2c27348d5a4d5440e
   languageName: node
   linkType: hard
 
@@ -3388,9 +3388,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"miniflare@npm:3.20240806.0":
-  version: 3.20240806.0
-  resolution: "miniflare@npm:3.20240806.0"
+"miniflare@npm:3.20240806.1":
+  version: 3.20240806.1
+  resolution: "miniflare@npm:3.20240806.1"
   dependencies:
     "@cspotcode/source-map-support": "npm:0.8.1"
     acorn: "npm:^8.8.0"
@@ -3406,7 +3406,7 @@ __metadata:
     zod: "npm:^3.22.3"
   bin:
     miniflare: bootstrap.js
-  checksum: 10/f0b5e7248d990e4ffada51ea355e1f20f5dd844e5d35a0c5a5425120e2b4563e2cd30a2014dfc081cef77c7347624770aa7535359d79922e1bb420d82142bd00
+  checksum: 10/dea7dc51085cb2b3c6d5dd236da6c0971821384de4075f719570856cc30dc489a9988f7dda5dda94b1bda3bbf42ee90c3ce86a8754e14e3b75689c4e06796084
   languageName: node
   linkType: hard
 
@@ -4163,7 +4163,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "sapphiredev@workspace:."
   dependencies:
-    "@cloudflare/workers-types": "npm:^4.20240806.0"
+    "@cloudflare/workers-types": "npm:^4.20240815.0"
     "@commitlint/cli": "npm:^19.4.0"
     "@commitlint/config-conventional": "npm:^19.2.2"
     "@octokit/app": "npm:^15.1.0"
@@ -4179,10 +4179,10 @@ __metadata:
     eslint: "npm:^8.57.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-prettier: "npm:^5.2.1"
-    lint-staged: "npm:^15.2.8"
+    lint-staged: "npm:^15.2.9"
     prettier: "npm:^3.3.3"
     typescript: "npm:^5.5.2"
-    wrangler: "npm:^3.70.0"
+    wrangler: "npm:^3.72.0"
   languageName: unknown
   linkType: soft
 
@@ -4755,12 +4755,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wrangler@npm:^3.70.0":
-  version: 3.70.0
-  resolution: "wrangler@npm:3.70.0"
+"wrangler@npm:^3.72.0":
+  version: 3.72.0
+  resolution: "wrangler@npm:3.72.0"
   dependencies:
     "@cloudflare/kv-asset-handler": "npm:0.3.4"
-    "@cloudflare/workers-shared": "npm:0.1.0"
+    "@cloudflare/workers-shared": "npm:0.2.0"
     "@esbuild-plugins/node-globals-polyfill": "npm:^0.2.3"
     "@esbuild-plugins/node-modules-polyfill": "npm:^0.2.2"
     blake3-wasm: "npm:^2.1.5"
@@ -4768,7 +4768,7 @@ __metadata:
     date-fns: "npm:^3.6.0"
     esbuild: "npm:0.17.19"
     fsevents: "npm:~2.3.2"
-    miniflare: "npm:3.20240806.0"
+    miniflare: "npm:3.20240806.1"
     nanoid: "npm:^3.3.3"
     path-to-regexp: "npm:^6.2.0"
     resolve: "npm:^1.22.8"
@@ -4789,7 +4789,7 @@ __metadata:
   bin:
     wrangler: bin/wrangler.js
     wrangler2: bin/wrangler.js
-  checksum: 10/3a73fd1b8ca5e3e4a59d832cb0c600c8bf755debe4bf9c1c33b095f8f04d0eadd0d8b8584b246f67a68f376dfbd196acf8b3c184f501277bc2db343afa407fbd
+  checksum: 10/e20806a68549a206250c9d6c3b74a81fb437f17dab060454d75dc84b74434d5ea1bfc8e03ede81a3d3305cd0a319e2873bcae852bdab5c92c671d6b54daf35a5
   languageName: node
   linkType: hard
 
