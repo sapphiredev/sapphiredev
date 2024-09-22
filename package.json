@@ -17,10 +17,10 @@
 	"dependencies": {
 		"@octokit/app": "^15.1.0",
 		"@octokit/plugin-rest-endpoint-methods": "^13.2.4",
-		"@octokit/plugin-retry": "^7.1.1"
+		"@octokit/plugin-retry": "^7.1.2"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20240909.0",
+		"@cloudflare/workers-types": "^4.20240919.0",
 		"@commitlint/cli": "^19.5.0",
 		"@commitlint/config-conventional": "^19.5.0",
 		"@octokit/webhooks-types": "^7.5.1",
@@ -30,13 +30,13 @@
 		"@typescript-eslint/eslint-plugin": "^7.13.1",
 		"@typescript-eslint/parser": "^7.13.1",
 		"cz-conventional-changelog": "^3.3.0",
-		"eslint": "^8.57.0",
+		"eslint": "^8.57.1",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-prettier": "^5.2.1",
 		"lint-staged": "^15.2.10",
 		"prettier": "^3.3.3",
 		"typescript": "^5.5.2",
-		"wrangler": "^3.78.2"
+		"wrangler": "^3.78.7"
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
