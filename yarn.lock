@@ -88,10 +88,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cloudflare/workers-types@npm:^4.20240925.0":
-  version: 4.20240925.0
-  resolution: "@cloudflare/workers-types@npm:4.20240925.0"
-  checksum: 10/caac1d2f638cd01bcfa44bf7effbf22e96cbe8f58ad4fb8472721ccd05a64a8b3ed2da45c90270ee52bf3fdf3275cd3460f2175f4f1d5a5e3420918e0ee87527
+"@cloudflare/workers-types@npm:^4.20241004.0":
+  version: 4.20241004.0
+  resolution: "@cloudflare/workers-types@npm:4.20241004.0"
+  checksum: 10/0ee4e5bb608d2a67b1c349cebb3545c133699309262f62983f651c9faef53b881f236ee80f30c4b4d58148e53ac7b159c704f867ec86ae70e3e2abaea939283a
   languageName: node
   linkType: hard
 
@@ -813,14 +813,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/plugin-rest-endpoint-methods@npm:^13.2.5":
-  version: 13.2.5
-  resolution: "@octokit/plugin-rest-endpoint-methods@npm:13.2.5"
+"@octokit/plugin-rest-endpoint-methods@npm:^13.2.6":
+  version: 13.2.6
+  resolution: "@octokit/plugin-rest-endpoint-methods@npm:13.2.6"
   dependencies:
-    "@octokit/types": "npm:^13.6.0"
+    "@octokit/types": "npm:^13.6.1"
   peerDependencies:
     "@octokit/core": ">=6"
-  checksum: 10/a73e0e507744747c91622ec6f44645a8b74ce1dcd6199bcae15a8c1c9c0f3dbc0e7b5c098487e584cfccdd3a7fcdb11918827a54a09019830f1def062dc0cd78
+  checksum: 10/368aee8b3f638faefc1426e77c138a2784fb56d0bec4e71bb128c2a46f90903b800ac2c8373c217c364f0efc403f1504e041ddba2168803a27af5c55a9fd921e
   languageName: node
   linkType: hard
 
@@ -858,12 +858,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:^13.0.0, @octokit/types@npm:^13.1.0, @octokit/types@npm:^13.4.1, @octokit/types@npm:^13.5.0, @octokit/types@npm:^13.6.0":
-  version: 13.6.0
-  resolution: "@octokit/types@npm:13.6.0"
+"@octokit/types@npm:^13.0.0, @octokit/types@npm:^13.1.0, @octokit/types@npm:^13.4.1, @octokit/types@npm:^13.5.0, @octokit/types@npm:^13.6.1":
+  version: 13.6.1
+  resolution: "@octokit/types@npm:13.6.1"
   dependencies:
     "@octokit/openapi-types": "npm:^22.2.0"
-  checksum: 10/461d018f46d69a781778743826f2f98546cdecead2a03226a298f41075a041518cd5faa3d2c1d6968c09d4accc61c42a49939ed58e4d006a208e4718a49be05e
+  checksum: 10/9ea6189839439e1085799cc16ee699292538d9c14dd15e9e45462377287f863b6be93455d2ad9acffd561018a0c35adbb9d1437e92075c9058d6c6d69ff2f503
   languageName: node
   linkType: hard
 
@@ -874,10 +874,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/webhooks-types@npm:^7.5.1":
-  version: 7.5.1
-  resolution: "@octokit/webhooks-types@npm:7.5.1"
-  checksum: 10/a6c4b32ec2fa994e1024624d168259bfe76350f32b62e68c9675c389bad3c7e2bbeb654226d51f46257eb7fa9805277bba091dd8102ea6741d95a62013555b6a
+"@octokit/webhooks-types@npm:^7.6.1":
+  version: 7.6.1
+  resolution: "@octokit/webhooks-types@npm:7.6.1"
+  checksum: 10/0b11bd7e8d13b5a9cf14214421298a423d0180a5e1aaaea876ee4db6f97b5cca536f48d89af63105db75419d777a2402733eb0e110002d4dd59581ef36037bdc
   languageName: node
   linkType: hard
 
@@ -4151,13 +4151,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "sapphiredev@workspace:."
   dependencies:
-    "@cloudflare/workers-types": "npm:^4.20240925.0"
+    "@cloudflare/workers-types": "npm:^4.20241004.0"
     "@commitlint/cli": "npm:^19.5.0"
     "@commitlint/config-conventional": "npm:^19.5.0"
     "@octokit/app": "npm:^15.1.0"
-    "@octokit/plugin-rest-endpoint-methods": "npm:^13.2.5"
+    "@octokit/plugin-rest-endpoint-methods": "npm:^13.2.6"
     "@octokit/plugin-retry": "npm:^7.1.2"
-    "@octokit/webhooks-types": "npm:^7.5.1"
+    "@octokit/webhooks-types": "npm:^7.6.1"
     "@sapphire/eslint-config": "npm:^5.0.5"
     "@sapphire/prettier-config": "npm:^2.0.0"
     "@sapphire/ts-config": "npm:^5.0.1"
@@ -4170,7 +4170,7 @@ __metadata:
     lint-staged: "npm:^15.2.10"
     prettier: "npm:^3.3.3"
     typescript: "npm:^5.5.2"
-    wrangler: "npm:^3.78.12"
+    wrangler: "npm:^3.80.0"
   languageName: unknown
   linkType: soft
 
@@ -4748,9 +4748,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wrangler@npm:^3.78.12":
-  version: 3.78.12
-  resolution: "wrangler@npm:3.78.12"
+"wrangler@npm:^3.80.0":
+  version: 3.80.0
+  resolution: "wrangler@npm:3.80.0"
   dependencies:
     "@cloudflare/kv-asset-handler": "npm:0.3.4"
     "@cloudflare/workers-shared": "npm:0.5.4"
@@ -4781,7 +4781,7 @@ __metadata:
   bin:
     wrangler: bin/wrangler.js
     wrangler2: bin/wrangler.js
-  checksum: 10/f87da7bf026c224108ac28d3df30a5bcf2db9a4f1a09ee51d1d505cbf1286270f9f392ca4185efb89936328972ca376edb89cb5576c33474dc9e63aa03a76669
+  checksum: 10/026eed9e10f24f8ecbecf0ad8ec03d5935553a097595e4a6f154e755ba6df4bce0c5cc9159b14a4e0e174fbb0bec471ecf0d884be747be080eeccf801d8954cc
   languageName: node
   linkType: hard
 
