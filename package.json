@@ -20,7 +20,7 @@
 		"@octokit/plugin-retry": "^7.1.2"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20241022.0",
+		"@cloudflare/workers-types": "^4.20241106.0",
 		"@commitlint/cli": "^19.5.0",
 		"@commitlint/config-conventional": "^19.5.0",
 		"@octokit/webhooks-types": "^7.6.1",
@@ -36,7 +36,7 @@
 		"lint-staged": "^15.2.10",
 		"prettier": "^3.3.3",
 		"typescript": "^5.5.2",
-		"wrangler": "^3.84.1"
+		"wrangler": "^3.86.0"
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
