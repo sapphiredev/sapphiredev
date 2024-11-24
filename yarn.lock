@@ -67,13 +67,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cloudflare/workers-shared@npm:0.7.1":
-  version: 0.7.1
-  resolution: "@cloudflare/workers-shared@npm:0.7.1"
+"@cloudflare/workers-shared@npm:0.8.0":
+  version: 0.8.0
+  resolution: "@cloudflare/workers-shared@npm:0.8.0"
   dependencies:
     mime: "npm:^3.0.0"
     zod: "npm:^3.22.3"
-  checksum: 10/2571639d898c81d604873b7a1af2fa58de599c70f4df0bbb28991f38f42b3438a61689de80700d5d4336b8d3876393aecad6360449b8836afec448f366c1f5f1
+  checksum: 10/a3ea82412023c0ee4c6e2bf88fdd831bc95578252b7dd8f7abc957d91bae3a21bdf558c575cb86e0af9074b9fc38050147c90a519a30a84c10c9968d354e8676
   languageName: node
   linkType: hard
 
@@ -84,12 +84,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@commitlint/cli@npm:^19.5.0":
-  version: 19.5.0
-  resolution: "@commitlint/cli@npm:19.5.0"
+"@commitlint/cli@npm:^19.6.0":
+  version: 19.6.0
+  resolution: "@commitlint/cli@npm:19.6.0"
   dependencies:
     "@commitlint/format": "npm:^19.5.0"
-    "@commitlint/lint": "npm:^19.5.0"
+    "@commitlint/lint": "npm:^19.6.0"
     "@commitlint/load": "npm:^19.5.0"
     "@commitlint/read": "npm:^19.5.0"
     "@commitlint/types": "npm:^19.5.0"
@@ -97,17 +97,17 @@ __metadata:
     yargs: "npm:^17.0.0"
   bin:
     commitlint: cli.js
-  checksum: 10/1d3384cc9823462da3a35308a145dc4fcf92025f7af976e1ceb9cbe9cbd7b7b83703fe0e9ca12fc7f4903ea2fe68c8c1492c18409ba301894c01cb2264a00795
+  checksum: 10/12ed3ad48de1b838c6603f39970b6fde6fd0594f86402e40cccb72940b4c9b1b1321e11606caffdf46b54ce8730c38970bc08e56b8878b9709c44ceb2a520bfa
   languageName: node
   linkType: hard
 
-"@commitlint/config-conventional@npm:^19.5.0":
-  version: 19.5.0
-  resolution: "@commitlint/config-conventional@npm:19.5.0"
+"@commitlint/config-conventional@npm:^19.6.0":
+  version: 19.6.0
+  resolution: "@commitlint/config-conventional@npm:19.6.0"
   dependencies:
     "@commitlint/types": "npm:^19.5.0"
     conventional-changelog-conventionalcommits: "npm:^7.0.2"
-  checksum: 10/5844fb51347677dd28f970a50528fbc44b9b415a8a5fd6fea6c7f6a2a11357956748eda9d1d6ae499430659b0aa78bfa7dcf8abf599951e7f34a581e60bf57da
+  checksum: 10/f96f6706502edad60d275f62a4aac06993a5fd47c343ad6286d48f173941e4e0848dab6642559099cc6714b513197338ac24da4b07debead5371326eef87bcb8
   languageName: node
   linkType: hard
 
@@ -152,25 +152,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@commitlint/is-ignored@npm:^19.5.0":
-  version: 19.5.0
-  resolution: "@commitlint/is-ignored@npm:19.5.0"
+"@commitlint/is-ignored@npm:^19.6.0":
+  version: 19.6.0
+  resolution: "@commitlint/is-ignored@npm:19.6.0"
   dependencies:
     "@commitlint/types": "npm:^19.5.0"
     semver: "npm:^7.6.0"
-  checksum: 10/1c7ee34686fd098587f9717763473477d49e847f470a317903f922d13091271d013a046f61b43b31b34eba4e4b0f76369b7427588269bbdc4c5f622d3ace2c95
+  checksum: 10/07b41573c9247522eb96af118be97ae015f5d0a141ecf5e3c0f67372b0fb7ba57c98adc462c722b7a7f0dd18ddcbacd92b42228e0e62370d3db110b0a35f6120
   languageName: node
   linkType: hard
 
-"@commitlint/lint@npm:^19.5.0":
-  version: 19.5.0
-  resolution: "@commitlint/lint@npm:19.5.0"
+"@commitlint/lint@npm:^19.6.0":
+  version: 19.6.0
+  resolution: "@commitlint/lint@npm:19.6.0"
   dependencies:
-    "@commitlint/is-ignored": "npm:^19.5.0"
+    "@commitlint/is-ignored": "npm:^19.6.0"
     "@commitlint/parse": "npm:^19.5.0"
-    "@commitlint/rules": "npm:^19.5.0"
+    "@commitlint/rules": "npm:^19.6.0"
     "@commitlint/types": "npm:^19.5.0"
-  checksum: 10/bba8cd17a90876b6b2cd2f869ee4d08cd3e5ad8a10f2c273d379d3b6602da30c46c2d9d0925710d7b9ebf180b3d1f02409adfc0f1a888cc566d88c9ee5862bdd
+  checksum: 10/f50721d8b02cea8cda9e67a57fb2c03377ae94ab708d47395a4e86f6f327d11db9dc84a1ecbcc3fae086f1e100400356826497a69a9d0caee6859238b32260dc
   languageName: node
   linkType: hard
 
@@ -237,15 +237,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@commitlint/rules@npm:^19.5.0":
-  version: 19.5.0
-  resolution: "@commitlint/rules@npm:19.5.0"
+"@commitlint/rules@npm:^19.6.0":
+  version: 19.6.0
+  resolution: "@commitlint/rules@npm:19.6.0"
   dependencies:
     "@commitlint/ensure": "npm:^19.5.0"
     "@commitlint/message": "npm:^19.5.0"
     "@commitlint/to-lines": "npm:^19.5.0"
     "@commitlint/types": "npm:^19.5.0"
-  checksum: 10/2c879d2cd50a3b4572cea41f044cc3091f0a11ef5ead0bb54bfa564ea637e0d93e08ae322ec4c99bb5b379b82835ace595d1c8dab6e35c1b68b63292160a61b3
+  checksum: 10/d9493b5ed450306358197c504ff7bb8ca3ef41ef1067c15497fa30ac4dc3ace9dc8c970cd5d130a7ff0e686a9619a6122ab09b155bc9eacdf8e6a0096748b402
   languageName: node
   linkType: hard
 
@@ -620,9 +620,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/app@npm:^15.1.0":
-  version: 15.1.0
-  resolution: "@octokit/app@npm:15.1.0"
+"@octokit/app@npm:^15.1.1":
+  version: 15.1.1
+  resolution: "@octokit/app@npm:15.1.1"
   dependencies:
     "@octokit/auth-app": "npm:^7.0.0"
     "@octokit/auth-unauthenticated": "npm:^6.0.0"
@@ -631,7 +631,7 @@ __metadata:
     "@octokit/plugin-paginate-rest": "npm:^11.0.0"
     "@octokit/types": "npm:^13.0.0"
     "@octokit/webhooks": "npm:^13.0.0"
-  checksum: 10/c292f77f85ed3b403aaf26313e795da784ebfc7b0becebd3be4e6d2f38b0fcba341f93ebee0248ac40a6a6a64dfd6b80623a7c724aa2018da5e08777fe717a02
+  checksum: 10/0e1d1931398352f19673de1d49c390e9fa9c4731f21f0d3c256431add4718815e4d02897c23d949a3f40e0754946ade41c929d62af9975f8f1f6357492cc7a4d
   languageName: node
   linkType: hard
 
@@ -3310,9 +3310,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"miniflare@npm:3.20241106.0":
-  version: 3.20241106.0
-  resolution: "miniflare@npm:3.20241106.0"
+"miniflare@npm:3.20241106.1":
+  version: 3.20241106.1
+  resolution: "miniflare@npm:3.20241106.1"
   dependencies:
     "@cspotcode/source-map-support": "npm:0.8.1"
     acorn: "npm:^8.8.0"
@@ -3328,7 +3328,7 @@ __metadata:
     zod: "npm:^3.22.3"
   bin:
     miniflare: bootstrap.js
-  checksum: 10/eb9e5e12c0ad9e18a54e3ad8a39d6602d0f21401aaddd1d4444b80d9b97640016fc6acdfd30e8bef16748eddbf01c9abe5b39bae15d83fe928be956e43c11954
+  checksum: 10/f1c51de67f02e440c1c84e1cd6da9895e1b4c3c93f2e40c3bb2543a0a89651d9bb4d40c2203295179e8a05318ad890cbe03e23d0acc40e3d7584f5a960fd2858
   languageName: node
   linkType: hard
 
@@ -4077,9 +4077,9 @@ __metadata:
   resolution: "sapphiredev@workspace:."
   dependencies:
     "@cloudflare/workers-types": "npm:^4.20241112.0"
-    "@commitlint/cli": "npm:^19.5.0"
-    "@commitlint/config-conventional": "npm:^19.5.0"
-    "@octokit/app": "npm:^15.1.0"
+    "@commitlint/cli": "npm:^19.6.0"
+    "@commitlint/config-conventional": "npm:^19.6.0"
+    "@octokit/app": "npm:^15.1.1"
     "@octokit/plugin-rest-endpoint-methods": "npm:^13.2.6"
     "@octokit/plugin-retry": "npm:^7.1.2"
     "@octokit/webhooks-types": "npm:^7.6.1"
@@ -4095,7 +4095,7 @@ __metadata:
     lint-staged: "npm:^15.2.10"
     prettier: "npm:^3.3.3"
     typescript: "npm:^5.5.2"
-    wrangler: "npm:^3.87.0"
+    wrangler: "npm:^3.90.0"
   languageName: unknown
   linkType: soft
 
@@ -4529,15 +4529,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unenv@npm:unenv-nightly@2.0.0-20241024-111401-d4156ac":
-  version: 2.0.0-20241024-111401-d4156ac
-  resolution: "unenv-nightly@npm:2.0.0-20241024-111401-d4156ac"
+"unenv@npm:unenv-nightly@2.0.0-20241111-080453-894aa31":
+  version: 2.0.0-20241111-080453-894aa31
+  resolution: "unenv-nightly@npm:2.0.0-20241111-080453-894aa31"
   dependencies:
     defu: "npm:^6.1.4"
     ohash: "npm:^1.1.4"
     pathe: "npm:^1.1.2"
     ufo: "npm:^1.5.4"
-  checksum: 10/9ebace8441cef504541595cf3d8f932ed0b72607210ee170e1ff9fe4551b41ea22539c2a3ebd88552f556b5ff4aa33b948a4da268d012a693bf23649b7d0efd6
+  checksum: 10/adcd8769d503eda8611ac82d70cfa9a2875f0bbd8e597edd581ab1f9ac654ec782e043a86099d2a161f230bb3bd93251b55ce1e75f16abe00388387c2fa50d81
   languageName: node
   linkType: hard
 
@@ -4678,12 +4678,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wrangler@npm:^3.87.0":
-  version: 3.87.0
-  resolution: "wrangler@npm:3.87.0"
+"wrangler@npm:^3.90.0":
+  version: 3.90.0
+  resolution: "wrangler@npm:3.90.0"
   dependencies:
     "@cloudflare/kv-asset-handler": "npm:0.3.4"
-    "@cloudflare/workers-shared": "npm:0.7.1"
+    "@cloudflare/workers-shared": "npm:0.8.0"
     "@esbuild-plugins/node-globals-polyfill": "npm:^0.2.3"
     "@esbuild-plugins/node-modules-polyfill": "npm:^0.2.2"
     blake3-wasm: "npm:^2.1.5"
@@ -4692,14 +4692,14 @@ __metadata:
     esbuild: "npm:0.17.19"
     fsevents: "npm:~2.3.2"
     itty-time: "npm:^1.0.6"
-    miniflare: "npm:3.20241106.0"
+    miniflare: "npm:3.20241106.1"
     nanoid: "npm:^3.3.3"
     path-to-regexp: "npm:^6.3.0"
     resolve: "npm:^1.22.8"
     resolve.exports: "npm:^2.0.2"
     selfsigned: "npm:^2.0.1"
     source-map: "npm:^0.6.1"
-    unenv: "npm:unenv-nightly@2.0.0-20241024-111401-d4156ac"
+    unenv: "npm:unenv-nightly@2.0.0-20241111-080453-894aa31"
     workerd: "npm:1.20241106.1"
     xxhash-wasm: "npm:^1.0.1"
   peerDependencies:
@@ -4713,7 +4713,7 @@ __metadata:
   bin:
     wrangler: bin/wrangler.js
     wrangler2: bin/wrangler.js
-  checksum: 10/a744b0343b81b3f8d13c95accc427398b22a2d3a2c5c98cdb0e94577d8beef8f67cc14c192249dd3c8ed0773fd3f34cb27241f1f21fd9fde5ff1280eaedd4f69
+  checksum: 10/229e9139e1d038fd1d296ccf46fa5a9a0c5232919e7e0a802ed4952ea5515d7875a36a5b013e7935db8eb52481094659b8a105c3600976797db1dfa1f654e7e1
   languageName: node
   linkType: hard
 
