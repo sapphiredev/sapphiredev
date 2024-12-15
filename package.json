@@ -33,10 +33,10 @@
 		"eslint": "^8.57.1",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-prettier": "^5.2.1",
-		"lint-staged": "^15.2.10",
+		"lint-staged": "^15.2.11",
 		"prettier": "^3.4.2",
 		"typescript": "^5.5.2",
-		"wrangler": "^3.93.0"
+		"wrangler": "^3.95.0"
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
