@@ -15,12 +15,12 @@
 		"format": "prettier --write src/**/*.ts"
 	},
 	"dependencies": {
-		"@octokit/app": "^15.1.5",
+		"@octokit/app": "^15.1.6",
 		"@octokit/plugin-rest-endpoint-methods": "^13.5.0",
-		"@octokit/plugin-retry": "^7.2.0"
+		"@octokit/plugin-retry": "^7.2.1"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20250406.0",
+		"@cloudflare/workers-types": "^4.20250413.0",
 		"@commitlint/cli": "^19.8.0",
 		"@commitlint/config-conventional": "^19.8.0",
 		"@octokit/webhooks-types": "^7.6.1",
@@ -31,12 +31,12 @@
 		"@typescript-eslint/parser": "^7.13.1",
 		"cz-conventional-changelog": "^3.3.0",
 		"eslint": "^8.57.1",
-		"eslint-config-prettier": "^10.1.1",
+		"eslint-config-prettier": "^10.1.2",
 		"eslint-plugin-prettier": "^5.2.6",
-		"lint-staged": "^15.5.0",
+		"lint-staged": "^15.5.1",
 		"prettier": "^3.5.3",
 		"typescript": "^5.5.2",
-		"wrangler": "^4.7.2"
+		"wrangler": "^4.10.0"
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
@@ -60,5 +60,5 @@
 	"eslintConfig": {
 		"extends": "@sapphire"
 	},
-	"packageManager": "yarn@4.8.1"
+	"packageManager": "yarn@4.9.0"
 }
