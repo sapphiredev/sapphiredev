@@ -15,9 +15,9 @@
 		"format": "prettier --write src/**/*.ts"
 	},
 	"dependencies": {
-		"@octokit/app": "^15.1.6",
-		"@octokit/plugin-rest-endpoint-methods": "^14.0.0",
-		"@octokit/plugin-retry": "^7.2.1"
+		"@octokit/app": "^16.0.1",
+		"@octokit/plugin-rest-endpoint-methods": "^15.0.0",
+		"@octokit/plugin-retry": "^8.0.1"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20250525.0",
