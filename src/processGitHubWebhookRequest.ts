@@ -18,6 +18,17 @@ const HydratedOctokit = Octokit.plugin(restEndpointMethods).plugin(retry).defaul
 	userAgent: 'Sapphire Deployer/ (@octokit/core) (https://github.com/sapphiredev/sapphiredev/tree/main)'
 });
 
+async function processPackages(octokit: Octokit & ReturnType<typeof restEndpointMethods>, owner: string, repo: string, publishJobId: number) {
+	const jobLogsUrl = await getJobLogs(octokit, owner, repo, publishJobId);
+	if (!jobLogsUrl) return null;
+
+	const jobLogsResult = await fetch(jobLogsUrl);
+	const jobLogs = await jobLogsResult.text();
+
+	const regexMatches = jobLogs.matchAll(packageMatchRegex);
+	return [...regexMatches].map((match) => match.groups?.name).filter(Boolean);
+}
+
 export async function processGitHubWebhookRequest(request: Request, env: Env): Promise<Response> {
 	const appId = env.APP_ID;
 	const secret = env.WEBHOOK_SECRET;
@@ -105,43 +116,33 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 			const owner = payload.repository.owner.name ?? 'sapphiredev';
 			const repo = payload.repository.name;
 
-			if (workflowRunInfo) {
-				const workflowJobs = await octokit.rest.actions.listJobsForWorkflowRun({
-					owner,
-					repo,
-					run_id: workflowRunInfo.id,
-					headers: OctokitRequestHeaders
-				});
+			if (!workflowRunInfo) return;
 
-				const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase().startsWith(ContinuousDeliveryName))?.id;
+			const workflowJobs = await octokit.rest.actions.listJobsForWorkflowRun({
+				owner,
+				repo,
+				run_id: workflowRunInfo.id,
+				headers: OctokitRequestHeaders
+			});
 
-				if (publishJobId) {
-					const jobLogsUrl = await getJobLogs(octokit, owner, repo, publishJobId);
+			const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase().startsWith(ContinuousDeliveryName))?.id;
+			if (!publishJobId) return;
 
-					if (jobLogsUrl) {
-						const jobLogsResult = await fetch(jobLogsUrl);
-						const jobLogs = await jobLogsResult.text();
+			const packageNames = await processPackages(octokit, owner, repo, publishJobId);
+			if (!packageNames?.length) return;
 
-						const regexMatches = jobLogs.matchAll(packageMatchRegex);
-						const packageNames = [...regexMatches].map((match) => match.groups?.name).filter(Boolean);
-
-						if (packageNames.length) {
-							await octokit.rest.issues.createComment({
-								owner,
-								repo,
-								issue_number: Number(lastPrNumber),
-								body: [
-									`Hey @${lastCommenter}, I've released this to NPM. You can install it for testing like so:`,
-									'```sh',
-									packageNames.map((name) => `npm install ${name}@pr-${lastPrNumber}`).join('\n'),
-									'```'
-								].join('\n'),
-								headers: OctokitRequestHeaders
-							});
-						}
-					}
-				}
-			}
+			await octokit.rest.issues.createComment({
+				owner,
+				repo,
+				issue_number: Number(lastPrNumber),
+				body: [
+					`Hey @${lastCommenter}, I've released this to NPM. You can install it for testing like so:`,
+					'```sh',
+					packageNames.map((name) => `npm install ${name}@pr-${lastPrNumber}`).join('\n'),
+					'```'
+				].join('\n'),
+				headers: OctokitRequestHeaders
+			});
 
 			// Remove values from KV
 			await env.cache.delete('LAST_PR_NUMBER');
@@ -172,7 +173,8 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 	try {
 		await verifyWebhookSignature(payloadString, signature, secret);
 	} catch (error) {
-		return new Response(`{ "error": "W-Webhook signyatuwe vewification faiwed. Awe you a b-bad actow? UwU" }`, {
+		console.error('Webhook signature verification failed:', error);
+		return new Response(`{ "error": "Webhook signature verification failed: ${error instanceof Error ? error.message : 'Unknown error'}" }`, {
 			status: 400,
 			headers: { 'content-type': 'application/json' }
 		});
@@ -198,7 +200,8 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 			headers: { 'content-type': 'application/json' }
 		});
 	} catch (error) {
-		return new Response(`{ "error": "Oopsie woopsie an ewwow occuwed on the sewvew. This won't wowk. UwU 😅" }`, {
+		console.error('Error processing webhook:', error);
+		return new Response(`{ "error": "Server error: ${error instanceof Error ? error.message : 'Unknown error'}" }`, {
 			status: 500,
 			headers: { 'content-type': 'application/json' }
 		});
