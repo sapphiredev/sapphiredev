@@ -173,7 +173,6 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 	try {
 		await verifyWebhookSignature(payloadString, signature, secret);
 	} catch (error) {
-		console.error('Webhook signature verification failed:', error);
 		return new Response(`{ "error": "Webhook signature verification failed: ${error instanceof Error ? error.message : 'Unknown error'}" }`, {
 			status: 400,
 			headers: { 'content-type': 'application/json' }
@@ -200,7 +199,6 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 			headers: { 'content-type': 'application/json' }
 		});
 	} catch (error) {
-		console.error('Error processing webhook:', error);
 		return new Response(`{ "error": "Server error: ${error instanceof Error ? error.message : 'Unknown error'}" }`, {
 			status: 500,
 			headers: { 'content-type': 'application/json' }
