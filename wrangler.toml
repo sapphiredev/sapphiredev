@@ -3,8 +3,8 @@ account_id = "c764ca18cc7569c05f37305e31aff359"
 workers_dev = true
 
 main = "src/index.ts"
-compatibility_date = "2023-07-01"
-node_compat = true
+compatibility_date = "2024-09-23"
+compatibility_flags = [ "nodejs_compat" ]
 
 kv_namespaces = [
     { binding = "cache", id = "9c35e418145e436790787db37bb4b341" }

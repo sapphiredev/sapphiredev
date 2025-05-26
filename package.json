@@ -16,7 +16,7 @@
 	},
 	"dependencies": {
 		"@octokit/app": "^16.0.1",
-		"@octokit/plugin-rest-endpoint-methods": "^15.0.0",
+		"@octokit/plugin-rest-endpoint-methods": "^16.0.0",
 		"@octokit/plugin-retry": "^8.0.1"
 	},
 	"devDependencies": {
@@ -27,15 +27,15 @@
 		"@sapphire/eslint-config": "^5.0.6",
 		"@sapphire/prettier-config": "^2.0.0",
 		"@sapphire/ts-config": "^5.0.1",
-		"@typescript-eslint/eslint-plugin": "^7.13.1",
-		"@typescript-eslint/parser": "^7.13.1",
+		"@typescript-eslint/eslint-plugin": "^7.18.0",
+		"@typescript-eslint/parser": "^7.18.0",
 		"cz-conventional-changelog": "^3.3.0",
 		"eslint": "^8.57.1",
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-prettier": "^5.4.0",
 		"lint-staged": "^16.0.0",
 		"prettier": "^3.5.3",
-		"typescript": "^5.5.2",
+		"typescript": "^5.8.3",
 		"wrangler": "^4.16.1"
 	},
 	"resolutions": {
