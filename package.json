@@ -16,11 +16,11 @@
 	},
 	"dependencies": {
 		"@octokit/app": "^16.1.0",
-		"@octokit/plugin-rest-endpoint-methods": "^16.0.0",
+		"@octokit/plugin-rest-endpoint-methods": "^16.1.0",
 		"@octokit/plugin-retry": "^8.0.1"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20250913.0",
+		"@cloudflare/workers-types": "^4.20250921.0",
 		"@commitlint/cli": "^19.8.1",
 		"@commitlint/config-conventional": "^19.8.1",
 		"@octokit/webhooks-types": "^7.6.1",
@@ -36,7 +36,7 @@
 		"lint-staged": "^16.1.6",
 		"prettier": "^3.6.2",
 		"typescript": "^5.8.3",
-		"wrangler": "^4.37.0"
+		"wrangler": "^4.38.0"
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
@@ -60,5 +60,5 @@
 	"eslintConfig": {
 		"extends": "@sapphire"
 	},
-	"packageManager": "yarn@4.9.4"
+	"packageManager": "yarn@4.10.0"
 }
