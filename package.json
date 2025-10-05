@@ -15,12 +15,12 @@
 		"format": "prettier --write src/**/*.ts"
 	},
 	"dependencies": {
-		"@octokit/app": "^16.1.0",
+		"@octokit/app": "^16.1.1",
 		"@octokit/plugin-rest-endpoint-methods": "^16.1.0",
-		"@octokit/plugin-retry": "^8.0.1"
+		"@octokit/plugin-retry": "^8.0.2"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20250927.0",
+		"@cloudflare/workers-types": "^4.20251004.0",
 		"@commitlint/cli": "^19.8.1",
 		"@commitlint/config-conventional": "^19.8.1",
 		"@octokit/webhooks-types": "^7.6.1",
@@ -33,10 +33,10 @@
 		"eslint": "^8.57.1",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-prettier": "^5.5.4",
-		"lint-staged": "^16.2.2",
+		"lint-staged": "^16.2.3",
 		"prettier": "^3.6.2",
 		"typescript": "^5.8.3",
-		"wrangler": "^4.40.2"
+		"wrangler": "^4.42.0"
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
