@@ -4082,7 +4082,7 @@ __metadata:
     lint-staged: "npm:^16.2.4"
     prettier: "npm:^3.6.2"
     typescript: "npm:^5.8.3"
-    wrangler: "npm:^4.42.2"
+    wrangler: "npm:^4.43.0"
   languageName: unknown
   linkType: soft
 
@@ -4720,9 +4720,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wrangler@npm:^4.42.2":
-  version: 4.42.2
-  resolution: "wrangler@npm:4.42.2"
+"wrangler@npm:^4.43.0":
+  version: 4.43.0
+  resolution: "wrangler@npm:4.43.0"
   dependencies:
     "@cloudflare/kv-asset-handler": "npm:0.4.0"
     "@cloudflare/unenv-preset": "npm:2.7.7"
@@ -4744,7 +4744,7 @@ __metadata:
   bin:
     wrangler: bin/wrangler.js
     wrangler2: bin/wrangler.js
-  checksum: 10/ab17e1e5e83112716dfc23c3fad55b79f5d53056c707b03b15ce0da7d40dbd38668ba8dba0a8c51ff04354ff2afc69fd163f90d429e6a67b9cf6a30d06a14dcc
+  checksum: 10/9339238ec8e082db0f6d489f1d185df56dc0c2665a658cfb1f38cce89c8ed0dbe2d80dfc4c1e7b648737d5f04feafd777ac34a0c2b3a2ba3e135f22f3ae354d3
   languageName: node
   linkType: hard
 
