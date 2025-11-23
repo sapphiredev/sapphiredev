@@ -20,23 +20,23 @@
 		"@octokit/plugin-retry": "^8.0.3"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20251115.0",
+		"@cloudflare/workers-types": "^4.20251121.0",
 		"@commitlint/cli": "^20.1.0",
 		"@commitlint/config-conventional": "^20.0.0",
 		"@octokit/webhooks-types": "^7.6.1",
 		"@sapphire/eslint-config": "^5.0.6",
 		"@sapphire/prettier-config": "^2.0.0",
-		"@sapphire/ts-config": "^5.0.1",
+		"@sapphire/ts-config": "^5.0.2",
 		"@typescript-eslint/eslint-plugin": "^7.18.0",
 		"@typescript-eslint/parser": "^7.18.0",
 		"cz-conventional-changelog": "^3.3.0",
 		"eslint": "^8.57.1",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-prettier": "^5.5.4",
-		"lint-staged": "^16.2.6",
+		"lint-staged": "^16.2.7",
 		"prettier": "^3.6.2",
 		"typescript": "^5.8.3",
-		"wrangler": "^4.47.0"
+		"wrangler": "^4.50.0"
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
