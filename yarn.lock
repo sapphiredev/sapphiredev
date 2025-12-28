@@ -80,7 +80,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cloudflare/workers-types@npm:^4.20251225.0":
+"@cloudflare/workers-types@npm:^4.20251228.0":
   version: 4.20251228.0
   resolution: "@cloudflare/workers-types@npm:4.20251228.0"
   checksum: 10/d8dd2dc42f618acce2c2604cd9e0a054dc5e8118dbd1eadd64d8156769febe3b94a8a63d70fd2e01935e845651ef30c3e9fb883379257979ee5c1df8425e6fba
@@ -4052,7 +4052,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "sapphiredev@workspace:."
   dependencies:
-    "@cloudflare/workers-types": "npm:^4.20251225.0"
+    "@cloudflare/workers-types": "npm:^4.20251228.0"
     "@commitlint/cli": "npm:^20.2.0"
     "@commitlint/config-conventional": "npm:^20.2.0"
     "@octokit/app": "npm:^16.1.2"
