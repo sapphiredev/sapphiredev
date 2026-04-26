@@ -20,7 +20,7 @@
 		"@octokit/plugin-retry": "^8.1.0"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20260425.1",
+		"@cloudflare/workers-types": "^4.20260426.1",
 		"@commitlint/cli": "^20.5.2",
 		"@commitlint/config-conventional": "^20.5.0",
 		"@octokit/webhooks-types": "^7.6.1",
