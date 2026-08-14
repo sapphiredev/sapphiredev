@@ -15,9 +15,9 @@
 		"format": "prettier --write src/**/*.ts"
 	},
 	"dependencies": {
-		"@octokit/app": "^16.1.2",
+		"@octokit/app": "^16.1.4",
 		"@octokit/plugin-rest-endpoint-methods": "^17.0.0",
-		"@octokit/plugin-retry": "^8.1.0"
+		"@octokit/plugin-retry": "^8.1.1"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20260702.1",
@@ -36,7 +36,7 @@
 		"lint-staged": "^16.4.0",
 		"prettier": "^3.9.6",
 		"typescript": "^5.8.3",
-		"wrangler": "^4.114.0"
+		"wrangler": "^4.123.0"
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
@@ -60,5 +60,5 @@
 	"eslintConfig": {
 		"extends": "@sapphire"
 	},
-	"packageManager": "yarn@4.17.1"
+	"packageManager": "yarn@4.18.0"
 }
