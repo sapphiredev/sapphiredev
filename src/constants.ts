@@ -2,6 +2,7 @@ export const PublishWorkflow = 'publish.yml';
 export const PublishName = 'publish @sapphire/';
 
 export const ValidPackages: string[] = [
+	// Utilities
 	'async-queue',
 	'bitfield',
 	'cron',
@@ -27,7 +28,21 @@ export const ValidPackages: string[] = [
 	'timer-manager',
 	'timestamp',
 	'ts-config',
-	'utilities'
+	'utilities',
+	// Documentation Plugins
+	'npm2yarn2pnpm',
+	'ts2esm2cjs',
+	'typedoc-djs-links',
+	// Sapphire Plugins
+	'api',
+	'editable-commands',
+	'hmr',
+	'i18next',
+	'logger',
+	'pattern-commands',
+	'scheduled-tasks',
+	'subcommands',
+	'utilities-store'
 ];
 
 export const VerifiedSenders = new Map<number, string>([
