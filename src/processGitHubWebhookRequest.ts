@@ -6,10 +6,16 @@ import { OctokitRequestHeaders, PublishName, PublishWorkflow, ValidPackages, Ver
 import { getJobLogs } from './octokit/getJobLogs.js';
 import type { Env, SupportedWebhookEvents } from './types.js';
 import { verifyWebhookSignature } from './verify.js';
+import { fetch as undiciFetch } from 'undici';
 
-const HydratedOctokit = Octokit.plugin(restEndpointMethods).plugin(retry).defaults({
-	userAgent: 'Sapphire Deployer/ (@octokit/core) (https://github.com/sapphiredev/sapphiredev/tree/main)'
-});
+const HydratedOctokit = Octokit.plugin(restEndpointMethods)
+	.plugin(retry)
+	.defaults({
+		userAgent: 'Sapphire Deployer/ (@octokit/core) (https://github.com/sapphiredev/sapphiredev/tree/main)',
+		request: {
+			fetch: undiciFetch
+		}
+	});
 
 async function processPackages(octokit: Octokit & ReturnType<typeof restEndpointMethods>, owner: string, repo: string, publishJobId: number) {
 	const jobLogsUrl = await getJobLogs(octokit, owner, repo, publishJobId);
@@ -86,6 +92,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 							package: packageName,
 							prerelease: true
 						},
+						return_run_details: true,
 						headers: OctokitRequestHeaders
 					});
 				} catch (error) {
@@ -94,6 +101,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 						owner,
 						repo,
 						ref: 'main',
+						return_run_details: true,
 						inputs: {
 							prNumber: payload.issue.number.toString(),
 							ref: fullPrData.data.head.ref,

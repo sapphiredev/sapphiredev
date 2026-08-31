@@ -39,7 +39,7 @@ export const VerifiedSenders = new Map<number, string>([
 export const packageMatchRegex = /📦\s+Bumped (?<name>@sapphire\/[a-z\-0-9.]+)/g;
 
 export const OctokitRequestHeaders = {
-	'X-GitHub-Api-Version': '2022-11-28',
+	'X-GitHub-Api-Version': '2026-03-10',
 	Accept: 'application/vnd.github+json'
 };
 
