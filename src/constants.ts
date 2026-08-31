@@ -1,5 +1,5 @@
 export const PublishWorkflow = 'publish.yml';
-export const PublishName = 'Publish @sapphire/';
+export const PublishName = 'publish @sapphire/';
 
 export const ValidPackages: string[] = [
 	'async-queue',
