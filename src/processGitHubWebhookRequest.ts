@@ -89,7 +89,21 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 						headers: OctokitRequestHeaders
 					});
 				} catch (error) {
-					console.error('An error occurred while trying to trigger the workflow dispatch:', error);
+					console.error('An error occurred while trying to trigger the workflow dispatch:', error, 'Arguments passed in: ', {
+						workflow_id: PublishWorkflow,
+						owner,
+						repo,
+						ref: 'main',
+						inputs: {
+							prNumber: payload.issue.number.toString(),
+							ref: fullPrData.data.head.ref,
+							repository: fullPrData.data.head.repo.full_name,
+							package: packageName,
+							prerelease: true
+						},
+						headers: OctokitRequestHeaders
+					});
+					throw error;
 				}
 
 				await octokit.rest.issues.createComment({
