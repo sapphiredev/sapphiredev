@@ -42,14 +42,10 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 			pull_request: Record<PropertyKey, unknown> | undefined;
 		};
 
-		console.log(`Received webhook event: ${payload.action} on issue #${payload.issue.number} by ${payload.sender.login}`);
-
 		/** Do not trigger if the comment was made by a bot */
 		if (payload.sender.type === 'Bot') {
 			return;
 		}
-
-		console.log(`Processing comment: "${payload.comment.body}" on issue #${payload.issue.number} by ${payload.sender.login}`);
 
 		if (
 			/** Validate that the action is either comments created or comments edited */
@@ -57,7 +53,6 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 			!isNullish((payload.issue as IssueWithPullRequestPayload).pull_request) &&
 			VerifiedSenders.has(payload.sender.id)
 		) {
-			console.log(`Valid comment from verified sender ${payload.sender.login} (ID: ${payload.sender.id}) on PR #${payload.issue.number}`);
 			const owner = payload.repository.owner.login ?? 'sapphiredev';
 			const repo = payload.repository.name;
 			const commentBodyLowerCase = payload.comment.body.toLowerCase();
@@ -72,28 +67,30 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 
 			const packageName = /@sapphiredev pack\s+(?<name>\S+)/.exec(commentBodyLowerCase)?.groups?.name;
 
-			console.log(`Extracted package name: ${packageName} from comment body: "${payload.comment.body}"`);
-
 			if (packageName && ValidPackages.includes(packageName) && fullPrData.data.head.repo) {
 				console.log(`Triggering workflow dispatch for package: ${packageName} on PR #${payload.issue.number} by ${payload.sender.login}`);
 				// Store the this PR number
 				const lastPrNumber = payload.issue.number;
 				const lastCommenter = payload.sender.login;
 
-				await octokit.rest.actions.createWorkflowDispatch({
-					workflow_id: PublishWorkflow,
-					owner,
-					repo,
-					ref: 'main',
-					inputs: {
-						prNumber: payload.issue.number.toString(),
-						ref: fullPrData.data.head.ref,
-						repository: fullPrData.data.head.repo.full_name,
-						package: packageName,
-						prerelease: true
-					},
-					headers: OctokitRequestHeaders
-				});
+				try {
+					await octokit.rest.actions.createWorkflowDispatch({
+						workflow_id: PublishWorkflow,
+						owner,
+						repo,
+						ref: 'main',
+						inputs: {
+							prNumber: payload.issue.number.toString(),
+							ref: fullPrData.data.head.ref,
+							repository: fullPrData.data.head.repo.full_name,
+							package: packageName,
+							prerelease: true
+						},
+						headers: OctokitRequestHeaders
+					});
+				} catch (error) {
+					console.error('An error occurred while trying to trigger the workflow dispatch:', error);
+				}
 
 				await octokit.rest.issues.createComment({
 					owner,
@@ -178,7 +175,6 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 	try {
 		await verifyWebhookSignature(payloadString, signature, secret);
 	} catch (error) {
-		console.error('An error occurred verifying the webhook signature', error);
 		return new Response(`{ "error": "Webhook signature verification failed: ${error instanceof Error ? error.message : 'Unknown error'}" }`, {
 			status: 400,
 			headers: { 'content-type': 'application/json' }

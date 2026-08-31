@@ -7,6 +7,18 @@ compatibility_date = "2026-08-04"
 
 kv_namespaces = [{ binding = "cache", id = "9c35e418145e436790787db37bb4b341" }]
 
-[observability.logs]
+[observability]
 enabled = false
+head_sampling_rate = 1
+redact_query_string = false
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
 invocation_logs = true
+
+[observability.traces]
+enabled = true
+persist = true
+head_sampling_rate = 1
