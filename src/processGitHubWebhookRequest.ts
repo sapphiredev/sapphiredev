@@ -65,9 +65,9 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 				headers: OctokitRequestHeaders
 			});
 
-			const packageName = /@sapphiredev pack\s+(?<name>\S+)/.exec(commentBodyLowerCase)?.groups?.name;
+			const packageName = /@sapphiredev pack(?:\s+(?<name>\S+))?/.exec(commentBodyLowerCase)?.groups?.name ?? '';
 
-			if (packageName && ValidPackages.includes(packageName) && fullPrData.data.head.repo) {
+			if ((!packageName || ValidPackages.includes(packageName)) && fullPrData.data.head.repo) {
 				// Store the this PR number
 				const lastPrNumber = payload.issue.number;
 				const lastCommenter = payload.sender.login;
