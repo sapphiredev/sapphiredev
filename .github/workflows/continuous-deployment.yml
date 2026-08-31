@@ -17,6 +17,6 @@ jobs:
         with:
           node-version: 20
       - name: Deploy to CF Workers
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
