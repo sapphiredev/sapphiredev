@@ -1,5 +1,34 @@
-export const ContinuousDeliveryWorkflow = 'continuous-delivery.yml';
-export const ContinuousDeliveryName = 'publish next to npm';
+export const PublishWorkflow = 'publish.yml';
+export const PublishName = 'Publish @sapphire/';
+
+export const ValidPackages: string[] = [
+	'async-queue',
+	'bitfield',
+	'cron',
+	'decorators',
+	'discord-utilities',
+	'discord.js-utilities',
+	'duration',
+	'eslint-config',
+	'eslint-plugin-result',
+	'event-iterator',
+	'fetch',
+	'iterator-utilities',
+	'lexure',
+	'node-utilities',
+	'phisherman',
+	'prettier-config',
+	'ratelimits',
+	'result',
+	'snowflake',
+	'stopwatch',
+	'string-store',
+	'time-utilities',
+	'timer-manager',
+	'timestamp',
+	'ts-config',
+	'utilities'
+];
 
 export const VerifiedSenders = new Map<number, string>([
 	[4019718, 'Favna'],

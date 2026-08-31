@@ -2,14 +2,7 @@ import { App } from '@octokit/app';
 import { Octokit } from '@octokit/core';
 import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods';
 import { retry } from '@octokit/plugin-retry';
-import {
-	ContinuousDeliveryName,
-	ContinuousDeliveryWorkflow,
-	OctokitRequestHeaders,
-	VerifiedSenders,
-	isNullish,
-	packageMatchRegex
-} from './constants.js';
+import { OctokitRequestHeaders, PublishName, PublishWorkflow, ValidPackages, VerifiedSenders, isNullish, packageMatchRegex } from './constants.js';
 import { getJobLogs } from './octokit/getJobLogs.js';
 import type { Env, SupportedWebhookEvents } from './types.js';
 import { verifyWebhookSignature } from './verify.js';
@@ -63,7 +56,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 			const owner = payload.repository.owner.login ?? 'sapphiredev';
 			const repo = payload.repository.name;
 			const commentBodyLowerCase = payload.comment.body.toLowerCase();
-			const workflowUrl = `https://github.com/${payload.repository.full_name}/actions/workflows/${ContinuousDeliveryWorkflow}`;
+			const workflowUrl = `https://github.com/${payload.repository.full_name}/actions/workflows/${PublishWorkflow}`;
 
 			const fullPrData = await octokit.rest.pulls.get({
 				owner,
@@ -72,20 +65,24 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 				headers: OctokitRequestHeaders
 			});
 
-			if (commentBodyLowerCase.includes('@sapphiredev pack') && fullPrData.data.head.repo) {
+			const packageName = /@sapphiredev pack\s+(?<name>\S+)/.exec(commentBodyLowerCase)?.groups?.name;
+
+			if (packageName && ValidPackages.includes(packageName) && fullPrData.data.head.repo) {
 				// Store the this PR number
 				const lastPrNumber = payload.issue.number;
 				const lastCommenter = payload.sender.login;
 
 				await octokit.rest.actions.createWorkflowDispatch({
-					workflow_id: ContinuousDeliveryWorkflow,
+					workflow_id: PublishWorkflow,
 					owner,
 					repo,
 					ref: 'main',
 					inputs: {
 						prNumber: payload.issue.number.toString(),
 						ref: fullPrData.data.head.ref,
-						repository: fullPrData.data.head.repo.full_name
+						repository: fullPrData.data.head.repo.full_name,
+						package: packageName,
+						prerelease: true
 					},
 					headers: OctokitRequestHeaders
 				});
@@ -111,7 +108,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 		const lastPrNumber = await env.cache.get('LAST_PR_NUMBER');
 		const lastCommenter = await env.cache.get('LAST_COMMENTER');
 		// Validate that the action is completed
-		if (lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow?.path.endsWith(ContinuousDeliveryWorkflow)) {
+		if (lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow?.path.endsWith(PublishWorkflow)) {
 			const workflowRunInfo = payload.workflow_run;
 			const owner = payload.repository.owner.name ?? 'sapphiredev';
 			const repo = payload.repository.name;
@@ -125,7 +122,7 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 				headers: OctokitRequestHeaders
 			});
 
-			const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase().startsWith(ContinuousDeliveryName))?.id;
+			const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase().startsWith(PublishName))?.id;
 			if (!publishJobId) return;
 
 			const packageNames = await processPackages(octokit, owner, repo, publishJobId);
