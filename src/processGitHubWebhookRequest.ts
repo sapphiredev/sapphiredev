@@ -68,45 +68,23 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 			const packageName = /@sapphiredev pack\s+(?<name>\S+)/.exec(commentBodyLowerCase)?.groups?.name;
 
 			if (packageName && ValidPackages.includes(packageName) && fullPrData.data.head.repo) {
-				console.log(`Triggering workflow dispatch for package: ${packageName} on PR #${payload.issue.number} by ${payload.sender.login}`);
 				// Store the this PR number
 				const lastPrNumber = payload.issue.number;
 				const lastCommenter = payload.sender.login;
 
-				try {
-					await octokit.rest.actions.createWorkflowDispatch({
-						workflow_id: PublishWorkflow,
-						owner,
-						repo,
-						ref: 'main',
-						inputs: {
-							prNumber: payload.issue.number.toString(),
-							ref: fullPrData.data.head.ref,
-							repository: fullPrData.data.head.repo.full_name,
-							package: packageName,
-							prerelease: true
-						},
-						return_run_details: true,
-						headers: OctokitRequestHeaders
-					});
-				} catch (error) {
-					console.error('An error occurred while trying to trigger the workflow dispatch:', error, 'Arguments passed in: ', {
-						workflow_id: PublishWorkflow,
-						owner,
-						repo,
-						ref: 'main',
-						return_run_details: true,
-						inputs: {
-							prNumber: payload.issue.number.toString(),
-							ref: fullPrData.data.head.ref,
-							repository: fullPrData.data.head.repo.full_name,
-							package: packageName,
-							prerelease: true
-						},
-						headers: OctokitRequestHeaders
-					});
-					throw error;
-				}
+				await octokit.rest.actions.createWorkflowDispatch({
+					workflow_id: PublishWorkflow,
+					owner,
+					repo,
+					ref: 'main',
+					inputs: {
+						prNumber: payload.issue.number.toString(),
+						ref: fullPrData.data.head.ref,
+						package: packageName,
+						prerelease: true
+					},
+					headers: OctokitRequestHeaders
+				});
 
 				await octokit.rest.issues.createComment({
 					owner,
