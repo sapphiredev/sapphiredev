@@ -104,13 +104,21 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 	});
 
 	app.webhooks.on('workflow_run.completed', async ({ octokit, payload }) => {
+		console.log('Received workflow_run.completed event');
 		const lastPrNumber = await env.cache.get('LAST_PR_NUMBER');
 		const lastCommenter = await env.cache.get('LAST_COMMENTER');
+		console.log(
+			`Last PR Number: ${lastPrNumber}, Last Commenter: ${lastCommenter}, payload workflow path: ${payload.workflow?.path}, payload action: ${payload.action}`
+		);
 		// Validate that the action is completed
 		if (lastPrNumber && lastCommenter && payload.action === 'completed' && payload.workflow?.path.endsWith(PublishWorkflow)) {
 			const workflowRunInfo = payload.workflow_run;
 			const owner = payload.repository.owner.name ?? 'sapphiredev';
 			const repo = payload.repository.name;
+
+			console.log(
+				`Processing workflow run for PR #${lastPrNumber} by @${lastCommenter} in ${owner}/${repo} with info ${JSON.stringify(workflowRunInfo)}`
+			);
 
 			if (!workflowRunInfo) return;
 
@@ -121,11 +129,17 @@ export async function processGitHubWebhookRequest(request: Request, env: Env): P
 				headers: OctokitRequestHeaders
 			});
 
+			console.log('workflowJobs: ', JSON.stringify(workflowJobs, null, 2));
+
 			const publishJobId = workflowJobs.data.jobs.find((job) => job.name.toLowerCase().startsWith(PublishName))?.id;
 			if (!publishJobId) return;
 
+			console.log('found publish job id ', publishJobId);
+
 			const packageNames = await processPackages(octokit, owner, repo, publishJobId);
 			if (!packageNames?.length) return;
+
+			console.log('found package names ', packageNames);
 
 			await octokit.rest.issues.createComment({
 				owner,
