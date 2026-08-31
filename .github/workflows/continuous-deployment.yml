@@ -15,8 +15,8 @@ jobs:
       - name: Install dependencies
         uses: sapphiredev/.github/actions/install-yarn-dependencies@main
         with:
-          node-version: 20
+          node-version: 24
       - name: Deploy to CF Workers
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
