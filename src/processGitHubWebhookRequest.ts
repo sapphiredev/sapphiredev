@@ -6,16 +6,10 @@ import { OctokitRequestHeaders, PublishName, PublishWorkflow, ValidPackages, Ver
 import { getJobLogs } from './octokit/getJobLogs.js';
 import type { Env, SupportedWebhookEvents } from './types.js';
 import { verifyWebhookSignature } from './verify.js';
-import { fetch as undiciFetch } from 'undici';
 
-const HydratedOctokit = Octokit.plugin(restEndpointMethods)
-	.plugin(retry)
-	.defaults({
-		userAgent: 'Sapphire Deployer/ (@octokit/core) (https://github.com/sapphiredev/sapphiredev/tree/main)',
-		request: {
-			fetch: undiciFetch
-		}
-	});
+const HydratedOctokit = Octokit.plugin(restEndpointMethods).plugin(retry).defaults({
+	userAgent: 'Sapphire Deployer/ (@octokit/core) (https://github.com/sapphiredev/sapphiredev/tree/main)'
+});
 
 async function processPackages(octokit: Octokit & ReturnType<typeof restEndpointMethods>, owner: string, repo: string, publishJobId: number) {
 	const jobLogsUrl = await getJobLogs(octokit, owner, repo, publishJobId);

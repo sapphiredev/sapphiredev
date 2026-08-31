@@ -3780,7 +3780,6 @@ __metadata:
     lint-staged: "npm:^17.4.1"
     prettier: "npm:^3.9.6"
     typescript: "npm:^5.9.3"
-    undici: "npm:^8.10.0"
     wrangler: "npm:^4.127.1"
   languageName: unknown
   linkType: soft
@@ -4230,13 +4229,6 @@ __metadata:
   version: 7.29.0
   resolution: "undici@npm:7.29.0"
   checksum: 10/ca73639071bdcbc41e57be1800847fa18f86f8fbf7a5641ff9899f7bbb6f5cecdd593e225f5fd94e31703dcbfaea4a722a3b81cab90c5c4e2b406aec1ae55732
-  languageName: node
-  linkType: hard
-
-"undici@npm:^8.10.0":
-  version: 8.10.0
-  resolution: "undici@npm:8.10.0"
-  checksum: 10/254219966d4a2fb110f565ffe73131caa82e949f207b9dd88930ebc23dfb6561db72ca187391cbd408ceeba7c647cb47d4110e8ae00df44c0c66e8a21e091dc0
   languageName: node
   linkType: hard
 

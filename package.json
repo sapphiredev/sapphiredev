@@ -17,8 +17,7 @@
 	"dependencies": {
 		"@octokit/app": "^16.1.4",
 		"@octokit/plugin-rest-endpoint-methods": "^18.0.0",
-		"@octokit/plugin-retry": "^8.1.1",
-		"undici": "^8.10.0"
+		"@octokit/plugin-retry": "^8.1.1"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^5.20260830.1",
