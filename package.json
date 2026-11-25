@@ -26,7 +26,7 @@
 		"@octokit/webhooks-types": "^7.6.1",
 		"@sapphire/eslint-config": "^5.0.6",
 		"@sapphire/prettier-config": "^2.0.0",
-		"@sapphire/ts-config": "^5.0.3",
+		"@sapphire/ts-config": "^6.0.0",
 		"@typescript-eslint/eslint-plugin": "^7.18.0",
 		"@typescript-eslint/parser": "^7.18.0",
 		"cz-conventional-changelog": "^3.3.0",
