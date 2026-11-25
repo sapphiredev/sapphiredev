@@ -24,7 +24,7 @@
 		"@commitlint/cli": "^21.2.4",
 		"@commitlint/config-conventional": "^21.2.4",
 		"@octokit/webhooks-types": "^7.6.1",
-		"@sapphire/eslint-config": "^5.0.6",
+		"@sapphire/eslint-config": "^6.0.0",
 		"@sapphire/prettier-config": "^2.0.0",
 		"@sapphire/ts-config": "^5.0.3",
 		"@typescript-eslint/eslint-plugin": "^7.18.0",
